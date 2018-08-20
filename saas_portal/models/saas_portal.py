@@ -235,11 +235,11 @@ class SaasPortalPlan(models.Model):
     @api.multi
     @api.depends('template_id.state')
     def _compute_get_state(self):
-        self.ensure_one()
-        if self.template_id.state == 'template':
-            self.state = 'confirmed'
-        else:
-            self.state = 'draft'
+        for plan in self:
+            if plan.template_id.state == 'template':
+                plan.state = 'confirmed'
+            else:
+                plan.state = 'draft'
 
     @api.multi
     def _new_database_vals(self, vals):
@@ -632,20 +632,20 @@ class SaasPortalDatabase(models.Model):
 
     @api.multi
     def _delete_database_server(self, force_delete=False):
-        self.ensure_one()
-        state = {
-            'd': self.name,
-            'client_id': self.client_id,
-        }
-        if force_delete:
-            state['force_delete'] = 1
-        req, req_kwargs = self.server_id._request_server(
-            path='/saas_server/delete_database',
-            state=state, client_id=self.client_id)
-        res = requests.Session().send(req, **req_kwargs)
-        _logger.info('delete database: %s', res.text)
-        if res.status_code != 500:
-            self.state = 'deleted'
+        for database in self:
+            state = {
+                'd': database.name,
+                'client_id': database.client_id,
+            }
+            if force_delete:
+                state['force_delete'] = 1
+            req, req_kwargs = database.server_id._request_server(
+                path='/saas_server/delete_database',
+                state=state, client_id=database.client_id)
+            res = requests.Session().send(req, **req_kwargs)
+            _logger.info('delete database: %s', res.text)
+            if res.status_code != 500:
+                database.state = 'deleted'
 
     @api.multi
     def show_upgrade_wizard(self):
