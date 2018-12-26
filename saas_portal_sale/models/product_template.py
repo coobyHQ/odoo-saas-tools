@@ -4,10 +4,10 @@ from odoo import models, fields
 class ProductTemplateSaaS(models.Model):
     _inherit = 'product.template'
 
-    is_saas=fields.Boolean('SaaS Product'),
-    saas_product_type=fields.Selection([
-        ('base','Base'),
-        ('addon','Add Ons')],
+    is_saas = fields.Boolean('SaaS Product')
+    saas_product_type = fields.Selection([
+        ('base', 'Base'),
+        ('addon', 'Add Ons')],
         string='SaaS Product Type')
 
     plan_ids = fields.One2many(

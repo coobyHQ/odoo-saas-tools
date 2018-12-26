@@ -12,7 +12,7 @@
       </xpath>
 
       <xpath expr="//page[last()]" position="after">
-        <page string="SaaS" name="saas" attrs="'invisible': [('is_saas','=',False)]}">
+        <page string="SaaS" name="saas" attrs="{'invisible': [('is_saas','=',False)]}">
           <group>
             <field name="saas_product_type"
                    attrs="{'required': [('is_saas','=',True)], 'invisible': [('is_saas','=',False)]}"/>
