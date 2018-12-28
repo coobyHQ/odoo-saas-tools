@@ -6,7 +6,7 @@
     <field name="inherit_id" ref="product.product_template_only_form_view"/>
     <field name="arch" type="xml">
 
-      <xpath expr="//field[@name='sale_ok']" position="after">
+      <xpath expr="//field[@name='purchase_ok']" position="before">
         <field name="is_saas"/>
         <label for="is_saas"/>
       </xpath>
@@ -17,6 +17,7 @@
             <field name="saas_product_type"
                    attrs="{'required': [('is_saas','=',True)], 'invisible': [('is_saas','=',False)]}"/>
             <field name="saas_plan_id"/>
+            <field name="saas_default"/>
           </group>
         </page>
       </xpath>
@@ -30,9 +31,12 @@
     <field name="inherit_id" ref="product.product_normal_form_view"/>
     <field name="arch" type="xml">
       <xpath expr="//page[last()]" position="after">
-        <page string="SaaS">
+        <page string="SaaS" name="saas" attrs="{'invisible': [('is_saas','=',False)]}">
           <group>
+            <field name="is_saas"/>
+            <field name="saas_product_type"/>
             <field name="saas_plan_id"/>
+            <field name="saas_default"/>
           </group>
         </page>
       </xpath>
