@@ -1,4 +1,4 @@
 SaaS Portal
 ===========
 
-Module for main database in saas structure.
+Module for managing databases, templates, clients and plans in SaaS Portal.

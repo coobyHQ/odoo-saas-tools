@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Technical Records -->
+    <menuitem id="menu_saas_tech" parent="menu_base_saas" name="Technical Records" sequence="2" />
+
+    <!-- Templates -->
+    <record id="view_databases_tree" model="ir.ui.view">
+        <field name="name">saas_portal.databases.tree</field>
+        <field name="model">saas_portal.database</field>
+        <field name="arch" type="xml">
+            <tree string="Plans" create="false" edit="false" delete="false">
+                 <field name="name" />
+                 <field name="state" />
+                 <field name="client_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_databases_form" model="ir.ui.view">
+        <field name="name">saas_portal.databases.form</field>
+        <field name="model">saas_portal.database</field>
+        <field name="arch" type="xml">
+          <form string="plans" create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                       <field name="name" />
+                       <field name="state" readonly="1"/>
+                       <field name="client_id" readonly="1" />
+                       <field name="server_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_databases_filter" model="ir.ui.view">
+        <field name="name">saas_portal.database.select</field>
+        <field name="model">saas_portal.database</field>
+        <field name="arch" type="xml">
+            <search string="Search Databases">
+                <field name="name" string="Database Name"/>
+                <filter string="Templates" name="template" domain="[('state', '=','template')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_templates" model="ir.actions.act_window">
+        <field name="name">Templates</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.database</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_template': 1}</field>
+    </record>
+
+    <menuitem action="action_templates" id="menu_templates" parent="menu_saas_tech" sequence="40" groups="base.group_no_one"/>
+
+    <!-- OAuth Applications -->
+    <record id="oauth_application_tree" model="ir.ui.view">
+        <field name="name">oauth.application.tree</field>
+        <field name="model">oauth.application</field>
+        <field name="arch" type="xml">
+            <tree create="false" delete="false" edit="false">
+               <field name="client_id"/>
+               <field name="last_connection"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="oauth_application_form" model="ir.ui.view">
+        <field name="name">oauth.application.form</field>
+        <field name="model">oauth.application</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false" edit="false">
+                <sheet>
+                    <group>
+                       <field name="client_id"/>
+                       <field name="last_connection"/>
+                    </group>
+                    <separator string="Server Database"/>
+                    <field name="server_db_ids">
+                        <tree>
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                    <separator string="Template Database"/>
+                    <field name="template_db_ids">
+                        <tree>
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                    <separator string="Client Database"/>
+                    <field name="client_db_ids">
+                        <tree>
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="oauth_applications" model="ir.actions.act_window">
+        <field name="name">OAuth Applications</field>
+        <field name="res_model">oauth.application</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="oauth_applications" id="menu_oauth_applications" parent="menu_saas_tech" sequence="99"/>
+
+</odoo>

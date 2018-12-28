@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Plan -->
+    <record id="view_plans_tree" model="ir.ui.view">
+        <field name="name">saas_portal.plans.tree</field>
+        <field name="model">saas_portal.plan</field>
+        <field name="priority">4</field>
+        <field name="arch" type="xml">
+            <tree string="Plans">
+                <field name="sequence" invisible="1"/>
+                <field name="name"/>
+                <field name="server_id"/>
+                <field name="template_id"/>
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_plans_form" model="ir.ui.view">
+        <field name="name">saas_portal.plans.form</field>
+        <field name="model">saas_portal.plan</field>
+        <field name="arch" type="xml">
+            <form string="plans">
+                <header>
+                    <button string="Create template DB" name="create_template_button" type="object"
+                            attrs="{'invisible':['|', '|', ('state','not in', ['draft']), ('server_id','=',False),
+                            ('template_id','=',False)]}" icon="fa-play" class="oe_highlight"/>
+                    <button string="Log in to template DB" name="%(action_edit_database)d"
+                            type="action" states="confirmed" icon="fa-edit"
+                            class="oe_highlight"/>
+                    <!--<button string="Configure template DB" name="upgrade_template" type="object" states="confirmed" icon="fa-play" />-->
+                    <button string="Delete template DB" name="delete_template" type="object" states="confirmed" icon="fa-undo" />
+                    <button string="Sync server" type="object" name="action_sync_server" icon="fa-refresh" attrs="{'invisible': [('id', '=', False)]}"/>
+                    <button string="Create Client" type="action" name="%(action_create_client)d" states="confirmed"/>
+                    <field name="state" widget="statusbar"/>
+                    <field name="id" invisible="1" />
+                </header>
+                <sheet>
+                    <div class="oe_left" style="width: 500px;">
+                        <field name="logo" widget="image" class="oe_avatar oe_left"/>
+                        <div class="oe_title" style="width: 390px;">
+                            <label class="oe_edit_only" for="name" string="Name"/>
+                            <h1><field name="name" class="oe_inline"/></h1>
+                            <label class="oe_edit_only" for="summary" string="Summary"/>
+                            <field name="summary"/>
+                        </div>
+                    </div>
+                    <group col="2">
+                        <group string="Client Settings">
+                            <field name="max_users" class="oe_inline"/>
+                            <field name="total_storage_limit" class="oe_inline"/>
+                            <field name="block_on_expiration" class="oe_inline"/>
+                            <field name="block_on_storage_exceed" class="oe_inline"/>
+                            <field name="on_create"/>
+                            <field name="on_create_email_template"/>
+                        </group>
+                        <group string="Plan Settings">
+                            <field name="dbname_template"/>
+                            <field name="expiration"/>
+                            <field name="grace_period"/>
+                            <field name="maximum_allowed_dbs_per_partner"/>
+                            <field name="maximum_allowed_trial_dbs_per_partner"/>
+                        </group>
+                    </group>
+                    <group col="2" >
+                        <group col="2" string="Technical Settings">
+                            <field name="server_id"/>
+                            <field name="template_id"/>
+                        </group>
+                        <group col="2" string="Odoo DB Settings">
+                            <field name="demo"/>
+                            <field name="lang"/>
+                            <field name="tz"/>
+                        </group>
+                    </group>
+                    <separator string="Other Settings"/>
+                    <notebook>
+                        <page string="Website Settings" name="website">
+                            <separator string="Website description"/>
+                            <group>
+                                <field name="website_description" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_plans" model="ir.actions.act_window">
+        <field name="name">Plans</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.plan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_plans" id="menu_plans" parent="saas_portal.menu_saas" sequence="30"/>
+</odoo>

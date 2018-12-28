@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Server -->
+
+    <record id="view_server_tree" model="ir.ui.view">
+        <field name="name">saas_portal.server.tree</field>
+        <field name="model">saas_portal.server</field>
+        <field name="priority">4</field>
+        <field name="arch" type="xml">
+            <tree string="Server" delete="false">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active"/>
+                <field name="odoo_version"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_server_form" model="ir.ui.view">
+        <field name="name">saas_portal.server.form</field>
+        <field name="model">saas_portal.server</field>
+        <field name="arch" type="xml">
+            <form string="Server" delete="false">
+                <header>
+                    <!-- TODO
+                         action_create_server will ask for master password only.
+                         * https://erppeek.readthedocs.org/en/latest/api.html#erppeek.Client.create_database
+                    <button string="Create Server" name="%(action_create_server
+)d" type="action" class="oe_highlight" states="draft"/>
+                    -->
+                    <button string="Open Server" name="action_redirect_to_server" type="object" icon="fa-sign-in" class="oe_highlight" attrs="{'invisible': [('id', '=', False)]}"/>
+                    <button name="action_sync_server" type="object" string="Sync server" icon="fa-refresh" attrs="{'invisible': [('id', '=', False)]}"/>
+                    <field name="id" invisible="1" />
+                </header>
+                <sheet>
+                <group>
+                    <group>
+                        <field name="odoo_version"/>
+                        <field name="name"/>
+                        <field name="client_id"/>
+                        <field name="active"/>
+                        <field name="request_scheme"/>
+                        <field name="request_port"/>
+                    </group>
+                    <group string="Server-side requests">
+                      <field name="local_request_scheme"/>
+                      <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
+                      <field name="local_host"/>
+                      <field name="local_port"/>
+                    </group>
+                    <group string="Credentials for rpc">
+                      <field name="password" password="True"/>
+                    </group>
+                    <group string="Client Settings">
+                      <field name="clients_host_template"/>
+                    </group>
+                </group>
+                <field name="client_ids" readonly="1">
+                    <tree>
+                        <field name="name"/>
+                        <field name="state"/>
+                        <field name="users_len"/>
+                        <field name="file_storage"/>
+                        <field name="db_storage"/>
+                    </tree>
+                </field>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_server" model="ir.actions.act_window">
+        <field name="name">Servers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.server</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="saas_portal.action_server" id="menu_server" parent="saas_portal.menu_saas" sequence="20"/>
+
+</odoo>
