@@ -12,8 +12,8 @@ class SaasPortalPlan(models.Model):
         string='Non-trial instances',
         help='Whether to use trial database or create new one when user make payment',
         required=True, default='create_new')
+    topup_ids = fields.One2many('saas_portal.plan_topup', inverse_name='plan_id', string='Top ups')
     product_tmpl_id = fields.Many2one('product.template', 'Product')
-
     product_variant_ids = fields.One2many('product.product',
                                           'saas_plan_id',
                                           'Product variants')
