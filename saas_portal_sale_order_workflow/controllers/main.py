@@ -2,12 +2,54 @@ from odoo.http import request
 from odoo import http, SUPERUSER_ID
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.addons.website_sale.controllers.main import WebsiteSaleForm
+from odoo.addons.saas_portal.controllers.main import SaasPortal
 from odoo.exceptions import ValidationError
 from odoo.addons.base.ir.ir_qweb.fields import nl2br
+from odoo.addons.saas_base.exceptions import MaximumDBException, MaximumTrialDBException
+from urllib.parse import urlencode
+import werkzeug
 import json
 import logging
 
 _logger = logging.getLogger(__name__)
+
+
+class SaasPortalOrder(SaasPortal):
+
+    @http.route(['/saas_portal/add_new_client'], type='http', auth='public', website=True)
+    def add_new_client(self, redirect_to_signup=False, **post):
+        uid = request.session.uid
+        if not uid:
+            url = '/web/signup' if redirect_to_signup else '/web/login'
+            redirect = str('/saas_portal/add_new_client?' + urlencode(post))
+            query = {'redirect': redirect}
+            return http.local_redirect(path=url, query=query)
+
+        dbname = self.get_full_dbname(post.get('dbname'))
+        user_id = request.session.uid
+        partner_id = None
+        if user_id:
+            user = request.env['res.users'].browse(user_id)
+            partner_id = user.partner_id.id
+        plan = self.get_plan(int(post.get('plan_id', 0) or 0))
+        trial = bool(post.get('trial', False))
+        order_id = post.get('order_id')
+        try:
+            res = plan.create_new_database(dbname=dbname,
+                                           user_id=user_id,
+                                           partner_id=partner_id,
+                                           trial=trial,
+                                           order_id=order_id)
+        except MaximumDBException:
+            _logger.info("MaximumDBException")
+            url = request.env['ir.config_parameter'].sudo().get_param('saas_portal.page_for_maximumdb', '/')
+            return werkzeug.utils.redirect(url)
+        except MaximumTrialDBException:
+            _logger.info("MaximumTrialDBException")
+            url = request.env['ir.config_parameter'].sudo().get_param('saas_portal.page_for_maximumtrialdb', '/')
+            return werkzeug.utils.redirect(url)
+
+        return werkzeug.utils.redirect(res.get('url'))
 
 
 class SaasCreateInstanceAfterValidating(WebsiteSale):
@@ -102,8 +144,8 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             dbname = order.saas_dbname
             if plan_id and dbname:
                 redirect = '/saas_portal/add_new_client'
-                redirect_url = '%s?dbname=%s&plan_id=%s' % (
-                    redirect, dbname, plan_id
+                redirect_url = '%s?dbname=%s&plan_id=%s&order_id=%s' % (
+                    redirect, dbname, plan_id, order.id
                 )
                 return request.redirect(redirect_url)
 
