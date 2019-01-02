@@ -8,5 +8,5 @@ class SaasPortalPlanTopup (models.Model):
     name = fields.Char('Topup name')
     product_tmpl_id = fields.Many2one('product.template', 'Product Template', domain=[('saas_product_type', '=', 'addon')])
     plan_id = fields.Many2one('saas_portal.plan', string='Plan')
-    topup_users = fields.Integer('Topup users', default='1')
-    topup_storage = fields.Integer('Topup Storage MB', default='1')
+    topup_users = fields.Integer('# of Extra Users', default=1)
+    topup_storage = fields.Integer('# of Extra Storage (MB)', default=0)

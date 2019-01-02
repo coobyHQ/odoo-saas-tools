@@ -31,6 +31,32 @@ class SaasPortalPlan(models.Model):
         vals['contract_id'] = contract.id
         return vals
 
+    @api.multi
+    def _create_new_database(self, **kw):
+        res = super(SaasPortalPlan, self)._create_new_database(**kw)
+
+        params_list = []
+        client_obj = self.env['saas_portal.client'].browse(res.get('id'))
+        # ir_params = self.env['ir.config_parameter'].sudo()
+        max_users = self.max_users # or ir_params.sudo().get_param('saas_client.max_users')
+        total_storage_limit = self.total_storage_limit # or ir_params.sudo().get_param('saas_client.total_storage_limit')
+
+        if self.topup_ids:
+            users = 0
+            storage = 0
+            for topup in self.topup_ids:
+                if topup.max_users: users += topup.max_users
+                if topup.total_storage_limit: storage += topup.total_storage_limit
+            if users:
+                params_list.append({'key': 'saas_client.max_users', 'value': max_users})
+            if storage:
+                params_list.append({'key': 'saas_client.total_storage_limit', 'value': total_storage_limit})
+
+            if params_list:
+                client_obj.upgrade(payload={'params': params_list})
+
+        return res
+
 
 class SaasPortalClient(models.Model):
     _inherit = 'saas_portal.client'

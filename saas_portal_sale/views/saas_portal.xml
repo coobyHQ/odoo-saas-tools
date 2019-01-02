@@ -40,6 +40,14 @@
                                 <field name="topup_storage"/>
                                 <field name="product_tmpl_id"/>
                             </tree>
+                            <form>
+                                <group>
+                                    <field name="name" colspan="4"/>
+                                    <field name="product_tmpl_id" colspan="4"/>
+                                    <field name="topup_users"/>
+                                    <field name="topup_storage"/>
+                                </group>
+                            </form>
                         </field>
                     </page>
                 </xpath>
