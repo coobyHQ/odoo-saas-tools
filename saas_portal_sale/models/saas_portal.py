@@ -41,16 +41,16 @@ class SaasPortalPlan(models.Model):
         max_users = self.max_users # or ir_params.sudo().get_param('saas_client.max_users')
         total_storage_limit = self.total_storage_limit # or ir_params.sudo().get_param('saas_client.total_storage_limit')
 
-        if self.topup_ids:
-            users = 0
-            storage = 0
+        if client_obj and self.topup_ids:
+            users = int(max_users)
+            storage = int(total_storage_limit)
             for topup in self.topup_ids:
-                if topup.max_users: users += topup.topup_users
-                if topup.total_storage_limit: storage += topup.topup_storage
+                if topup.topup_users: users += topup.topup_users
+                if topup.topup_storage: storage += topup.topup_storage
             if users:
-                params_list.append({'key': 'saas_client.max_users', 'value': max_users})
+                params_list.append({'key': 'saas_client.max_users', 'value': users})
             if storage:
-                params_list.append({'key': 'saas_client.total_storage_limit', 'value': total_storage_limit})
+                params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage})
 
             if params_list:
                 client_obj.upgrade(payload={'params': params_list})
