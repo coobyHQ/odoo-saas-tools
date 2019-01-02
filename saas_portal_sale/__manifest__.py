@@ -5,7 +5,7 @@
     "support": "apps@it-projects.info",
     'website': "https://twitter.com/nasyrov_ildar",
     'category': 'SaaS',
-    'summary': 'Sale SaaS products in the Webshop',
+    'summary': 'Sells SaaS products in the Webshop',
     'version': '11.0.1.0.0',
     'depends': [
         'sale',
