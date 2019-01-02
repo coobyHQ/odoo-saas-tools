@@ -32,8 +32,8 @@ class SaasPortalPlan(models.Model):
         return vals
 
     @api.multi
-    def _create_new_database(self, **kw):
-        res = super(SaasPortalPlan, self)._create_new_database(**kw)
+    def create_new_database(self, **kwargs):
+        res = super(SaasPortalPlan, self).create_new_database(**kwargs)
 
         params_list = []
         client_obj = self.env['saas_portal.client'].browse(res.get('id'))
@@ -45,8 +45,8 @@ class SaasPortalPlan(models.Model):
             users = 0
             storage = 0
             for topup in self.topup_ids:
-                if topup.max_users: users += topup.max_users
-                if topup.total_storage_limit: storage += topup.total_storage_limit
+                if topup.max_users: users += topup.topup_users
+                if topup.total_storage_limit: storage += topup.topup_storage
             if users:
                 params_list.append({'key': 'saas_client.max_users', 'value': max_users})
             if storage:
