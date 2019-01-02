@@ -34,6 +34,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem action="saas_portal_support_teams" id="menu_saas_portal_support_teams" parent="saas_portal.menu_saas" sequence="100"/>
+    <menuitem id="menu_saas_helpdesk" parent="saas_portal.menu_saas_portal_config" name="Support and Helpdesk" sequence="50" />
+    <menuitem action="saas_portal_support_teams" id="menu_saas_portal_support_teams" parent="menu_saas_helpdesk" sequence="51"/>
 
 </odoo>

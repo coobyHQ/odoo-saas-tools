@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="saas_portal_create_client_view_form" model="ir.ui.view">
+        <field name="name">saas_portal.create_client.form_inherit</field>
+        <field name="inherit_id" ref="saas_portal.create_client.form"/>
+        <field name="model">saas_portal.create_client</field>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='notify_user']" position="after">
+          <field name="support_team_id" class="oe_inline"/>
+          </xpath>
+        </field>
+    </record>
+</odoo>
