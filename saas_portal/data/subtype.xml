@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <!-- Client-related subtypes for messaging / Chatter -->
         <record id="mt_expired" model="mail.message.subtype">
@@ -8,12 +8,12 @@
             <field name="default" eval="False"/>
             <field name="description">Subscription expired</field>
         </record>
-        <!-- Support_team-related subtypes for messaging / Chatter -->
+        <!-- Support_team-related subtypes for messaging / Chatter 
         <record id="mt_support_team_expired" model="mail.message.subtype">
             <field name="name">Subscription expired</field>
             <field name="res_model">saas_portal.support_team</field>
             <field name="parent_id" eval="ref('saas_portal.mt_expired')"/>
             <field name="relation_field">support_team_id</field>
-        </record>
+        </record>-->
     </data>
-</openerp>
+</odoo>

@@ -94,5 +94,8 @@
     <field name="target">inline</field>
     <field name="context">{'module' : 'saas_portal'}</field>
   </record>
-  <menuitem id="menu_saas_portal_general_settings" name="Settings" parent="menu_saas_portal_config" sequence="0" action="action_saas_portal_config_settings" groups="base.group_system"/>
+
+  <menuitem id="menu_saas_portal_general_settings" name="Settings" parent="menu_saas_portal_config" sequence="0"
+            action="action_saas_portal_config_settings" groups="base.group_system"/>
+
 </odoo>

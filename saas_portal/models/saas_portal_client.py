@@ -28,8 +28,6 @@ class SaasPortalClient(models.Model):
         'res.users', default=lambda self: self.env.user, string='Salesperson')
     notification_sent = fields.Boolean(
         default=False, readonly=True, help='notification about oncoming expiration has sent')
-    support_team_id = fields.Many2one(
-        'saas_portal.support_team', 'Support Team')
     active = fields.Boolean(
         default=True, compute='_compute_active', store=True)
     block_on_expiration = fields.Boolean(

@@ -150,9 +150,6 @@ class SaasPortalCreateClient(models.TransientModel):
     notify_user = fields.Boolean(
         help='Notify user by email when database will have been created',
         default=True)
-    support_team_id = fields.Many2one(
-        'saas_portal.support_team', 'Support Team',
-        default=lambda self: self.env.user.support_team_id)
     async_creation = fields.Boolean(
         'Asynchronous',
         default=False, help='Asynchronous creation of client base')

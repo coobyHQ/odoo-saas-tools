@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem name="SaaS" id="menu_base_saas" sequence="30" web_icon="saas_portal,static/description/icon_menu.png"/>
-    <menuitem id="menu_saas" parent="menu_base_saas" name="SaaS" sequence="1"/>
-    <menuitem id="menu_saas_portal_config"
-        name="Configuration"
-        parent="menu_base_saas"
-        sequence="6"
-        groups="base.group_system"/>
-
     <!-- Client -->
     <record id="view_clients_tree" model="ir.ui.view">
         <field name="name">saas_portal.client.tree</field>
@@ -120,7 +112,7 @@
         <field name="context">{'search_default_current': 1}</field>
     </record>
 
-    <menuitem action="action_clients" id="menu_clients" parent="menu_saas" sequence="10"/>
+    <menuitem name="Client Instances" action="action_clients" id="menu_clients" parent="menu_base_saas" sequence="1"/>
 
     <!-- Client Config -->
 
@@ -211,8 +203,8 @@
         <field name="context">{'default_action': 'upgrade'}</field>
     </record>
 
-    <act_window
-    id="act_configure_clients"
+    <!-- Configure Client Databases -->
+    <act_window id="act_configure_clients"
     name="Configure Clients"
     res_model="saas.config"
     key2="client_action_multi"
@@ -223,7 +215,6 @@
     <!--<menuitem action="action_upgrade_clients" id="menu_upgrade_clients" parent="saas_portal.menu_saas" sequence="100"/>-->
 
     <!-- Upgrade Databases -->
-
     <record id="action_updb" model="ir.actions.act_window">
         <field name="name">Configure Databases</field>
         <field name="type">ir.actions.act_window</field>
@@ -232,12 +223,12 @@
         <field name="target">new</field>
     </record>
 
-    <act_window
-    id="act_delete_batch_clients"
+    <!-- Delete Client Databases -->
+    <act_window id="act_delete_batch_clients"
     name="Delete Clients"
     res_model="saas_portal.batch_delete_wizard"
     key2="client_action_multi"
     src_model="saas_portal.client"
-    view_mode="form" target="new" view_type="form" />
+    view_mode="form" target="new" view_type="form"/>
 
 </odoo>

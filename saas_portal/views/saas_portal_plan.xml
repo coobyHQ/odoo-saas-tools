@@ -96,5 +96,5 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem action="action_plans" id="menu_plans" parent="saas_portal.menu_saas" sequence="30"/>
+    <menuitem action="action_plans" id="menu_plans" parent="menu_base_saas" sequence="4"/>
 </odoo>

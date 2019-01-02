@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Technical Records -->
-    <menuitem id="menu_saas_tech" parent="menu_base_saas" name="Technical Records" sequence="2" />
+    <menuitem id="menu_saas_tech" parent="menu_saas_portal_config" name="Technical Records" sequence="5" />
 
     <!-- Templates -->
     <record id="view_databases_tree" model="ir.ui.view">

@@ -82,6 +82,6 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem action="saas_portal.action_server" id="menu_server" parent="saas_portal.menu_saas" sequence="20"/>
+    <menuitem action="saas_portal.action_server" id="menu_server" parent="menu_saas_portal_config" sequence="5"/>
 
 </odoo>

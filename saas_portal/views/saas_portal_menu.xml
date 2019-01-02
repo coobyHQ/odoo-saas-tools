@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem name="SaaS" id="menu_base_saas" sequence="30" web_icon="saas_portal,static/description/icon_menu.png"/>
+    <menuitem name="SaaS" id="menu_saas" parent="menu_base_saas" sequence="1"/>
+
+    <menuitem
+        id="menu_contract_saas" name="Contracts"
+        parent="menu_base_saas"
+        action="contract.action_account_analytic_sale_overdue_all"
+        sequence="6"
+        groups="sales_team.group_sale_salesman"/>
+
+    <menuitem id="menu_saas_portal_config"
+        name="Configuration"
+        parent="menu_base_saas"
+        sequence="6"
+        groups="base.group_system"/>
+
+</odoo>

@@ -8,3 +8,5 @@
 - Revamp of code, separation into one file per model
 - Extraction of code for support groups into separate module
 - Improved UX for client instance and plans
+- Revamp of Menu structure
+- Adding menu link to Customers
