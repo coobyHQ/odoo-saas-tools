@@ -60,6 +60,32 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
         base_saas_domain = config.sudo().get_param(full_param)
         return base_saas_domain
 
+    def upgrade_client_with_topup(self, client, plan_id, order_id):
+        plan = request.env['saas_portal.plan'].sudo().browse(plan_id)
+        max_users = int(plan.max_users)
+        total_storage_limit = int(plan.total_storage_limit)
+
+        if order_id and client and plan.topup_ids:
+            order = request.env['sale.order'].sudo().browse(int(order_id))
+            params_list = []
+            users = max_users
+            storage = total_storage_limit
+            for topup in plan.topup_ids:
+                order_lines = order.order_line.filtered(lambda line: line.product_id.id == topup.product_tmpl_id.id)
+                if order_lines:
+                    for line in order_lines:
+                        if topup.topup_users:
+                            users += int(topup.topup_users * line.product_uom_qty)
+                        if topup.topup_storage:
+                            storage += int(topup.topup_storage * line.product_uom_qty)
+            if users != max_users:
+                params_list.append({'key': 'saas_client.max_users', 'value': users})
+            if storage != total_storage_limit:
+                params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage})
+
+            if params_list:
+                client.upgrade(payload={'params': params_list})
+
     # ------------------------------------------------------
     # Extra step to add dbname
     # ------------------------------------------------------
@@ -91,6 +117,13 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             base_saas_domain = self.get_saas_domain()
             post['base_saas_domain'] = base_saas_domain
 
+        instances = False
+        if order:
+            if not order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False and product.saas_product_type == 'base'):
+                partner = request.env.user.partner_id
+                SaasPortalClient = request.env['saas_portal.client']
+                instances = SaasPortalClient.sudo().search([('partner_id.id', '=', partner.id)])
+
         values = {
             'website_sale_order': order,
             'post': post,
@@ -98,6 +131,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             'escape': lambda x: x.replace("'", r"\'"),
             'partner': order.partner_id.id,
             'order': order,
+            'instances': instances
         }
 
         return request.render("website_sale.extra_info", values)
@@ -138,18 +172,22 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             return request.redirect('/shop')
 
         # create a new saas client
-        if order and order.order_line.mapped('product_id').filtered(
-                lambda product: product.saas_plan_id != False):
-            plan_id = 1
-            dbname = order.saas_dbname
-            if plan_id and dbname:
-                redirect = '/saas_portal/add_new_client'
-                redirect_url = '%s?dbname=%s&plan_id=%s&order_id=%s' % (
-                    redirect, dbname, plan_id, order.id
-                )
-                return request.redirect(redirect_url)
+        if order:
+            if order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False):
+                plan_id = order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False)[:1].saas_plan_id.id
+                dbname = order.saas_dbname
+                client = order.saas_instance_id # request.env['saas_portal.client'].sudo().search([('name', '=', dbname)], limit=1)
+                if plan_id and dbname and not client:
+                    redirect = '/saas_portal/add_new_client'
+                    redirect_url = '%s?dbname=%s&plan_id=%s&order_id=%s' % (
+                        redirect, dbname, plan_id, order.id
+                    )
+                    return request.redirect(redirect_url)
+                if plan_id and client:
+                    self.upgrade_client_with_topup(client, plan_id, order.id)
 
         return request.redirect('/shop/confirmation')
+
 
 class WebsiteSaleForm(WebsiteSaleForm):
 
@@ -167,6 +205,8 @@ class WebsiteSaleForm(WebsiteSaleForm):
 
         if 'dbname' in kwargs:
             order.write({'saas_dbname': kwargs['dbname']})
+        if 'instance_id' in kwargs:
+            order.write({'saas_instance_id': kwargs['instance_id']})
 
         if data['custom']:
             values = {
