@@ -4,16 +4,30 @@
         <xpath expr="//div[hasclass('o_website_sale_rightfit')]" position="replace">
             <div class="row">
                 <div class='col-md-12 o_website_sale_rightfit'>
-                <h2 class="mb8 mt8">Desired web address for your system</h2>
                 <form action="/website_form/" method="post" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data" data-force_action="shop.sale.order.dbname" data-model_name="sale.order" data-success_page="/shop/payment">
                     <div class="form-group form-field o_website_form_custom">
                         <div class="form-group field-name">
                            <!--label for="dbname" class="control-label">Domain:</label-->
-                               <div class="input-group">
-                                   <input type="text" name="dbname" t-att-value="dbname" id="dbname" class="form-control" placeholder="your-company-name"
-                                   required="required" />
-                                   <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
-                               </div>
+                                <t t-if="not instances">
+                                   <h2 class="mb8 mt8">Desired web address for your system</h2>
+                                   <div class="input-group">
+                                       <input type="text" name="dbname" t-att-value="dbname" id="dbname"
+                                              class="form-control" placeholder="your-company-name" required="required"/>
+                                       <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
+                                   </div>
+                                </t>
+                                <t t-if="instances">
+                                    <h2 class="mb8 mt8">Select Your Instance To Upgrade</h2>
+                                    <div class="form-group">
+                                        <select name="instance_id" class="form-control instance_id" required="required">
+                                            <t t-foreach="instances or []" t-as="instance">
+                                                <option t-att-value="instance.id">
+                                                    <t t-esc="instance.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </t>
                        </div>
                     </div>
                     <div class="form-group form-field o_website_form_custom hidden">
