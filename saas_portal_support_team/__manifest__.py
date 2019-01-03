@@ -12,9 +12,10 @@
         'saas_portal',
     ],
     'data': [
-        'views/saas_portal_client.xml',
         'views/saas_portal_support_team.xml',
+#       'views/saas_portal_client.xml',
         'views/res_users.xml',
+#       'wizard/config_wizard.xml',
         'data/support_team.xml',
         'data/res_users.xml',
     ],

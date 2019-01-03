@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contract menu -->
+    <menuitem
+        id="menu_contract_saas" name="Contracts"
+        parent="saas_portal.menu_base_saas"
+        action="contract.action_account_analytic_sale_overdue_all"
+        sequence="4"
+        groups="sales_team.group_sale_salesman"/>
+
+</odoo>
