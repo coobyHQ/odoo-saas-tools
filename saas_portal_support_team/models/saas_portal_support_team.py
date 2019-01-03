@@ -10,3 +10,4 @@ class SaasPortalSupportTeams(models.Model):
     _inherit = ['mail.thread']
 
     name = fields.Char('Team name')
+    user_ids = fields.One2many('res.users', 'support_team_id', string='Users')
