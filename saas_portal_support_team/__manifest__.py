@@ -18,6 +18,7 @@
 #       'wizard/config_wizard.xml',
         'data/support_team.xml',
         'data/res_users.xml',
+        'data/subtype.xml',
     ],
     'application': False,
     'installable': True,
