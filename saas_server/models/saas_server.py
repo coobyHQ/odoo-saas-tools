@@ -29,7 +29,7 @@ class SaasServerClient(models.Model):
     expiration_datetime = fields.Datetime(readonly=True)
     state = fields.Selection([('template', 'Template'),
                               ('draft', 'New'),
-                              ('open', 'In Progress'),
+                              ('open', 'Running'),
                               ('cancelled', 'Cancelled'),
                               ('pending', 'Pending'),
                               ('deleted', 'Deleted')],

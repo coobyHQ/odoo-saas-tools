@@ -39,11 +39,11 @@ class SaasPortalPlan(models.Model):
         help='maximum allowed non-trial databases per customer', require=True, default=0)
     maximum_allowed_trial_dbs_per_partner = fields.Integer(
         help='maximum allowed trial databases per customer', require=True, default=0)
-
-    max_users = fields.Char('Initial Max users',
+    # Todo why char ???
+    max_users = fields.Integer('Initial Max users',
                             default='0', help='leave 0 for no limit')
     total_storage_limit = fields.Integer(
-        'Total storage limit (MB)', help='leave 0 for no limit')
+        'Total plan storage limit (MB)', help='leave 0 for no limit')
     block_on_expiration = fields.Boolean(
         'Block clients on expiration', default=False)
     block_on_storage_exceed = fields.Boolean(

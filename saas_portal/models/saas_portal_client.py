@@ -22,6 +22,13 @@ class SaasPortalClient(models.Model):
         'res.partner', string='Partner', track_visibility='onchange', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
                               track_visibility='onchange', ondelete='set null', readonly=True)
+    plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly='True')
+    plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly='True')
+    plan_max_storage = fields.Integer(related='plan_id.total_storage_limit', string="Plan max allowed Storage", readonly='True')
+    topup_users = fields.Integer('Additional users', default='0', help='from Topups')
+    topup_storage_limit = fields.Integer('Additional storage (MB)',  default='0', help='from Topups')
+    total_storage = fields.Integer('Used storage (MB)',  help='from Client')
+
     expiration_datetime = fields.Datetime(string="Expiration")
     expired = fields.Boolean('Expired')
     user_id = fields.Many2one(

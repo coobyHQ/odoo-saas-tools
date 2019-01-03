@@ -198,7 +198,7 @@ class OauthApplication(models.Model):
 
 class SaasPortalDatabase(models.Model):
     _name = 'saas_portal.database'
-
+    _description = 'Saas database instances'
     _inherits = {'oauth.application': 'oauth_application_id'}
 
     name = fields.Char('Database name', readonly=False)
@@ -209,7 +209,7 @@ class SaasPortalDatabase(models.Model):
         'saas_portal.server', ondelete='restrict',
         string='Server', readonly=True)
     state = fields.Selection([('draft', 'New'),
-                              ('open', 'In Progress'),
+                              ('open', 'Running'),
                               ('cancelled', 'Cancelled'),
                               ('pending', 'Pending'),
                               ('deleted', 'Deleted'),
