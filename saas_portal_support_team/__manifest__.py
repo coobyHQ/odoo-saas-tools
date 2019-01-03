@@ -6,7 +6,7 @@
     'category': 'SaaS',
     'support': 'apps@it-projects.info',
     'website': 'https://it-projects.info',
-    'summary': 'Module that ads Support team to client instances in SaaS Portal.',
+    'summary': 'Module that ads Support teams to client instances in SaaS Portal.',
 
     'depends': [
         'saas_portal',

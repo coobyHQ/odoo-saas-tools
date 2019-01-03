@@ -169,7 +169,7 @@ class SaasPortalCreateClient(models.TransientModel):
             partner_id=self.partner_id.id,
             user_id=self.user_id.id,
             notify_user=self.notify_user,
-            support_team_id=self.support_team_id.id,
+  # moved   support_team_id=self.support_team_id.id,
             async=self.async_creation,
             trial=self.trial)
         if self.async_creation:
