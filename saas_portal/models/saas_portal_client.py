@@ -13,11 +13,12 @@ _logger = logging.getLogger(__name__)
 class SaasPortalClient(models.Model):
     _name = 'saas_portal.client'
     _description = 'Client Instances'
+    _mail_flat_thread = False
     _rec_name = 'name'
 
-    _inherit = ['mail.thread', 'saas_portal.database', 'saas_base.client']
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'saas_portal.database', 'saas_base.client']
 
-    name = fields.Char(required=True)
+    name = fields.Char(required=True, help='Client Database name')
     partner_id = fields.Many2one(
         'res.partner', string='Partner', track_visibility='onchange', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
@@ -25,10 +26,9 @@ class SaasPortalClient(models.Model):
     plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly='True')
     plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly='True')
     plan_max_storage = fields.Integer(related='plan_id.total_storage_limit', string="Plan max allowed Storage", readonly='True')
-    topup_users = fields.Integer('Additional users', default='0', help='from Topups')
-    topup_storage_limit = fields.Integer('Additional storage (MB)',  default='0', help='from Topups')
-    total_storage = fields.Integer('Used storage (MB)',  help='from Client')
+    plan_lang = fields.Selection(related='plan_id.lang', readonly='True')
 
+    total_storage = fields.Integer('Used storage (MB)', compute='_get_storage_client_sum', help='from Client')
     expiration_datetime = fields.Datetime(string="Expiration")
     expired = fields.Boolean('Expired')
     user_id = fields.Many2one(
@@ -46,6 +46,7 @@ class SaasPortalClient(models.Model):
     trial_hours = fields.Integer('Initial period for trial (hours)',
                                  help='Subsription initial period in hours for trials',
                                  readonly=True)
+    note = fields.Html('Note')
 
     # TODO: use new api for tracking
     _track = {
@@ -54,6 +55,12 @@ class SaasPortalClient(models.Model):
             lambda self, cr, uid, obj, ctx=None: obj.expired
         }
     }
+
+    @api.multi
+    @api.depends('state')
+    def _get_storage_client_sum(self):
+        for record in self:
+            record.total_storage = record.file_storage + record.db_storage
 
     @api.multi
     @api.depends('state')

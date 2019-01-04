@@ -310,14 +310,3 @@ class SaasPortalPlan(models.Model):
         self.ensure_one()
         res = self.template_id.delete_database_server()
         return res
-
-
-class SaasPortalPlanTopup (models.Model):
-    _name = 'saas_portal.plan_topup'
-
-    name = fields.Char('Topup name')
-    summary = fields.Char('Summary')
-    plan_id = fields.Many2one(
-        'saas_portal.plan', 'Master Plan', ondelete='restrict')
-    product_template_id = fields.Many2one(
-        'saas_portal.database', 'Product', ondelete='restrict')
