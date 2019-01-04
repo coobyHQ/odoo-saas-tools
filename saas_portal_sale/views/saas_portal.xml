@@ -6,13 +6,50 @@
         <field name="model">saas_portal.client</field>
         <field name="inherit_id" ref="saas_portal.view_clients_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@name='settings']" position="after">
-                <group string="Invoicing" name="invoicing">
-                    <field name="contract_id"/>
-                </group>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <label for="contract_id"/> <field name="contract_id"/>
             </xpath>
+            <xpath expr="//field[@name='plan_max_users']" position="after">
+                <label for="topup_users"/> <field name="contract_id"/>
+            </xpath>
+            <xpath expr="//field[@name='plan_max_storage']" position="after">
+                <label for="topup_storage_limit"/> <field name="contract_id"/>
+            </xpath>
+
+            <!-- Adding new page
+            Todo this is still experimental -->
+
+            <xpath expr="//page[@name='notes']" position="before">
+                <page string="Product and Topups" name="topups">
+                    <separator string="Topups"/>
+                    <field name="topup_ids">
+                        <tree>
+                            <field name="qty_delivered"/>
+                            <field name="name"/>
+                            <field name="topup_users"/>
+                            <field name="topup_storage"/>
+                            <field name="plan_id"/>
+                            <field name="client_id"/>
+                        </tree>
+                        <form>
+                            <group colspan="4" col="4">
+                                <field name="name" colspan="4"/>
+                                 <field name="qty_delivered"/>
+                                <field name="plan_id"/>
+                                <field name="topup_users" colspan="2"/>
+                                <field name="topup_storage" colspan="2"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+
         </field>
     </record>
+
+
+
+
     <!-- plans -->
     <record id="view_sale_plans_form" model="ir.ui.view">
         <field name="name">saas_portal_sale.plans.form</field>

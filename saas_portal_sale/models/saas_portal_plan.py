@@ -32,11 +32,3 @@ class SaasPortalPlan(models.Model):
         return vals
 
 
-class SaasPortalClient(models.Model):
-    _inherit = 'saas_portal.client'
-
-    contract_id = fields.Many2one(
-        'account.analytic.account',
-        string='Contract',
-        readonly=True,
-    )
