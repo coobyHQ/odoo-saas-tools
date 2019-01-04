@@ -10,10 +10,10 @@
                 <label for="contract_id"/> <field name="contract_id"/>
             </xpath>
             <xpath expr="//field[@name='plan_max_users']" position="after">
-                <label for="topup_users"/> <field name="contract_id"/>
+                <field name="topup_users"/>
             </xpath>
             <xpath expr="//field[@name='plan_max_storage']" position="after">
-                <label for="topup_storage_limit"/> <field name="contract_id"/>
+                <field name="topup_storage_limit"/>
             </xpath>
 
             <!-- Adding new page
