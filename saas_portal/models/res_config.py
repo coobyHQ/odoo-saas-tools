@@ -12,7 +12,7 @@ class SaasPortalConfigWizard(models.TransientModel):
 
     expiration_notify_in_advance = fields.Char(help='Notify partners when less then defined number of days left befor expiration')
 
-    module_saas_portal_sale_online = fields.Boolean(string='Sale SaaS from website shop', help='Use saas_portal_sale_online module')
+    module_website_sale_saas = fields.Boolean(string='Sale SaaS from website shop', help='Use website_sale_saas module')
     module_saas_server_backup_rotate = fields.Boolean(string='Rotate backups', help='Use saas_server_backup_rotate module')
 
     @api.multi

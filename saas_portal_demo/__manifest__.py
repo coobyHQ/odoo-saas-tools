@@ -14,7 +14,7 @@
     "depends": [
         "saas_portal",
         "website_sale",
-        "saas_portal_sale_online",
+        "website_sale_saas",
         # "website_seo_url",
         # "website_seo_url_product",
         # "website_sale_add_to_cart_disable",
