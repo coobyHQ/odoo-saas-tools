@@ -8,4 +8,16 @@
            </xpath>
        </template>
 
+        <!-- Add warning on website cart page -->
+        <template id="cart_saas_warning" inherit_id="website_sale.cart">
+            <xpath expr="//h2" position="after">
+                <t t-if="not valid">
+                    <div class="alert alert-danger">
+                        <strong>Warning!</strong>
+                        You can't buy more then one base SaaS product at the same time! Please select only one.
+                    </div>
+                </t>
+            </xpath>
+        </template>
+
 </odoo>
