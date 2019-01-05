@@ -15,6 +15,21 @@
                                               class="form-control" placeholder="your-company-name" required="required"/>
                                        <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
                                    </div>
+                                    <br/>
+                                   <h3 class="mb8 mt8" style="text-align: center; color: orange;">Your Odoo Instance Size</h3>
+                                   <div class="row" id="max_users">
+                                        <span class="col-xs-6 text-right text-muted">Max. users:</span>
+                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                            <span t-raw="plan and plan['max_allowed_users'] or ''" style="white-space: nowrap;"/>
+                                        </span>
+                                    </div>
+                                    <div class="row" id="max_storage">
+                                        <span class="col-xs-6 text-right text-muted">Max. storage (MB):</span>
+                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                            <span t-raw="plan and plan['max_allowed_storage'] or ''" style="white-space: nowrap;"/>
+                                        </span>
+                                    </div>
+
                                 </t>
                                 <t t-if="instances">
                                     <h2 class="mb8 mt8">Select Your Instance To Upgrade</h2>

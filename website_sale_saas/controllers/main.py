@@ -60,36 +60,39 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
         base_saas_domain = config.sudo().get_param(full_param)
         return base_saas_domain
 
+    def get_topup_info(self, order, plan, client):
+        additional_invoice_lines = []
+        users = int(plan.max_users)
+        storage = int(plan.total_storage_limit)
+        for topup in plan.topup_ids:
+            order_lines = order.order_line.filtered(lambda line: line.product_id.id == topup.product_tmpl_id.id)
+            if order_lines:
+                for line in order_lines:
+                    if topup.topup_users:
+                        users += int(topup.topup_users * line.product_uom_qty)
+                    if topup.topup_storage:
+                        storage += int(topup.topup_storage * line.product_uom_qty)
+                    if topup.contract_template_id and client and client.contract_id:
+                        for inv_line in topup.contract_template_id.recurring_invoice_line_ids:
+                            additional_invoice_lines.append({
+                                'analytic_account_id': client.contract_id and client.contract_id.id or False,
+                                'product_id': inv_line.product_id.id,
+                                'name': inv_line.name,
+                                'quantity': inv_line.quantity * line.product_uom_qty,
+                                'uom_id': inv_line.uom_id.id,
+                                'automatic_price': inv_line.automatic_price,
+                                'price_unit': inv_line.price_unit,
+                            })
+        return users, storage, additional_invoice_lines
+
     def upgrade_client_with_topup(self, client, plan_id, order_id):
         plan = request.env['saas_portal.plan'].sudo().browse(plan_id)
         max_users = int(plan.max_users)
         total_storage_limit = int(plan.total_storage_limit)
-
         if order_id and client and plan.topup_ids:
             order = request.env['sale.order'].sudo().browse(int(order_id))
             params_list = []
-            additional_invoice_lines = []
-            users = max_users
-            storage = total_storage_limit
-            for topup in plan.topup_ids:
-                order_lines = order.order_line.filtered(lambda line: line.product_id.id == topup.product_tmpl_id.id)
-                if order_lines:
-                    for line in order_lines:
-                        if topup.topup_users:
-                            users += int(topup.topup_users * line.product_uom_qty)
-                        if topup.topup_storage:
-                            storage += int(topup.topup_storage * line.product_uom_qty)
-                        if topup.contract_template_id and client.contract_id:
-                            for inv_line in topup.contract_template_id.recurring_invoice_line_ids:
-                                additional_invoice_lines.append({
-                                    'analytic_account_id': client.contract_id and client.contract_id.id or False,
-                                    'product_id': inv_line.product_id.id,
-                                    'name': inv_line.name,
-                                    'quantity': inv_line.quantity * line.product_uom_qty,
-                                    'uom_id': inv_line.uom_id.id,
-                                    'automatic_price': inv_line.automatic_price,
-                                    'price_unit': inv_line.price_unit,
-                                })
+            users, storage, additional_invoice_lines = self.get_topup_info(order, plan, client)
             if users != max_users:
                 params_list.append({'key': 'saas_client.max_users', 'value': users})
             if storage != total_storage_limit:
@@ -140,11 +143,25 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             post['base_saas_domain'] = base_saas_domain
 
         instances = False
+        plan = False
         if order:
-            if not order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False and product.saas_product_type == 'base'):
+            base_plan_product = order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False and product.saas_product_type == 'base')
+            if not base_plan_product:
                 partner = request.env.user.partner_id
                 SaasPortalClient = request.env['saas_portal.client']
                 instances = SaasPortalClient.sudo().search([('partner_id.id', '=', partner.id)])
+            elif base_plan_product.saas_plan_id:
+                users, storage, additional_invoice_lines = self.get_topup_info(order, base_plan_product.saas_plan_id, None)
+                #additional_users = base_plan_product.saas_plan_id.max_users - users
+                #additional_storage = base_plan_product.saas_plan_id.total_storage_limit - storage
+                plan = {
+                    #'plan_users': base_plan_product.saas_plan_id.max_users,
+                    #'additional_users': additional_users,
+                    'max_allowed_users': users,
+                    #'plan_storage': base_plan_product.saas_plan_id.total_storage_limit,
+                    #'additional_storage': additional_storage,
+                    'max_allowed_storage': storage,
+                }
 
         values = {
             'website_sale_order': order,
@@ -153,7 +170,8 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             'escape': lambda x: x.replace("'", r"\'"),
             'partner': order.partner_id.id,
             'order': order,
-            'instances': instances
+            'instances': instances,
+            'plan': plan
         }
 
         return request.render("website_sale.extra_info", values)
