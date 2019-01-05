@@ -19,7 +19,6 @@
         'views/product_attribute_views.xml',
         'views/saas_portal_menu.xml',
         'views/saas_portal.xml',
-        'views/saas_portal_shop_extra_step.xml',
         'data/mail_template_data.xml',
         'data/ir_config_parameter.xml',
     ],
