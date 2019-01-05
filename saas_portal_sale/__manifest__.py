@@ -1,12 +1,12 @@
 {
     'name': "Saas Portal Sale",
-    'author': "IT-Projects LLC, Ildar Nasyrov, Nicolas JEUDY",
+    'author': "IT-Projects LLC, Ildar Nasyrov, Nicolas JEUDY, Cooby tec",
     'license': 'LGPL-3',
     'support': 'apps@it-projects.info',
     'website': 'https://it-projects.info',
     'category': 'SaaS',
     'summary': 'Sells SaaS products in the Webshop',
-    'version': '11.0.1.0.0',
+    'version': '11.0.1.1.0',
     'depends': [
         'sale',
         'saas_portal',

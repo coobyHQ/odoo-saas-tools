@@ -64,11 +64,13 @@
                 <!-- Adding new page -->
                 <xpath expr="//page[@name='website']" position="before">
                     <page string="Product and Topups" name="topups">
-                        <group string="Product Template" name="template">
-                            <field name="product_tmpl_id"/>
-                        </group>
-                        <group string="Contract Template" name="contract_template">
-                            <field name="contract_template_id"/>
+                        <group>
+                            <group string="Product Template" name="template">
+                                <field name="product_tmpl_id"/>
+                            </group>
+                            <group string="Contract Template" name="contract_template">
+                                <field name="contract_template_id"/>
+                            </group>
                         </group>
                         <separator string="Variants"/>
                         <field name="product_variant_ids"/>
