@@ -34,7 +34,7 @@
                         <form>
                             <group colspan="4" col="4">
                                 <field name="name" colspan="4"/>
-                                 <field name="qty_delivered"/>
+                                <field name="qty_delivered"/>
                                 <field name="plan_id"/>
                                 <field name="topup_users" colspan="2"/>
                                 <field name="topup_storage" colspan="2"/>
@@ -67,6 +67,9 @@
                         <group string="Product Template" name="template">
                             <field name="product_tmpl_id"/>
                         </group>
+                        <group string="Contract Template" name="contract_template">
+                            <field name="contract_template_id"/>
+                        </group>
                         <separator string="Variants"/>
                         <field name="product_variant_ids"/>
                         <separator string="Topups"/>
@@ -76,12 +79,14 @@
                                 <field name="topup_users"/>
                                 <field name="topup_storage"/>
                                 <field name="product_tmpl_id"/>
+                                <field name="contract_template_id"/>
                             </tree>
                             <form>
                                 <group colspan="4" col="4">
                                     <field name="name" colspan="4"/>
                                     <field name="product_tmpl_id" colspan="4"
                                            context="{'default_is_saas': True, 'default_saas_product_type': 'addon'}"/>
+                                    <field name="contract_template_id" colspan="4"/>
                                     <field name="topup_users" colspan="2"/>
                                     <field name="topup_storage" colspan="2"/>
                                 </group>

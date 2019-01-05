@@ -17,6 +17,7 @@ class SaasPortalPlan(models.Model):
     product_variant_ids = fields.One2many('product.product',
                                           'saas_plan_id',
                                           'Product variants')
+    contract_template_id = fields.Many2one('account.analytic.contract', string='Contract Template')
 
     @api.multi
     def _new_database_vals(self, vals):
@@ -26,7 +27,10 @@ class SaasPortalPlan(models.Model):
             'name': vals['name'],
             'partner_id': vals['partner_id'],
             'recurring_invoices': True,
+            'contract_template_id': self.contract_template_id and self.contract_template_id.id or False
         })
+        if self.contract_template_id:
+            contract._onchange_contract_template_id()
 
         vals['contract_id'] = contract.id
         return vals

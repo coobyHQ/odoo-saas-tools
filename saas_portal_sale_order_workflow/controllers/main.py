@@ -68,6 +68,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
         if order_id and client and plan.topup_ids:
             order = request.env['sale.order'].sudo().browse(int(order_id))
             params_list = []
+            additional_invoice_lines = []
             users = max_users
             storage = total_storage_limit
             for topup in plan.topup_ids:
@@ -78,6 +79,17 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
                             users += int(topup.topup_users * line.product_uom_qty)
                         if topup.topup_storage:
                             storage += int(topup.topup_storage * line.product_uom_qty)
+                        if topup.contract_template_id and client.contract_id:
+                            for inv_line in topup.contract_template_id.recurring_invoice_line_ids:
+                                additional_invoice_lines.append({
+                                    'analytic_account_id': client.contract_id and client.contract_id.id or False,
+                                    'product_id': inv_line.product_id.id,
+                                    'name': inv_line.name,
+                                    'quantity': inv_line.quantity * line.product_uom_qty,
+                                    'uom_id': inv_line.uom_id.id,
+                                    'automatic_price': inv_line.automatic_price,
+                                    'price_unit': inv_line.price_unit,
+                                })
             if users != max_users:
                 params_list.append({'key': 'saas_client.max_users', 'value': users})
             if storage != total_storage_limit:
@@ -85,6 +97,16 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
 
             if params_list:
                 client.upgrade(payload={'params': params_list})
+                # request.env['saas_portal.client_topup'].sudo().create({
+                #     'client_id': client.id,
+                #     'topup_users': users if users != max_users else None,
+                #     'topup_storage': storage if storage != total_storage_limit else None,
+                # })
+
+            if client.contract_id and additional_invoice_lines:
+                #client.contract_id.recurring_invoice_line_ids = additional_invoice_lines
+                for invoice_line in additional_invoice_lines:
+                    request.env['account.analytic.invoice.line'].sudo().create(invoice_line)
 
     # ------------------------------------------------------
     # Extra step to add dbname
