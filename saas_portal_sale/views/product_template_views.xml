@@ -18,6 +18,7 @@
                    attrs="{'required': [('is_saas','=',True)], 'invisible': [('is_saas','=',False)]}"/>
             <field name="saas_plan_id"/>
             <field name="saas_default"/>
+            <field name="trial_allowed"/>
           </group>
         </page>
       </xpath>

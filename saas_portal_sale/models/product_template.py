@@ -17,6 +17,9 @@ class ProductTemplateSaaS(models.Model):
     saas_default = fields.Boolean(
         'Is default',
         help='Use as default SaaS product on signup form')
+    trial_allowed = fields.Boolean(
+        'Trial instance is allowed',
+        help='In webshop the form gets an extra Button "Trial"')
     on_create_email_template = fields.Many2one(
         'mail.template',
         string='credentials mail')
@@ -32,4 +35,6 @@ class ProductAttributeSaaS(models.Model):
 
     def _get_saas_codes(self):
         return [('max_users', 'max_users'),
-                ('total_storage_limit', 'total_storage_limit')]
+                ('total_storage_limit', 'total_storage_limit'),
+                ('lang', 'Language')
+                ]

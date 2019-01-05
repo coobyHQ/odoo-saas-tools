@@ -3,3 +3,9 @@
 
 - Init version
 - Clean all code for V11
+
+`1.1.0`
+------------
+
+- Complete UX revamping
+- Adding of topup products
