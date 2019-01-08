@@ -7,8 +7,21 @@ class ProductTemplateSaaS(models.Model):
     is_saas = fields.Boolean('SaaS Product')
     saas_product_type = fields.Selection([
         ('base', 'Base'),
-        ('addon', 'Add Ons')],
+        ('topup', 'Topups')],
         string='SaaS Product Type')
+
+    saas_base_type = fields.Selection([
+        ('server', 'Base Server based'),
+        ('container', 'Base Container based')],
+        string='SaaS Base Type')
+
+    saas_topup_type = fields.Selection([
+        ('users', 'Additional Users'),
+        ('storage', 'Additional Storage'),
+        ('kube_pot', 'Additional Kubernetes Pots'),
+        ('cert_le', 'Letsencrypt Certificate'),
+        ('cert_own', 'Own commercial Certificate')],
+        string='SaaS Topup Type')
 
     plan_ids = fields.One2many(
         'saas_portal.plan', 'product_tmpl_id',
@@ -34,7 +47,6 @@ class ProductAttributeSaaS(models.Model):
     saas_code = fields.Selection('_get_saas_codes')
 
     def _get_saas_codes(self):
-        return [('max_users', 'max_users'),
-                ('total_storage_limit', 'total_storage_limit'),
+        return [
                 ('lang', 'Language')
                 ]

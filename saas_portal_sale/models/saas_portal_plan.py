@@ -14,6 +14,9 @@ class SaasPortalPlan(models.Model):
         required=True, default='create_new')
     topup_ids = fields.One2many('saas_portal.plan_topup', inverse_name='plan_id', string='Top ups')
     product_tmpl_id = fields.Many2one('product.template', 'Product')
+    attribute_line_ids = fields.One2many(related='product_tmpl_id.attribute_line_ids',
+                                         String='Product variants')
+
     product_variant_ids = fields.One2many('product.product',
                                           'saas_plan_id',
                                           'Product variants')

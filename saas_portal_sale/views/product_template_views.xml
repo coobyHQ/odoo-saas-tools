@@ -16,6 +16,11 @@
           <group>
             <field name="saas_product_type"
                    attrs="{'required': [('is_saas','=',True)], 'invisible': [('is_saas','=',False)]}"/>
+            <field name="saas_base_type"
+                   attrs="{'required': [('saas_product_type','=','base')], 'invisible': [('saas_product_type','=','topup')]}"/>
+            <field name="saas_topup_type"
+                   attrs="{'required': [('saas_product_type','=','topup')], 'invisible': [('saas_product_type','=','base')]}"/>
+
             <field name="saas_plan_id"/>
             <field name="saas_default"/>
             <field name="trial_allowed"/>
