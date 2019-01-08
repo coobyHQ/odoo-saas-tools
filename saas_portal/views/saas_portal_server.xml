@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Server -->
-
     <record id="view_server_tree" model="ir.ui.view">
         <field name="name">saas_portal.server.tree</field>
         <field name="model">saas_portal.server</field>
         <field name="priority">4</field>
         <field name="arch" type="xml">
-            <tree string="Server" delete="false">
+            <tree string="Servers/Containers" delete="false">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="active"/>
@@ -21,6 +20,7 @@
         <field name="name">saas_portal.server.form</field>
         <field name="model">saas_portal.server</field>
         <field name="arch" type="xml">
+
             <form string="Server" delete="false">
                 <header>
                     <!-- TODO
@@ -34,22 +34,38 @@
                     <field name="id" invisible="1" />
                 </header>
                 <sheet>
-                <group>
-                    <group>
-                        <field name="odoo_version"/>
+                    <div class="oe_title" style="width: 390px;">
+                        <label class="oe_edit_only" for="name_txt" string="Name"/>
+                        <h1><field name="name_txt" class="oe_inline"/></h1>
+                        <label class="oe_edit_only" for="summary" string="Summary"/>
+                        <field name="summary"/>
+                    </div>
+                <group name="base">
+                    <group string="Definition">
                         <field name="name"/>
+                        <field name="server_type"/>
+                        <field name="odoo_version"/>
                         <field name="client_id"/>
                         <field name="active"/>
+                        <field name="max_client"/>
+                    </group>
+                    <group string="Server-side requests">
+                        <field name="local_request_scheme"/>
+                        <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
+                        <field name="local_host"/>
+                        <field name="local_port"/>
+                        <separator string="Portal requests"/>
                         <field name="request_scheme"/>
                         <field name="request_port"/>
                     </group>
-                    <group string="Server-side requests">
-                      <field name="local_request_scheme"/>
-                      <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
-                      <field name="local_host"/>
-                      <field name="local_port"/>
-                    </group>
-                    <group string="Credentials for rpc">
+
+                <group string="Container settings" name="container" attrs="{'invisible': [('server_type', '=', 'server')]}">
+                    <group>
+                        <field name="container_url"/>
+                     </group>
+                </group>
+
+                    <group string="Credentials for rpc" name="credential">
                       <field name="password" password="True"/>
                     </group>
                     <group string="Client Settings">
@@ -75,7 +91,7 @@
     </record>
 
     <record id="action_server" model="ir.actions.act_window">
-        <field name="name">Servers</field>
+        <field name="name">Servers/Containers</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">saas_portal.server</field>
         <field name="view_type">form</field>

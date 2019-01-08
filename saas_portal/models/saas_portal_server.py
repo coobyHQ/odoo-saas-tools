@@ -19,20 +19,40 @@ def _compute_host(self):
             host = '%s.%s' % (r.name, base_saas_domain)
         r.host = host
 
+"""
+todo  action_create_server will ask for master password only.-->
+ https: // erppeek.readthedocs.org / en / latest / api.html  # erppeek.Client.create_database-->
+button string = "Create Server"
+name = "%(action_create_server)d"
+type = "action" class ="oe_highlight" states="draft" / >
+"""
+
 
 class SaasPortalServer(models.Model):
     _name = 'saas_portal.server'
-    _description = 'SaaS Server'
-    _rec_name = 'name'
+    _description = 'SaaS Server / Container'
+    _rec_name = 'name_txt'
 
     _inherit = ['mail.thread']
     _inherits = {'oauth.application': 'oauth_application_id'}
 
+    # Todo as names is used for database name another field was created, but ev. it makes sense to rename
+    #  the field name to database _name, I would prefer this LUH
+    name_txt = fields.Char('Name', required=True)
     name = fields.Char('Database name', required=True)
+    summary = fields.Char('Summary')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     sequence = fields.Integer('Sequence')
     active = fields.Boolean('Active', default=True)
+    server_type = fields.Selection([
+        ('server', 'Server based'),
+        ('container', 'Container based'),
+        ('container_kube', 'Container Kubernetes based')],
+        string='SaaS Server Type')
+
+    container_url = fields.Char('Container URL')
+    max_client = fields.Integer('Max #of Client DB`s', default=100)
     request_scheme = fields.Selection(
         [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
     verify_ssl = fields.Boolean(
@@ -166,7 +186,6 @@ class SaasPortalServer(models.Model):
         p_server = self.env['saas_portal.server']
         saas_server_list = p_server.sudo().search([])
         return saas_server_list[random.randint(0, len(saas_server_list) - 1)]
-
 
 
 class OauthApplication(models.Model):
