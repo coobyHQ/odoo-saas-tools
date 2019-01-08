@@ -24,6 +24,7 @@
             <field name="saas_plan_id"/>
             <field name="saas_default"/>
             <field name="trial_allowed"/>
+            <field name="plan_ids"/>
           </group>
         </page>
       </xpath>

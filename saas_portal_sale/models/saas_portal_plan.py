@@ -12,11 +12,15 @@ class SaasPortalPlan(models.Model):
         string='Non-trial instances',
         help='Whether to use trial database or create new one when user make payment',
         required=True, default='create_new')
-    topup_ids = fields.One2many('saas_portal.plan_topup', inverse_name='plan_id', string='Top ups')
+   # topup_ids = fields.One2many('product.template', inverse_name='plan_id', string='Top ups')
+   # Todo creates errror
+    product_tmpl_topup_ids = fields.Many2many(related='product_tmpl_id.accessory_product_ids',
+                                              String='Topup Templates')
+    #'product.template', 'Topup Template', inverse_name='saas_plan_id', domain=[('saas_product_type', '=', 'topup')], required=True)
     product_tmpl_id = fields.Many2one('product.template', 'Product')
     attribute_line_ids = fields.One2many(related='product_tmpl_id.attribute_line_ids',
                                          String='Product variants')
-
+    # Todo delete, use for what? in module saas_portal_demo
     product_variant_ids = fields.One2many('product.product',
                                           'saas_plan_id',
                                           'Product variants')
