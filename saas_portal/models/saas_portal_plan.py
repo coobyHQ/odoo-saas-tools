@@ -68,7 +68,7 @@ class SaasPortalPlan(models.Model):
         'Grace period (days)', help='initial days before expiration')
 
     dbname_template = fields.Char(
-        'DB Names', help='Used for generating client database domain name. Use %i for numbering. Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
+        'Default DB Name', help='Used for generating client database domain name. Use %i for numbering. Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
     server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
                                 ondelete='restrict',
                                 help='User this saas server or choose random')

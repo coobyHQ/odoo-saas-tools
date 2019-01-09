@@ -1,4 +1,11 @@
-SaaS portal sale
-================
+SaaS Website portal sale
+========================
 
-With this module you can sale SaaS
+This module ads the layout for the webshop to allow sale SaaS products.
+
+
+Contributors
+------------
+* Ildar Nasyrov,
+* Nicolas JEUDY,
+* Cooby tec, Antonio Buric, Lucas Huber

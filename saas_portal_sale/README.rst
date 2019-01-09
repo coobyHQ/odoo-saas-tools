@@ -16,8 +16,7 @@ Got to SaaS / Plans and add the topups in the tab "Products and Topups"
 
 SaaS attribute codes for SaaS products
 --------------------------------------
-* SUBSCRIPTION_PERIOD (TBD)
-* MAX_USERS
+
 * LANGUAGE (lang)
 
 These codes should be assigned in Sales->Configuration->Product Categories & Attributes->Attributes.

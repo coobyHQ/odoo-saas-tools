@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, api, fields
 
 
 class ProductTemplateSaaS(models.Model):
@@ -18,11 +18,12 @@ class ProductTemplateSaaS(models.Model):
     saas_topup_type = fields.Selection([
         ('users', 'Additional Users'),
         ('storage', 'Additional Storage'),
+        ('upgrade', 'Plan Upgrade'),
+        ('downgrade', 'Plan Downgrade'),
         ('kube_pot', 'Additional Kubernetes Pots'),
         ('cert_le', 'Letsencrypt Certificate'),
         ('cert_own', 'Own commercial Certificate')],
         string='SaaS Topup Type')
-
 
     saas_default = fields.Boolean(
         'Is default',
@@ -38,12 +39,27 @@ class ProductTemplateSaaS(models.Model):
                                    string='Related SaaS Plan',
                                    ondelete='restrict')
 
+    @api.depends('accessory_product_ids')
+    def _compute_product_tmpl_topup_ids(self):
+        for product in self:
+            product_ids = []
+            if product.accessory_product_ids:
+                for pr in product.accessory_product_ids:
+                    product_ids.append(pr.id)
+            product.product_tmpl_topup_ids = product_ids
+
+    # Accessories topup  ids
+    product_tmpl_topup_ids = fields.One2many(
+        string='Topup Products', store=False,
+        comodel_name='product.product',
+        compute='_compute_product_tmpl_topup_ids'
+    )
+
     # Todo ev. to delete, Makes no sense as one Product should relate to one plan.
     plan_ids = fields.One2many(
         'saas_portal.plan', 'product_tmpl_id',
         string='SaaS Plans',
         help='Create db per each selected plan - use the DB Names prefix setting in each selected plans')
-
 
 
 class ProductAttributeSaaS(models.Model):

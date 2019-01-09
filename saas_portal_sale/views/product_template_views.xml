@@ -24,6 +24,14 @@
             <field name="saas_plan_id"/>
             <field name="saas_default"/>
             <field name="trial_allowed"/>
+              <!-- to fix
+            <field name="product_tmpl_topup_ids">
+              <tree>
+                 <field name="name"/>
+                 <field name="uom_id"/>
+              </tree>
+            </field>  -->
+            <!-- to delete -->
             <field name="plan_ids"/>
           </group>
         </page>

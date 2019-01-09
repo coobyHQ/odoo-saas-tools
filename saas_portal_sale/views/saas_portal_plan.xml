@@ -25,9 +25,7 @@
                         <separator string="Variants"/>
                         <field name="attribute_line_ids">
                             <tree>
-                             <!--   <field name="name"/>
-                                <field name="product_attribute_id"/>
-                                <field name="template_id"/>
+                             <!--    <field name="name"/>
                                 <field name="lang"/> -->
                             </tree>
                         </field>
@@ -37,6 +35,7 @@
                         <field name="product_tmpl_topup_ids">
                             <tree>
                                 <field name="name"/>
+                                <field name="saas_topup_type"/>
                                 <field name="uom_id"/>
                             </tree>
                         </field>
