@@ -36,7 +36,8 @@
                         <separator string="Topups"/>
                         <field name="product_tmpl_topup_ids">
                             <tree>
-
+                                <field name="name"/>
+                                <field name="uom_id"/>
                             </tree>
                         </field>
                     </page>

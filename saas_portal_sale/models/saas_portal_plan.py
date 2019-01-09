@@ -4,6 +4,15 @@ from odoo import models, fields, api
 class SaasPortalPlan(models.Model):
     _inherit = 'saas_portal.plan'
 
+    @api.depends('product_tmpl_id', 'product_tmpl_id.accessory_product_ids')
+    def _compute_product_tmpl_topup_ids(self):
+        for plan in self:
+            product_ids = []
+            if plan.product_tmpl_id and plan.product_tmpl_id.accessory_product_ids:
+                for pr in plan.product_tmpl_id.accessory_product_ids:
+                    product_ids.append(pr.id)
+            plan.product_tmpl_topup_ids = product_ids
+
     free_subdomains = fields.Boolean(
         help='allow to choose subdomains for trials otherwise allow only after payment',
         default=True)
@@ -13,11 +22,13 @@ class SaasPortalPlan(models.Model):
         help='Whether to use trial database or create new one when user make payment',
         required=True, default='create_new')
    # topup_ids = fields.One2many('product.template', inverse_name='plan_id', string='Top ups')
-   # Todo creates errror
-    product_tmpl_topup_ids = fields.Many2many(related='product_tmpl_id.accessory_product_ids',
-                                              String='Topup Templates')
     #'product.template', 'Topup Template', inverse_name='saas_plan_id', domain=[('saas_product_type', '=', 'topup')], required=True)
     product_tmpl_id = fields.Many2one('product.template', 'Product')
+    product_tmpl_topup_ids = fields.One2many(
+        string='Topup Products', store=False,
+        comodel_name='product.product',
+        compute='_compute_product_tmpl_topup_ids'
+    )
     attribute_line_ids = fields.One2many(related='product_tmpl_id.attribute_line_ids',
                                          String='Product variants')
     # Todo delete, use for what? in module saas_portal_demo
