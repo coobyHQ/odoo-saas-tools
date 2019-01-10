@@ -1,0 +1,395 @@
+<odoo>
+    <data noupdate="1">
+        <record id="product_attribute_saas_language" model="product.attribute">
+            <field name="name">Language</field>
+            <field name="saas_code">lang</field>
+        </record>
+
+        <record id="product_attribute_value_saas_lang_en_US" model="product.attribute.value">
+            <field name="name">English</field>
+            <field name="saas_lang">en_US</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_am_ET" model="product.attribute.value">
+            <field name="name">Amharic / አምሃርኛ</field>
+            <field name="saas_lang">am_ET</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ar_SY" model="product.attribute.value">
+            <field name="name">Arabic / الْعَرَبيّة</field>
+            <field name="saas_lang">ar_SY</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_eu_ES" model="product.attribute.value">
+            <field name="name">Basque / Euskara</field>
+            <field name="saas_lang">eu_ES</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_bs_BA" model="product.attribute.value">
+            <field name="name">Bosnian / bosanski jezik</field>
+            <field name="saas_lang">bs_BA</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_bg_BG" model="product.attribute.value">
+            <field name="name">Bulgarian / български език</field>
+            <field name="saas_lang">bg_BG</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ca_ES" model="product.attribute.value">
+            <field name="name">Catalan / Català</field>
+            <field name="saas_lang">ca_ES</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_zh_CN" model="product.attribute.value">
+            <field name="name">Chinese (Simplified) / 简体中文</field>
+            <field name="saas_lang">zh_CN</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_zh_HK" model="product.attribute.value">
+            <field name="name">Chinese (HK)</field>
+            <field name="saas_lang">zh_HK</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_zh_TW" model="product.attribute.value">
+            <field name="name">Chinese (Traditional) / 正體字</field>
+            <field name="saas_lang">zh_TW</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_hr_HR" model="product.attribute.value">
+            <field name="name">Croatian / hrvatski jezik</field>
+            <field name="saas_lang">hr_HR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_cs_CZ" model="product.attribute.value">
+            <field name="name">Czech / Čeština</field>
+            <field name="saas_lang">cs_CZ</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_da_DK" model="product.attribute.value">
+            <field name="name">Danish / Dansk</field>
+            <field name="saas_lang">da_DK</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_nl_BE" model="product.attribute.value">
+            <field name="name">Dutch (BE) / Nederlands (BE)</field>
+        <field name="saas_lang">nl_BE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_nl_NL" model="product.attribute.value">
+            <field name="name">Dutch / Nederlands</field>
+            <field name="saas_lang">nl_NL</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_en_AU" model="product.attribute.value">
+            <field name="name">English (AU)</field>
+            <field name="saas_lang">en_AU</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_en_GB" model="product.attribute.value">
+            <field name="name">English (UK)</field>
+            <field name="saas_lang">en_GB</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_et_EE" model="product.attribute.value">
+            <field name="name">Estonian / Eesti keel</field>
+            <field name="saas_lang">et_EE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_fi_FI" model="product.attribute.value">
+            <field name="name">Finnish / Suomi</field>
+            <field name="saas_lang">fi_FI</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_fr_BE" model="product.attribute.value">
+            <field name="name">French (BE) / Français (BE)</field>
+            <field name="saas_lang">fr_BE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_fr_CA" model="product.attribute.value">
+            <field name="name">French (CA) / Français (CA)</field>
+            <field name="saas_lang">fr_CA</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_fr_CH" model="product.attribute.value">
+            <field name="name">French (CH) / Français (CH)</field>
+            <field name="saas_lang">fr_CH</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_fr_FR" model="product.attribute.value">
+            <field name="name">French / Français</field>
+            <field name="saas_lang">fr_FR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_gl_ES" model="product.attribute.value">
+            <field name="name">Galician / Galego</field>
+            <field name="saas_lang">gl_ES</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ka_GE" model="product.attribute.value">
+            <field name="name">Georgian / ქართული ენა</field>
+            <field name="saas_lang">ka_GE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_de_DE" model="product.attribute.value">
+            <field name="name">German / Deutsch</field>
+            <field name="saas_lang">de_DE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_de_CH" model="product.attribute.value">
+            <field name="name">German (CH) / Deutsch (CH)</field>
+            <field name="saas_lang">de_CH</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_el_GR" model="product.attribute.value">
+            <field name="name">Greek / Ελληνικά</field>
+            <field name="saas_lang">el_GR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_gu_IN" model="product.attribute.value">
+            <field name="name">Gujarati / ગુજરાતી</field>
+            <field name="saas_lang">gu_IN</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_he_IL" model="product.attribute.value">
+            <field name="name">Hebrew / עִבְרִי</field>
+            <field name="saas_lang">he_IL</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_hi_IN" model="product.attribute.value">
+            <field name="name">Hindi / हिंदी</field>
+            <field name="saas_lang">hi_IN</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_hu_HU" model="product.attribute.value">
+            <field name="name">Hungarian / Magyar</field>
+            <field name="saas_lang">hu_HU</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_id_ID" model="product.attribute.value">
+            <field name="name">Indonesian / Bahasa Indonesia</field>
+            <field name="saas_lang">id_ID</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_it_IT" model="product.attribute.value">
+            <field name="name">Italian / Italiano</field>
+            <field name="saas_lang">it_IT</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ja_JP" model="product.attribute.value">
+            <field name="name">Japanese / 日本語</field>
+            <field name="saas_lang">ja_JP</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_kab_DZ" model="product.attribute.value">
+            <field name="name">Kabyle / Taqbaylit</field>
+            <field name="saas_lang">kab_DZ</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ko_KP" model="product.attribute.value">
+            <field name="name">Korean (KP) / 한국어 (KP)</field>
+            <field name="saas_lang">ko_KP</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ko_KR" model="product.attribute.value">
+            <field name="name">Korean (KR) / 한국어 (KR)</field>
+            <field name="saas_lang">ko_KR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_lo_LA" model="product.attribute.value">
+            <field name="name">Lao / ພາສາລາວ</field>
+            <field name="saas_lang">lo_LA</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_lv_LV" model="product.attribute.value">
+            <field name="name">Latvian / latviešu valoda</field>
+            <field name="saas_lang">lv_LV</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_lt_LT" model="product.attribute.value">
+            <field name="name">Lithuanian / Lietuvių kalba</field>
+            <field name="saas_lang">lt_LT</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_mk_MK" model="product.attribute.value">
+            <field name="name">Macedonian / македонски јазик</field>
+            <field name="saas_lang">mk_MK</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_mn_MN" model="product.attribute.value">
+            <field name="name">Mongolian / монгол</field>
+            <field name="saas_lang">mn_MN</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_my_MM" model="product.attribute.value">
+            <field name="name">Burmese / ဗမာစာ</field>
+            <field name="saas_lang">my_MM</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_nb_NO" model="product.attribute.value">
+            <field name="name">Norwegian Bokmål / Norsk bokmål</field>
+            <field name="saas_lang">nb_NO</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_fa_IR" model="product.attribute.value">
+            <field name="name">Persian / فارس</field>
+            <field name="saas_lang">fa_IR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_pl_PL" model="product.attribute.value">
+            <field name="name">Polish / Język polski</field>
+            <field name="saas_lang">pl_PL</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_pt_BR" model="product.attribute.value">
+            <field name="name">Portuguese (BR) / Português (BR)</field>
+            <field name="saas_lang">pt_BR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_pt_PT" model="product.attribute.value">
+            <field name="name">Portuguese / Português</field>
+            <field name="saas_lang">pt_PT</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ro_RO" model="product.attribute.value">
+            <field name="name">Romanian / română</field>
+            <field name="saas_lang">ro_RO</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_ru_RU" model="product.attribute.value">
+            <field name="name">Russian / русский язык</field>
+            <field name="saas_lang">ru_RU</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_sr_RS" model="product.attribute.value">
+            <field name="name">Serbian (Cyrillic) / српски</field>
+            <field name="saas_lang">sr_RS</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_sr@latin" model="product.attribute.value">
+            <field name="name">Serbian (Latin) / srpski</field>
+            <field name="saas_lang">sr@latin</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_sk_SK" model="product.attribute.value">
+            <field name="name">Slovak / Slovenský jazyk</field>
+            <field name="saas_lang">sk_SK</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_sl_SI" model="product.attribute.value">
+            <field name="name">Slovenian / slovenščina</field>
+            <field name="saas_lang">sl_SI</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_AR" model="product.attribute.value">
+            <field name="name">Spanish (AR) / Español (AR)</field>
+            <field name="saas_lang">es_AR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_BO" model="product.attribute.value">
+            <field name="name">Spanish (BO) / Español (BO)</field>
+            <field name="saas_lang">es_BO</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_CL" model="product.attribute.value">
+            <field name="name">Spanish (CL) / Español (CL)</field>
+            <field name="saas_lang">es_CL</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_CO" model="product.attribute.value">
+            <field name="name">Spanish (CO) / Español (CO)</field>
+            <field name="saas_lang">es_CO</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_CR" model="product.attribute.value">
+            <field name="name">Spanish (CR) / Español (CR)</field>
+            <field name="saas_lang">es_CR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_DO" model="product.attribute.value">
+            <field name="name">Spanish (DO) / Español (DO)</field>
+            <field name="saas_lang">es_DO</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_EC" model="product.attribute.value">
+            <field name="name">Spanish (EC) / Español (EC)</field>
+            <field name="saas_lang">es_EC</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_GT" model="product.attribute.value">
+            <field name="name">Spanish (GT) / Español (GT)</field>
+            <field name="saas_lang">es_GT</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_MX" model="product.attribute.value">
+            <field name="name">Spanish (MX) / Español (MX)</field>
+            <field name="saas_lang">es_MX</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_PA" model="product.attribute.value">
+            <field name="name">Spanish (PA) / Español (PA)</field>
+            <field name="saas_lang">es_PA</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_PE" model="product.attribute.value">
+            <field name="name">Spanish (PE) / Español (PE)</field>
+            <field name="saas_lang">es_PE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_PY" model="product.attribute.value">
+            <field name="name">Spanish (PY) / Español (PY)</field>
+            <field name="saas_lang">es_PY</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_UY" model="product.attribute.value">
+            <field name="name">Spanish (UY) / Español (UY)</field>
+            <field name="saas_lang">es_UY</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_VE" model="product.attribute.value">
+            <field name="name">Spanish (VE) / Español (VE)</field>
+            <field name="saas_lang">es_VE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_es_ES" model="product.attribute.value">
+            <field name="name">Spanish / Español</field>
+            <field name="saas_lang">es_ES</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_sv_SE" model="product.attribute.value">
+            <field name="name">Swedish / svenska</field>
+            <field name="saas_lang">sv_SE</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_th_TH" model="product.attribute.value">
+            <field name="name">Thai / ภาษาไทย</field>
+            <field name="saas_lang">th_TH</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_tr_TR" model="product.attribute.value">
+            <field name="name">Turkish / Türkçe</field>
+            <field name="saas_lang">tr_TR</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_uk_UA" model="product.attribute.value">
+            <field name="name">Ukrainian / українська</field>
+            <field name="saas_lang">uk_UA</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_vi_VN" model="product.attribute.value">
+            <field name="name">Vietnamese / Tiếng Việt</field>
+            <field name="saas_lang">vi_VN</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_sq_AL" model="product.attribute.value">
+            <field name="name">Albanian / Shqip</field>
+            <field name="saas_lang">sq_AL</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+        <record id="product_attribute_value_saas_lang_te_IN" model="product.attribute.value">
+            <field name="name">Telugu / తెలుగు</field>
+            <field name="saas_lang">te_IN</field>
+            <field name="attribute_id" ref="product_attribute_saas_language"/>
+        </record>
+
+    </data>
+</odoo>
