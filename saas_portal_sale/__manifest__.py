@@ -24,5 +24,6 @@
         'data/mail_template_data.xml',
         'data/ir_config_parameter.xml',
         'data/product_uom_data.xml',
+        'data/product_attribute_data.xml',
     ],
 }

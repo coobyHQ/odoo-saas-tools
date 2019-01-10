@@ -1,4 +1,5 @@
 from odoo import models, api, fields
+from odoo.tools import scan_languages
 
 
 class ProductTemplateSaaS(models.Model):
@@ -72,3 +73,12 @@ class ProductAttributeSaaS(models.Model):
         return [
                 ('lang', 'Language')
                 ]
+
+
+class ProductAttributeValueSaaS(models.Model):
+    _inherit = "product.attribute.value"
+
+    def _get_default_lang(self):
+        return self.env.user.lang
+
+    saas_lang = fields.Selection(scan_languages(), 'Language', default=_get_default_lang)

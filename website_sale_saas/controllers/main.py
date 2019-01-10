@@ -41,8 +41,9 @@ class SaasPortalOrder(SaasPortal):
                 lambda product: product.saas_plan_id != False and product.saas_product_type == 'base')
             if base_plan_product.attribute_value_ids:
                 for attr in base_plan_product.attribute_value_ids:
-                    if attr.attribute_id.name == 'Language':
-                        lang=attr.name
+                    if attr.attribute_id and attr.attribute_id.saas_code == 'lang':
+                        if attr.saas_lang:
+                            lang = attr.saas_lang
         try:
             res = plan.create_new_database(dbname=dbname,
                                            user_id=user_id,
