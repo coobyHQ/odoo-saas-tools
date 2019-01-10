@@ -23,5 +23,6 @@
         'views/saas_portal_client.xml',
         'data/mail_template_data.xml',
         'data/ir_config_parameter.xml',
+        'data/product_uom_data.xml',
     ],
 }

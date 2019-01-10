@@ -20,6 +20,7 @@
                    attrs="{'required': [('saas_product_type','=','base')], 'invisible': [('saas_product_type','=','topup')]}"/>
             <field name="saas_topup_type"
                    attrs="{'required': [('saas_product_type','=','topup')], 'invisible': [('saas_product_type','=','base')]}"/>
+            <field name="saas_topup_contract_template_id" attrs="{'invisible': [('saas_product_type','=','base')]}"/>
 
             <field name="saas_plan_id"/>
             <field name="saas_default"/>

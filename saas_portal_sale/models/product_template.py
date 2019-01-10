@@ -24,6 +24,7 @@ class ProductTemplateSaaS(models.Model):
         ('cert_le', 'Letsencrypt Certificate'),
         ('cert_own', 'Own commercial Certificate')],
         string='SaaS Topup Type')
+    saas_topup_contract_template_id = fields.Many2one('account.analytic.contract', string='Contract Template')
 
     saas_default = fields.Boolean(
         'Is default',

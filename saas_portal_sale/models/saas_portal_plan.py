@@ -21,8 +21,6 @@ class SaasPortalPlan(models.Model):
         string='Non-trial instances',
         help='Whether to use trial database or create new one when user make payment',
         required=True, default='create_new')
-   # topup_ids = fields.One2many('product.template', inverse_name='plan_id', string='Top ups')
-    #'product.template', 'Topup Template', inverse_name='saas_plan_id', domain=[('saas_product_type', '=', 'topup')], required=True)
     product_tmpl_id = fields.Many2one('product.template', 'Product')
     product_tmpl_topup_ids = fields.One2many(
         string='Topup Products', store=False,
@@ -31,10 +29,6 @@ class SaasPortalPlan(models.Model):
     )
     attribute_line_ids = fields.One2many(related='product_tmpl_id.attribute_line_ids',
                                          String='Product variants')
-    # Todo delete, use for what? in module saas_portal_demo
-    product_variant_ids = fields.One2many('product.product',
-                                          'saas_plan_id',
-                                          'Product variants')
     contract_template_id = fields.Many2one('account.analytic.contract', string='Contract Template')
 
     @api.multi
@@ -53,6 +47,39 @@ class SaasPortalPlan(models.Model):
         vals['contract_id'] = contract.id
         return vals
 
+    def get_topup_info(self, order, client):
+        additional_invoice_lines = []
+        users = int(self.max_users)
+        storage = int(self.total_storage_limit)
+        mb_uom = self.env.ref('saas_portal_sale.product_uom_megabyte', raise_if_not_found=False)
+        users_uom = self.env.ref('saas_portal_sale.product_uom_users', raise_if_not_found=False)
+        topup_order_lines = order.order_line.filtered(lambda line: line.product_id.is_saas and line.product_id.saas_product_type == 'topup')
+        for topup_line in topup_order_lines:
+            topup = topup_line.product_id
+            if topup.id in self.product_tmpl_topup_ids.ids:
+                if topup.saas_topup_type == 'users':
+                    qty = topup_line.product_uom_qty
+                    if topup_line.product_uom.uom_type != 'reference':
+                        qty = topup_line.product_uom.with_context({'raise-exception':False})._compute_quantity(topup_line.product_uom_qty, users_uom or topup_line.product_uom)
+                    users += int(qty)
+                if topup.saas_topup_type == 'storage':
+                    qty = topup_line.product_uom_qty
+                    if topup_line.product_uom.uom_type != 'reference':
+                        qty = topup_line.product_uom._compute_quantity(topup_line.product_uom_qty, mb_uom or topup_line.product_uom)
+                    storage += int(qty)
+                if topup.saas_topup_contract_template_id and client and client.contract_id:
+                    for inv_line in topup.saas_topup_contract_template_id.recurring_invoice_line_ids:
+                        additional_invoice_lines.append({
+                            'analytic_account_id': client.contract_id and client.contract_id.id or False,
+                            'product_id': inv_line.product_id.id,
+                            'name': inv_line.name,
+                            'quantity': inv_line.quantity * topup_line.product_uom_qty,
+                            'uom_id': inv_line.uom_id.id,
+                            'automatic_price': inv_line.automatic_price,
+                            'price_unit': inv_line.price_unit,
+                        })
+        return users, storage, additional_invoice_lines
+
     @api.multi
     def create_new_database(self, **kwargs):
         order_id = kwargs.get('order_id')
@@ -64,19 +91,10 @@ class SaasPortalPlan(models.Model):
         max_users = int(self.max_users)
         total_storage_limit = int(self.total_storage_limit)
 
-        if order_id and client_obj and self.topup_ids:
+        if order_id and client_obj and self.product_tmpl_topup_ids:
             order = self.env['sale.order'].sudo().browse(int(order_id))
+            users, storage, additional_invoice_lines = self.get_topup_info(order, client_obj)
             params_list = []
-            users = max_users
-            storage = total_storage_limit
-            for topup in self.topup_ids:
-                order_lines = order.order_line.filtered(lambda line: line.product_id.id == topup.product_tmpl_id.id)
-                if order_lines:
-                    for line in order_lines:
-                        if topup.topup_users:
-                            users += int(topup.topup_users * line.product_uom_qty)
-                        if topup.topup_storage:
-                            storage += int(topup.topup_storage * line.product_uom_qty)
             if users != max_users:
                 params_list.append({'key': 'saas_client.max_users', 'value': users})
             if storage != total_storage_limit:
@@ -84,6 +102,9 @@ class SaasPortalPlan(models.Model):
 
             if params_list:
                 client_obj.upgrade(payload={'params': params_list})
+            if client_obj.contract_id and additional_invoice_lines:
+                for invoice_line in additional_invoice_lines:
+                    self.env['account.analytic.invoice.line'].sudo().create(invoice_line)
 
         return res
 

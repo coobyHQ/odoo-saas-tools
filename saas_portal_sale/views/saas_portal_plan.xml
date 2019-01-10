@@ -29,8 +29,6 @@
                                 <field name="lang"/> -->
                             </tree>
                         </field>
-                        <separator string="Variants old"/>
-                        <field name="product_variant_ids"/>
                         <separator string="Topups"/>
                         <field name="product_tmpl_topup_ids">
                             <tree>
