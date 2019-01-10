@@ -3,6 +3,7 @@ import requests
 from datetime import datetime, timedelta
 from odoo import api, exceptions, fields, models
 from odoo.tools.translate import _
+from odoo.tools import scan_languages
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from werkzeug.exceptions import Forbidden
 
@@ -27,7 +28,8 @@ class SaasPortalClient(models.Model):
     plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly='True')
     plan_max_storage = fields.Integer(related='plan_id.total_storage_limit', string="Plan max allowed Storage", readonly='True')
     plan_lang = fields.Selection(related='plan_id.lang', readonly='True')
-
+    client_primary_lang = fields.Selection(scan_languages(),
+                                           'Instance primary language', default='plan_lang', readonly='False')
     total_storage = fields.Integer('Used storage (MB)', compute='_get_storage_client_sum', help='from Client')
     expiration_datetime = fields.Datetime(string="Expiration")
     expired = fields.Boolean('Expired')
