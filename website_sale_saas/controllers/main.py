@@ -34,12 +34,22 @@ class SaasPortalOrder(SaasPortal):
         plan = self.get_plan(int(post.get('plan_id', 0) or 0))
         trial = bool(post.get('trial', False))
         order_id = post.get('order_id')
+        lang=None
+        if order_id:
+            order = request.env['sale.order'].sudo().browse(int(order_id))
+            base_plan_product = order.order_line.mapped('product_id').filtered(
+                lambda product: product.saas_plan_id != False and product.saas_product_type == 'base')
+            if base_plan_product.attribute_value_ids:
+                for attr in base_plan_product.attribute_value_ids:
+                    if attr.attribute_id.name == 'Language':
+                        lang=attr.name
         try:
             res = plan.create_new_database(dbname=dbname,
                                            user_id=user_id,
                                            partner_id=partner_id,
                                            trial=trial,
-                                           order_id=order_id)
+                                           order_id=order_id,
+                                           lang=lang)
         except MaximumDBException:
             _logger.info("MaximumDBException")
             url = request.env['ir.config_parameter'].sudo().get_param('saas_portal.page_for_maximumdb', '/')
