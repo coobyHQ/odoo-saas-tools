@@ -12,6 +12,7 @@ class SaasPortalClient(models.Model):
     topup_users = fields.Integer('Additional users', compute='_get_user_topup_sum', help='from Topups', readonly=True)
     topup_storage_limit = fields.Integer('Additional storage (MB)',  compute='_get_storage_topup_sum', help='from Topups', readonly=True)
     topup_ids = fields.One2many('saas_portal.client_topup', inverse_name='client_id', string='Top ups')
+    saas_contract_state = fields.Char('Contract state', compute='_compute_contract_state',)
 
     # Get the sum of Topuped Nr. of users
     @api.multi
@@ -38,6 +39,64 @@ class SaasPortalClient(models.Model):
                 storage.update({
                     'topup_ids': sum_total
                 })
+
+    # Todo Get the the state of billing of contract
+    @api.multi
+    @api.depends('contract_id')
+    def _compute_contract_state(self):
+        for contract in self:
+            state_paid = "paid"
+            state_open = "amount"
+            state = ""
+
+            for line in contract.contract_id:
+                ({state == state_paid
+                })
+
+    # Todo example from contract module
+    """
+    def _compute_contract_count(self):
+        contract_model = self.env['account.analytic.account']
+        today = fields.Date.today()
+        fetch_data = contract_model.read_group([
+            ('recurring_invoices', '=', True),
+            ('partner_id', 'child_of', self.ids),
+            '|',
+            ('date_end', '=', False),
+            ('date_end', '>=', today)],
+            ['partner_id', 'contract_type'], ['partner_id', 'contract_type'],
+            lazy=False)
+        result = [[data['partner_id'][0], data['contract_type'],
+                   data['__count']] for data in fetch_data]
+        for partner in self:
+            partner_child_ids = partner.child_ids.ids + partner.ids
+            partner.sale_contract_count = sum([
+                r[2] for r in result
+                if r[0] in partner_child_ids and r[1] == 'sale'])
+            partner.purchase_contract_count = sum([
+                r[2] for r in result
+                if r[0] in partner_child_ids and r[1] == 'purchase'])
+    """
+    def act_show_contract(self):
+        # Todo This opens contract view
+        #    @return: the contract view
+
+        self.ensure_one()
+        contract_type = self._context.get('contract_type')
+
+        res = self._get_act_window_contract_xml(contract_type)
+        res.update(
+            context=dict(
+                self.env.context,
+                search_default_recurring_invoices=True,
+                search_default_not_finished=True,
+                search_default_partner_id=self.id,
+                default_partner_id=self.id,
+                default_recurring_invoices=True,
+                default_pricelist_id=self.property_product_pricelist.id,
+            ),
+        )
+        return res
 
 
 class SaasPortalClientTopup (models.Model):

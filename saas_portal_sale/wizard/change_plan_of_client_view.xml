@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Change Client plan -->
+    <record id="saas_plan_change_wizard_form" model="ir.ui.view">
+        <field name="name">saas_portal_sale.change_plan_of_client.wizard.view</field>
+        <field name="model">saas_portal_sale.change_plan_of_client.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+            <div>
+                Select which predefined text you like to send to the Client.
+                If necessary, you can change the predefined text directly in the list.
+                There might be conditions which lead to an automatic change of a plan too!!
+                <p></p>
+                The mail will get composed according the following order:
+                <p>
+                Dear ...
+                - Predefined Text
+                - Individual comment or explanations
+                - Terms of service
+                </p>
+            </div>
+                <group>
+                    <field name="cur_client_id" readonly="True"/>
+
+                   <!-- <field name="old_plan_id" readonly="True" help="Old Client Grade"/> -->
+                    <field name="new_plan_id" required="True"
+                           placeholder="Choose the new plan"/>
+                    <field name="saas_plan_change_type"/>
+                    <p></p><!--
+                    <field name="plane_id_desc"/>
+                    <field name="text_id" placeholder="Choose a predefined text..."/>
+                    <field name="text_template_desc"/> -->
+                    <field name="message" placeholder="Your Client Grade has been changed due to ..."/>
+                </group>
+                <footer>
+                    <button string="Change Client Plan" name="change_saas_plan" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="saas_plan_change_wizard_action" model="ir.actions.act_window">
+        <field name="name">Reason to change Plan</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal_sale.change_plan_of_client.wizard</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="saas_plan_change_wizard_form"/>
+    </record>
+</odoo>
