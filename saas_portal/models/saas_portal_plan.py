@@ -30,6 +30,7 @@ def _compute_host(self):
 class SaasPortalPlan(models.Model):
     _name = 'saas_portal.plan'
     _description = 'SaaS Plan (templates)'
+
     name = fields.Char('Plan', required=True)
     summary = fields.Char('Summary')
     template_id = fields.Many2one(
@@ -71,8 +72,11 @@ class SaasPortalPlan(models.Model):
         'Default DB Name', help='Used for generating client database domain name. Use %i for numbering. Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
     server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
                                 ondelete='restrict',
-                                help='User this saas server or choose random')
-
+                                help='Use this saas server or choose random')
+    """  Todo
+    upgrade_path_ids = fields.Many2many('saas.portal_plan', string='Upgrade possibilities')
+    downgrade_path_ids = fields.Many2many('saas.portal_plan', string='Downgrade possibilities')
+    """
     website_description = fields.Html('Website description')
     logo = fields.Binary('Logo')
 

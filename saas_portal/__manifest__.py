@@ -29,6 +29,7 @@
         'data/ir_config_parameter.xml',
         'data/subtype.xml',
         'security/ir.model.access.csv',
+        'security/portal_security.xml',
     ],
     'application': True,
     'installable': True,

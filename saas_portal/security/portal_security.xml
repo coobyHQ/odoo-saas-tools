@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 <Cooby tec>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <data noupdate="0">
+	<record id="saas-portal_security_category" model="ir.module.category">
+		    <field name="name">SaaS Portal</field>
+		</record>
+		
+		<record id="saas_group_agent" model="res.groups">
+		    <field name="name">Agent</field>
+		    <field name="category_id" ref="saas-portal_security_category"/>
+    		<field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+		</record>
+
+		<record id="saas_group_moderator" model="res.groups">
+			<field name="name">Moderator</field>
+			<field name="category_id" ref="saas-portal_security_category"/>
+			<field name="implied_ids" eval="[(4, ref('saas_group_agent')), (4, ref('base.group_user'))]"/>
+            <field name="comment">The Moderators can onboard and approve new SaaS client and manage them</field>
+		</record>
+
+		<record id="saas_group_admin" model="res.groups">
+		    <field name="name">Administrator</field>
+		    <field name="category_id" ref="saas-portal_security_category"/>
+		    <field name="implied_ids" eval="[(4, ref('saas_group_moderator'))]"/>
+            <field name="comment">The Administrators having full access</field>
+		    <field name="users" eval="[(4, ref('base.user_root'))]"/>
+		</record>
+		
+    </data>
+</odoo>
