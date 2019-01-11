@@ -8,19 +8,20 @@
         <field name="arch" type="xml">
             <tree string="Servers/Containers" delete="false">
                 <field name="sequence" widget="handle"/>
+                <field name="name_txt"/>
                 <field name="name"/>
-                <field name="active"/>
+                <field name="server_type"/>
+                <field name="product_type"/>
                 <field name="odoo_version"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
-
 
     <record id="view_server_form" model="ir.ui.view">
         <field name="name">saas_portal.server.form</field>
         <field name="model">saas_portal.server</field>
         <field name="arch" type="xml">
-
             <form string="Server" delete="false">
                 <header>
                     <!-- TODO
@@ -32,22 +33,29 @@
                     <button string="Open Server" name="action_redirect_to_server" type="object" icon="fa-sign-in" class="oe_highlight" attrs="{'invisible': [('id', '=', False)]}"/>
                     <button name="action_sync_server" type="object" string="Sync server" icon="fa-refresh" attrs="{'invisible': [('id', '=', False)]}"/>
                     <field name="id" invisible="1" />
+                <field name="state" widget="statusbar" statusbar_visible="draft,running,running_full" clickable=""/>
                 </header>
                 <sheet>
+                     <div class="oe_button_box" name="button_box">
+                       <!-- placeholder -->
+                     </div>
                     <div class="oe_title" style="width: 390px;">
                         <label class="oe_edit_only" for="name_txt" string="Name"/>
                         <h1><field name="name_txt" class="oe_inline"/></h1>
                         <label class="oe_edit_only" for="summary" string="Summary"/>
                         <field name="summary"/>
+                        <br></br><label for="name"/>
+                        <field name="name"/>
                     </div>
                 <group name="base">
                     <group string="Definition">
-                        <field name="name"/>
                         <field name="server_type"/>
-                        <field name="odoo_version"/>
+                        <field name="product_type"/>
+                        <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>
                         <field name="client_id"/>
                         <field name="active"/>
                         <field name="max_client"/>
+                        <field name="number_of_clients"/>
                     </group>
                     <group string="Server-side requests">
                         <field name="local_request_scheme"/>
@@ -58,20 +66,18 @@
                         <field name="request_scheme"/>
                         <field name="request_port"/>
                     </group>
-
-                <group string="Container settings" name="container" attrs="{'invisible': [('server_type', '=', 'server')]}">
-                    <group>
-                        <field name="container_url"/>
-                     </group>
                 </group>
-
-                    <group string="Credentials for rpc" name="credential">
-                      <field name="password" password="True"/>
+                <group name="settings">
+                    <group string="Container settings" name="container" attrs="{'invisible': [('server_type', '=', 'server')]}">
+                        <field name="container_url" widget="url"
+                               placeholder="e.g. https://rancher.cooby.tech/p/c-l9x86:p-x5w2v/workload/deployment:odoo:odoo-odoo"/>
                     </group>
-                    <group string="Client Settings">
-                      <field name="clients_host_template"/>
+                    <group string="Client Settings" name="client">
+                          <field name="password" password="True"/>
+                          <field name="clients_host_template"/>
                     </group>
                 </group>
+
                 <field name="client_ids" readonly="1">
                     <tree>
                         <field name="name"/>

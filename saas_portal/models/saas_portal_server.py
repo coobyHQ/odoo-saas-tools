@@ -44,15 +44,42 @@ class SaasPortalServer(models.Model):
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     sequence = fields.Integer('Sequence')
+    # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
+    state = fields.Selection([('draft', 'Draft'),
+                              ('running', 'Running'),
+                              ('running_full', 'Running Full'),
+                              ('running_err', 'Running with Error'),
+                              ('running_failed', 'Running Failed'),
+                              ('stopped', 'Stopped'),
+                              ('cancelled', 'Cancelled'),
+                              ],
+                             'State', default='draft',
+                             track_visibility='onchange')
     server_type = fields.Selection([
         ('server', 'Server based'),
-        ('container', 'Container based'),
+        ('container', 'Container Application'),
         ('container_kube', 'Container Kubernetes based')],
         string='SaaS Server Type')
-
-    container_url = fields.Char('Container URL')
+    product_type = fields.Selection([
+        ('odoo', 'Odoo Server based'),
+        ('flectra', 'Flectra ERP'),
+        ('other-erp', 'Other ERP'),
+        ('other', 'Other Product'),
+        ('storage', 'Storage container or volume'),
+        ('database', 'Database Container/Server')],
+        string='Product type', help='Which product the SaaS Server is hosting')
+    odoo_version = fields.Selection([
+        ('V11', 'Odoo V 11'),
+        ('V12', 'Odoo V 12'),
+        ('V13', 'Odoo V 13')],
+        string='Odoo version', help='Which Odoo version is hosted')
+    # Todo the old Odoo version field doesn't seems to be used expect in the saas_portal_demo module
+    odoo_version_old = fields.Char('Odoo version', readonly=True)
+    container_url = fields.Char('Container URL', help="URL to the used container")
     max_client = fields.Integer('Max #of Client DB`s', default=100)
+    # Todo compute number
+    number_of_clients = fields.Integer('# of Client DB`s')
     request_scheme = fields.Selection(
         [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
     verify_ssl = fields.Boolean(
@@ -67,8 +94,8 @@ class SaasPortalServer(models.Model):
     local_request_scheme = fields.Selection(
         [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
     host = fields.Char('Host', compute=_compute_host)
-    odoo_version = fields.Char('Odoo version', readonly=True)
-    password = fields.Char()
+    # Todo use of password is not yet clear?
+    password = fields.Char('Default Superadmin password')
     clients_host_template = fields.Char('Template for clients host names',
                                         help='The possible dynamic parts of the host names are: {dbname}, {base_saas_domain}, {base_saas_domain_1}')
 
