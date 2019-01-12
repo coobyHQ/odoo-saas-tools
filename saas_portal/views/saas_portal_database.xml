@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Database Templates -->
+    <record id="view_databases_tree" model="ir.ui.view">
+        <field name="name">saas_portal.databases.tree</field>
+        <field name="model">saas_portal.database</field>
+        <field name="arch" type="xml">
+            <tree string="Plans" create="false" edit="true" delete="false">
+                 <field name="name" />
+                 <field name="server_id"/>
+                 <field name="product_type"/>
+                 <field name="client_id" />
+                 <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_databases_form" model="ir.ui.view">
+        <field name="name">saas_portal.databases.form</field>
+        <field name="model">saas_portal.database</field>
+        <field name="arch" type="xml">
+          <form string="Template database" create="false" edit="true" delete="true">
+                <sheet>
+                    <group>
+                       <field name="name" />
+                       <field name="product_type"/>
+                       <field name="odoo_version"/>
+                       <field name="db_primary_lang"/>
+                       <field name="client_id" readonly="0"/>
+                       <field name="server_id" readonly="0"/>
+                       <field name="server_db_name"/>
+                       <field name="state" readonly="0"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_databases_filter" model="ir.ui.view">
+        <field name="name">saas_portal.database.select</field>
+        <field name="model">saas_portal.database</field>
+        <field name="arch" type="xml">
+            <search string="Search Databases">
+                <field name="name" string="Database Name"/>
+                <filter string="Templates" name="template" domain="[('state', '=','template')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_templates" model="ir.actions.act_window">
+        <field name="name">Templates</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.database</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_template': 1}</field>
+    </record>
+
+    <menuitem action="action_templates" id="menu_templates" parent="menu_saas_tech" sequence="40" groups="base.group_no_one"/>
+</odoo>

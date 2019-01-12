@@ -22,6 +22,7 @@ def random_password(len=32):
 
 class SaasServerClient(models.Model):
     _name = 'saas_server.client'
+    _description = 'SaaS client data for server'
     _inherit = ['mail.thread', 'saas_base.client']
 
     name = fields.Char('Database name', readonly=True, required=True)
@@ -33,7 +34,7 @@ class SaasServerClient(models.Model):
                               ('cancelled', 'Cancelled'),
                               ('pending', 'Pending'),
                               ('deleted', 'Deleted')],
-                             'State', default='draft',
+                             'State', default='draft', help='Goes from draft to Running, after expiration state=pending',
                              track_visibility='onchange')
     host = fields.Char('Host')
 

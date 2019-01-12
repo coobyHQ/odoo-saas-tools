@@ -1,12 +1,12 @@
 {
     'name': 'SaaS Portal',
     'version': '11.0.1.1.0',
-    'author': 'Ivan Yelizariev, Nicolas JEUDY, Lucas Huber',
+    'author': 'Ivan Yelizariev, Nicolas JEUDY, Antonio Buric, Lucas Huber',
     'license': 'LGPL-3',
     'category': 'SaaS',
     'support': 'apps@it-projects.info',
     'website': 'https://it-projects.info',
-    'summary': 'Module for managing databases, templates, clients and plans in SaaS Portal.',
+    'summary': 'Module to manage databases, templates, products, clients and plans.',
 
     'depends': [
         'oauth_provider',
@@ -24,6 +24,7 @@
         'views/saas_portal_client.xml',
         'views/saas_portal_plan.xml',
         'views/saas_portal_server.xml',
+        'views/saas_portal_database.xml',
         'views/saas_portal_configuration.xml',
         'views/res_config.xml',
         'data/ir_config_parameter.xml',
