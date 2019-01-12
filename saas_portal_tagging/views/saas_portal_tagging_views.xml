@@ -53,11 +53,10 @@
             <field name="model">saas_portal.client</field>
             <field name="inherit_id" ref="saas_portal.view_clients_form" />
             <field name="arch" type="xml">
-                <group name="settings" position="after">
-                    <group string="Tags">
-                        <field name="category_ids" widget="many2many_tags" />
-                    </group>
-                </group>
+                <field name="partner_id" position="after">
+                   <br></br><label for="category_ids"/>
+                    <field name="category_ids" widget="many2many_tags" />
+                </field>
             </field>
         </record>
         

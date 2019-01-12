@@ -21,6 +21,7 @@ class SaasPortalCategory(models.Model):
 
     _name = "saas.portal.category"
     _description = "SaaS Client  Category"
+
     name = fields.Char(
         "Employee Tag",
         required=True
