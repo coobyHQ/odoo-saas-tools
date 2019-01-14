@@ -39,6 +39,7 @@ class SaasPortalClient(models.Model):
         'Block clients on storage exceed', default=False)
     storage_exceed = fields.Boolean(
         'Storage limit has been exceed', default=False)
+    # Todo, field not used?? Better taking from plan. LUH
     trial_hours = fields.Integer('Initial period for trial (hours)',
                                  help='Subsription initial period in hours for trials',
                                  readonly=True)

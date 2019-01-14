@@ -4,8 +4,9 @@ from odoo import api, fields, models
 from odoo.tools.translate import _
 
 
-class SaasConfig(models.TransientModel):
+class SaasOperatorWizard(models.TransientModel):
     _name = 'saas.config'
+    _description = 'SaaS Operator wizard'
 
     def _default_database_ids(self):
         return self._context.get('active_ids')

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+saas_portal_tagging_agent,saas_portal.tagging.agent,model_saas_portal_category,saas_portal.saas_group_agent,1,0,0,0
+saas_portal_tagging_moderator,saas_portal.tagging.moderator,model_saas_portal_category,saas_portal.saas_group_moderator,1,0,0,0
+saas_portal_tagging_admin,saas_portal.tagging.admin,model_saas_portal_category,saas_portal.saas_group_admin,1,1,1,1

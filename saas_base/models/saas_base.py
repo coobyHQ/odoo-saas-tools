@@ -19,7 +19,7 @@ class SaasClient(models.AbstractModel):
     total_storage = fields.Integer('Used storage (MB)', compute='_get_storage_client_sum', help='from Client')
     trial = fields.Boolean('Trial', help='indication of trial clients', default=False, readonly=True)
     client_primary_lang = fields.Selection(scan_languages(),
-                                           'Instance primary language', readonly='False')
+                                           'Instance primary language', readonly=False)
 
     expiration_datetime = fields.Datetime(string="Expiration")
     expired = fields.Boolean('Expired')

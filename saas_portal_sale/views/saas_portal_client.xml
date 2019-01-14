@@ -15,7 +15,7 @@
                         help="Show the sale contracts for this client instance">
                     <field name="saas_contract_state" widget="statinfo" string="SaaS Contract"/>
                 </button>
-           </xpath>
+            </xpath>
              <!-- <xpath expr="//field[@name='partner_id']" position="after">
                 <br></br><label for="contract_id"/> <field name="contract_id"/>
             </xpath> -->
