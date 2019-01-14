@@ -58,6 +58,7 @@
                         <field name="number_of_clients"/>
                     </group>
                     <group string="Server-side requests">
+                        <field name="domain" placeholder="e.g. s1.cooby.online"/>
                         <field name="local_request_scheme"/>
                         <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
                         <field name="local_host"/>
@@ -69,6 +70,8 @@
                 </group>
                 <group name="settings">
                     <group string="Container settings" name="container" attrs="{'invisible': [('server_type', '=', 'server')]}">
+                        <field name="container_name"/>
+                        <field name="container_image"/>
                         <field name="container_url" widget="url"
                                placeholder="e.g. https://rancher.cooby.tech/p/c-l9x86:p-x5w2v/workload/deployment:odoo:odoo-odoo"/>
                     </group>

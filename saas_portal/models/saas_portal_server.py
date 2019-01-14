@@ -43,6 +43,7 @@ class SaasPortalServer(models.Model):
     summary = fields.Char('Summary')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
+    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server')
     sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
@@ -77,6 +78,9 @@ class SaasPortalServer(models.Model):
     # Todo the old Odoo version field doesn't seems to be used expect in the saas_portal_demo module
     odoo_version_old = fields.Char('Odoo version', readonly=True)
     container_url = fields.Char('Container URL', help="URL to the used container")
+    container_name = fields.Char('Container Name')
+    container_image = fields.Char('Container Image')
+
     max_client = fields.Integer('Max #of Client DB`s', default=100)
     # Todo compute number
     number_of_clients = fields.Integer('# of Client DB`s')
