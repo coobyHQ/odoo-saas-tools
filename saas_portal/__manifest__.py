@@ -27,6 +27,7 @@
         'views/saas_portal_database.xml',
         'views/saas_portal_configuration.xml',
         'views/res_config.xml',
+        'wizard/saas_duplicate_template_view.xml',
         'data/ir_config_parameter.xml',
         'data/subtype.xml',
         'security/portal_security.xml',
