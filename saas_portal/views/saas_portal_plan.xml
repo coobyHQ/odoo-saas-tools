@@ -82,6 +82,16 @@
                                 <field name="website_description" nolabel="1"/>
                             </group>
                         </page>
+                        <page string="Upgrades/Downgrades" name="upgrade_downgrade">
+                            <group colspan="4" col="4">
+                                <label for="upgrade_path_ids" colspan="4"/>
+                                <field name="upgrade_path_ids" nolabel="1" colspan="4"/>
+                            </group>
+                            <group colspan="4" col="4">
+                                <label for="downgrade_path_ids" colspan="4"/>
+                                <field name="downgrade_path_ids" nolabel="1" colspan="4"/>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
