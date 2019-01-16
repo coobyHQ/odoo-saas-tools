@@ -12,7 +12,7 @@ class SaasChangePlanWizard(models.TransientModel):
     cur_client_id = fields.Many2one(comodel_name="saas_portal.client", string="Client",
                                    required=True, ondelete="cascade", default=_get_client_id, auto_join=True)
 
-    old_plan_id = fields.Many2one(string="Current Plan", readonly=True, comodel_name='saas_portal.client.plan_id',
+    old_plan_id = fields.Many2one(string="Current Plan", readonly=True, comodel_name='saas_portal.plan',
                                   related='cur_client_id.plan_id')
     new_plan_id = fields.Many2one(string="New plan", comodel_name='saas_portal.plan')
 
@@ -20,9 +20,22 @@ class SaasChangePlanWizard(models.TransientModel):
         ('upgrade', 'Upgrade the plan'),
         ('downgrade', 'Downgrade the plan ')],
         string='SaaS Plan Change Type')
-    """
-    plan_id_desc = fields.Text(string="Plan Description", readonly="1",
-                                related='plan_id.description')
-    """
+    plan_id_desc = fields.Html(string="Plan Description", readonly=True, related='new_plan_id.website_description')
     message = fields.Text(string="Plan Change Comment", help="Comment at change of plan from Staff",
-                          required="1")
+                          required=True)
+
+    @api.onchange('saas_plan_change_type')
+    def onchange_saas_plan_change_type(self):
+        domain = {}
+        if self.saas_plan_change_type and self.old_plan_id:
+            if self.saas_plan_change_type == 'upgrade':
+                domain['new_plan_id'] = [('id', 'in', self.old_plan_id.upgrade_path_ids.ids)]
+            else:
+                domain['new_plan_id'] = [('id', 'in', self.old_plan_id.downgrade_path_ids.ids)]
+        else:
+            domain['new_plan_id'] = [('id', '=', 0)]
+        if domain and self.new_plan_id:
+            possible_plans = self.env['saas_portal.plan'].search(domain['new_plan_id'])
+            if not possible_plans or self.new_plan_id.id not in possible_plans.ids:
+                self.new_plan_id = False
+        return {'domain': domain}

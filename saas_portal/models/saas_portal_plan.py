@@ -73,10 +73,8 @@ class SaasPortalPlan(models.Model):
     server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
                                 ondelete='restrict',
                                 help='Use this saas server or choose random')
-    """  Todo
-    upgrade_path_ids = fields.Many2many('saas.portal_plan', string='Upgrade possibilities')
-    downgrade_path_ids = fields.Many2many('saas.portal_plan', string='Downgrade possibilities')
-    """
+    upgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_upgrade_rel', 'plan_id', 'upgrade_plan_id', string='Potential Plans To Upgrade To')
+    downgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_downgrade_rel', 'plan_id', 'downgrade_plan_id', string='Potential Plans To Downgrade To')
     website_description = fields.Html('Website description')
     logo = fields.Binary('Logo')
 

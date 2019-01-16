@@ -23,14 +23,14 @@
                     <field name="cur_client_id" readonly="True"/>
 
                    <!-- <field name="old_plan_id" readonly="True" help="Old Client Grade"/> -->
+                    <field name="saas_plan_change_type"/>
                     <field name="new_plan_id" required="True"
                            placeholder="Choose the new plan"/>
-                    <field name="saas_plan_change_type"/>
+                     <field name="plan_id_desc"/>
                     <p></p><!--
-                    <field name="plane_id_desc"/>
                     <field name="text_id" placeholder="Choose a predefined text..."/>
                     <field name="text_template_desc"/> -->
-                    <field name="message" placeholder="Your Client Grade has been changed due to ..."/>
+                    <field name="message" placeholder="Your Client Plan has been changed due to ..."/>
                 </group>
                 <footer>
                     <button string="Change Client Plan" name="change_saas_plan" type="object" class="btn-primary"/>
@@ -49,4 +49,9 @@
         <field name="view_mode">form</field>
         <field name="view_id" ref="saas_plan_change_wizard_form"/>
     </record>
+    <act_window id="ir_saas_plan_change_wizard"
+            multi="True"
+            key2="client_action_multi" name="Change The Plan for The Client"
+            res_model="saas_portal_sale.change_plan_of_client.wizard" src_model="saas_portal.client"
+            view_mode="form" target="new" view_type="form"/>
 </odoo>
