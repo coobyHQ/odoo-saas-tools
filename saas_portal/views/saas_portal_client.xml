@@ -71,18 +71,20 @@
                     <group string="User Limits">
                         <field name="users_len"/>
                         <!-- limits -->
+                        <br></br>
                         <field name="plan_max_users"/>
                       <!--        <field name="topup_users"/> -->
-                        <field name="max_users"/>
+                       <field name="max_users" style="font-weight:bold"/>
                     </group>
                     <group string="Storage Limits">
                         <field name="file_storage"/>
                         <field name="db_storage"/>
-                     <field name="total_storage"/>
+                        <field name="total_storage" style="font-weight:bold"/>
                         <!-- limits -->
+                        <br></br>
                         <field name="plan_max_storage"/>
-                      <!--   <field name="topup_storage_limit"/> -->
-                       <field name="total_storage_limit"/>
+                        <!--   <field name="topup_storage_limit"/> -->
+                        <field name="total_storage_limit" style="font-weight:bold"/>
                     </group>
                 </group>
                 <group>

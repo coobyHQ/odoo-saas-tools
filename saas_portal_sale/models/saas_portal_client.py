@@ -4,41 +4,43 @@ from odoo import models, fields, api
 class SaasPortalClient(models.Model):
     _inherit = 'saas_portal.client'
 
-    contract_id = fields.Many2one(
-        'account.analytic.account',
-        string='Contract',
-        readonly=True,
-    )
+    contract_id = fields.Many2one('account.analytic.account', string='Contract', readonly=True)
+    contract_line_ids = fields.One2many(related='contract_id.recurring_invoice_line_ids',
+                                        string='Product invoice lines', readonly=True)
     topup_users = fields.Integer('Additional users', compute='_get_user_topup_sum', help='from Topups', readonly=True)
-    topup_storage_limit = fields.Integer('Additional storage (MB)',  compute='_get_storage_topup_sum', help='from Topups', readonly=True)
+    topup_storage = fields.Integer('Additional storage (MB)',  compute='_get_storage_topup_sum',
+                                         help='from Topups', readonly=True)
     topup_ids = fields.One2many('saas_portal.client_topup', inverse_name='client_id', string='Top ups')
     saas_contract_state = fields.Char('Contract state', compute='_compute_contract_state',)
 
-    # Get the sum of Topuped Nr. of users
+    # Get the sum of Topuped # of users
     @api.multi
-    @api.depends('topup_ids.name', 'topup_ids.topup_users')
+    @api.depends('contract_line_ids.name', 'contract_line_ids.quantity')
     def _get_user_topup_sum(self):
         for users in self:
             sum_total = 0.0
 
-            for line in users.topup_ids:
-                sum_total += line.topup_users
-                users.update({
-                    'topup_ids': sum_total
-                })
+            for line in users.contract_line_ids:
+                if line.uom_id is 'Users':
+                    sum_total += line.quantity
+                    users.update({
+                        'topup_users': sum_total
+                    })
 
     # Get the sum of Topuped Nr. of storage
+    # Todo adding logic for differnet UOM as GB
     @api.multi
-    @api.depends('topup_ids.name', 'topup_ids.topup_storage')
+    @api.depends('contract_line_ids.name', 'contract_line_ids.quantity')
     def _get_storage_topup_sum(self):
         for storage in self:
             sum_total = 0.0
 
-            for line in storage.topup_ids:
-                sum_total += line.topup_storage
-                storage.update({
-                    'topup_ids': sum_total
-                })
+            for line in storage.contract_line_ids:
+                if line.uom_id is 'MB':
+                    sum_total += line.quantity
+                    storage.update({
+                        'topup_storage': sum_total
+                    })
 
     # Todo Get the the state of billing of contract
     @api.multi
@@ -78,7 +80,7 @@ class SaasPortalClient(models.Model):
                 if r[0] in partner_child_ids and r[1] == 'purchase'])
     """
     def act_show_contract(self):
-        # Todo This opens contract view
+        # Todo This example opens contract view
         #    @return: the contract view
 
         self.ensure_one()
