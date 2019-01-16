@@ -20,7 +20,6 @@ class SaasClient(models.AbstractModel):
     trial = fields.Boolean('Trial', help='indication of trial clients', default=False, readonly=True)
     client_primary_lang = fields.Selection(scan_languages(),
                                            'Instance primary language', readonly=False)
-
     expiration_datetime = fields.Datetime(string="Expiration")
     expired = fields.Boolean('Expired')
 

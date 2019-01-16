@@ -7,13 +7,13 @@
         action="contract.action_account_analytic_sale_overdue_all"
         sequence="4"
         groups="sales_team.group_sale_salesman"/>
-    <!-- Product Template menu -->
+    <!--  Product Template menu -->
     <menuitem
             id="menu_products" action="product.product_template_action"
             parent="saas_portal.menu_base_saas" groups="sales_team.group_sale_salesman" sequence="12"/>
 
     <!-- Product Variant  menu -->
     <menuitem
-            id="menu_products" action="product.product_normal_action_sell"
+            id="menu_products_variant" action="product.product_normal_action_sell"
             parent="saas_portal.menu_saas_portal_config" groups="sales_team.group_sale_salesman" sequence="41"/>
 </odoo>

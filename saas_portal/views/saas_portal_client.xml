@@ -96,6 +96,7 @@
                     </group>
                     <group name="subscription">
                         <field name="trial"/>
+                        <field name="trial_hours" attrs="{'invisible': [('trial', '!=', False)]}"/>
                         <field name="expiration_datetime"/>
                         <field name="client_primary_lang"/>
                     </group>

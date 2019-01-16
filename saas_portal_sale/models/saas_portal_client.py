@@ -9,7 +9,7 @@ class SaasPortalClient(models.Model):
                                         string='Product invoice lines', readonly=True)
     topup_users = fields.Integer('Additional users', compute='_get_user_topup_sum', help='from Topups', readonly=True)
     topup_storage = fields.Integer('Additional storage (MB)',  compute='_get_storage_topup_sum',
-                                         help='from Topups', readonly=True)
+                                   help='from Topups', readonly=True)
     saas_contract_state = fields.Char('Contract state', compute='_compute_contract_state',)
 
     # Get the sum of Topuped # of users
