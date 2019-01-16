@@ -1,7 +1,8 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, SUPERUSER_ID
 from odoo.tools.translate import _
+import odoo
 from odoo.service import db
-from odoo.tools import scan_languages
+from odoo.tools import scan_languages, load_language
 from odoo.exceptions import ValidationError
 
 
@@ -19,6 +20,12 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
     lang = fields.Selection(scan_languages(), 'Language')
 
     @api.multi
+    def registry(self, new=False, **kwargs):
+        self.ensure_one()
+        m = odoo.modules.registry.Registry
+        return m.new(self.new_name, **kwargs)
+
+    @api.multi
     def duplicate_template(self):
         new_db = self.new_name
         if self.template_id:
@@ -33,8 +40,13 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
             new_template = saas_portal_database.create({
                 'name': new_db,
                 'server_id': self.template_id.server_id.id,
+                'db_primary_lang': self.lang,
                 'state': 'template'
             })
+            if self.lang:
+                with self.registry().cursor() as cr:
+                    env = api.Environment(cr, SUPERUSER_ID, self._context)
+                    load_language(env.cr, self.lang)
 
             action = self.env.ref('saas_portal.action_templates').read()[0]
             if action:

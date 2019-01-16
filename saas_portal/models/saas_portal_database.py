@@ -54,6 +54,16 @@ class SaasPortalDatabase(models.Model):
     password = fields.Char('Default Database Password')
 
     @api.multi
+    def name_get(self):
+        res = []
+        for record in self:
+            if record.db_primary_lang:
+                res.append((record.id, '%s [%s]' % (record.name, record.db_primary_lang)))
+            else:
+                res.append((record.id, record.name))
+        return res
+
+    @api.multi
     def _compute_host(self):
         base_saas_domain = self.env['ir.config_parameter'].sudo(
         ).get_param('saas_portal.base_saas_domain')
