@@ -78,23 +78,13 @@ class SaasPortalClient(models.Model):
                 r[2] for r in result
                 if r[0] in partner_child_ids and r[1] == 'purchase'])
     """
+    @api.multi
     def act_show_contract(self):
-        # Todo This example opens contract view
-        #    @return: the contract view
-
-        self.ensure_one()
-        contract_type = self._context.get('contract_type')
-
-        res = self._get_act_window_contract_xml(contract_type)
-        res.update(
-            context=dict(
-                self.env.context,
-                search_default_recurring_invoices=True,
-                search_default_not_finished=True,
-                search_default_partner_id=self.id,
-                default_partner_id=self.id,
-                default_recurring_invoices=True,
-                default_pricelist_id=self.property_product_pricelist.id,
-            ),
-        )
-        return res
+        contract = self.contract_id
+        action = self.env.ref('contract.action_account_analytic_sale_overdue_all').read()[0]
+        if action:
+            action['views'] = [(self.env.ref('contract.account_analytic_account_sale_form').id, 'form')]
+            action['res_id'] = contract.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
