@@ -18,6 +18,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="after">
                     <field name="saas_lang"/>
+                    <field name="template_id"/>
                 </xpath>
             </field>
         </record>

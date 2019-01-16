@@ -140,7 +140,7 @@ class SaasPortalPlan(models.Model):
     @api.multi
     def _create_new_database(self, dbname=None, client_id=None,
                              partner_id=None, user_id=None, notify_user=True,
-                             trial=False, support_team_id=None, async=None, lang=None):
+                             trial=False, support_team_id=None, async=None, lang=None, template_db=None):
         self.ensure_one()
         p_client = self.env['saas_portal.client']
         p_server = self.env['saas_portal.server']
@@ -210,7 +210,8 @@ class SaasPortalPlan(models.Model):
         }
         if lang:
             state.update(lang=lang)
-        if self.template_id:
+            if template_db: state.update({'db_template': template_db})
+        if self.template_id and 'db_template' not in state:
             state.update({'db_template': self.template_id.name})
         scope = ['userinfo', 'force_login', 'trial', 'skiptheuse']
         req, req_kwargs = server._request_server(path='/saas_server/new_database',

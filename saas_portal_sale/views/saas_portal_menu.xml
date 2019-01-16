@@ -9,7 +9,7 @@
         groups="sales_team.group_sale_salesman"/>
     <!--  Product Template menu -->
     <menuitem
-            id="menu_products" action="product.product_template_action"
+            id="menu_products" action="saas_product_template_action"
             parent="saas_portal.menu_base_saas" groups="sales_team.group_sale_salesman" sequence="12"/>
 
     <!-- Product Variant  menu -->
