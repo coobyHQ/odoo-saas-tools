@@ -23,18 +23,16 @@
             <field name="saas_topup_contract_template_id"
                    attrs="{'required': [('saas_product_type','=','topup')], 'invisible': [('saas_product_type','=','base')]}"/>
 
-            <field name="saas_plan_id"/>
-            <field name="saas_default"/>
-            <field name="trial_allowed"/>
+            <field name="saas_plan_id" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
+            <field name="saas_default" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
+            <field name="trial_allowed" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
               <!-- to fix
-            <field name="product_tmpl_topup_ids">
+            <field name="product_tmpl_topup_ids attrs="{'invisible': [('saas_product_type','=','topup')]}"">
               <tree>
                  <field name="name"/>
                  <field name="uom_id"/>
               </tree>
             </field>  -->
-            <!-- to delete -->
-            <field name="plan_ids"/>
           </group>
         </page>
       </xpath>
