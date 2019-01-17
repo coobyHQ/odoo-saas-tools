@@ -76,6 +76,7 @@
     <field name="res_model">product.template</field>
     <field name="view_type">form</field>
     <field name="view_mode">kanban,tree,form</field>
-    <field name="context">{'search_default_group_by_saas_product_type': 1}</field>
+    <field name="domain">[('is_saas', '=', True)]</field>
+    <field name="context">{'search_default_group_by_saas_product_type': 1, 'default_is_saas': True}</field>
   </record>
 </odoo>
