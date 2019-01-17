@@ -103,6 +103,23 @@ class SaasPortalServer(models.Model):
     clients_host_template = fields.Char('Template for clients host names',
                                         help='The possible dynamic parts of the host names are: {dbname}, {base_saas_domain}, {base_saas_domain_1}')
 
+    @api.multi
+    def name_get(self):
+        res = []
+        for record in self:
+            res.append((record.id, '%s [%s]' % (record.name_txt, record.name)))
+        return res
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        domain = args or []
+        domain += [
+            '|',
+            ('name', operator, name),
+            ('name_txt', operator, name),
+        ]
+        return self.search(domain, limit=limit).name_get()
+
     @api.model
     def create(self, vals):
         record = super(SaasPortalServer, self).create(vals)
