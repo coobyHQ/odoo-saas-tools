@@ -45,12 +45,17 @@
               <group>
                 <field name="client_id"/>
                 <field name="name"/>
+                <field name="trial"/>
+                <field name="client_primary_lang"/>
+                <field name="expiration_datetime"/>
+                <field name="expired"/>
+              </group>
+              <group>
                 <field name="users_len"/>
                 <field name="max_users"/>
                 <field name="file_storage"/>
                 <field name="db_storage"/>
-                <field name="trial"/>
-                <field name="expiration_datetime"/>
+                <field name="total_storage" style="font-weight:bold"/>
               </group>
             </group>
           </sheet>

@@ -81,7 +81,7 @@
                     </group>
                 </group>
 
-                <field name="client_ids" readonly="1">
+                <field name="client_ids" readonly="0">
                     <tree>
                         <field name="name"/>
                         <field name="state"/>
