@@ -96,13 +96,16 @@ class SaasPortalPlan(models.Model):
             order = self.env['sale.order'].sudo().browse(int(order_id))
             users, storage, additional_invoice_lines = self.get_topup_info(order, client_obj)
             params_list = []
+            client_vals = {}
             if users != max_users:
                 params_list.append({'key': 'saas_client.max_users', 'value': users})
+                client_vals.update(max_users=str(users))
             if storage != total_storage_limit:
                 params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage})
-
+                client_vals.update(total_storage_limit=storage)
             if params_list:
                 client_obj.upgrade(payload={'params': params_list})
+                if client_vals: client_obj.write(client_vals)
             if client_obj.contract_id and additional_invoice_lines:
                 for invoice_line in additional_invoice_lines:
                     self.env['account.analytic.invoice.line'].sudo().create(invoice_line)
