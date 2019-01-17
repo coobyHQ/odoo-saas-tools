@@ -89,14 +89,8 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
 
             if params_list:
                 client.upgrade(payload={'params': params_list})
-                # request.env['saas_portal.client_topup'].sudo().create({
-                #     'client_id': client.id,
-                #     'topup_users': users if users != max_users else None,
-                #     'topup_storage': storage if storage != total_storage_limit else None,
-                # })
 
             if client.contract_id and additional_invoice_lines:
-                #client.contract_id.recurring_invoice_line_ids = additional_invoice_lines
                 for invoice_line in additional_invoice_lines:
                     request.env['account.analytic.invoice.line'].sudo().create(invoice_line)
 
@@ -127,9 +121,16 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
                 order.write(values)
             return request.redirect("/shop/payment")
 
+        base_saas_domain = None
         if not post.get('base_saas_domain', False):
             base_saas_domain = self.get_saas_domain()
             post['base_saas_domain'] = base_saas_domain
+
+        dbname = None
+        if not post.get('dbname', False):
+            if order and order.saas_dbname:
+                dbname = order.saas_dbname
+                post['dbname'] = dbname
 
         instances = False
         plan = False
@@ -156,6 +157,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             'website_sale_order': order,
             'post': post,
             'base_saas_domain': base_saas_domain,
+            'dbname': dbname,
             'escape': lambda x: x.replace("'", r"\'"),
             'partner': order.partner_id.id,
             'order': order,
