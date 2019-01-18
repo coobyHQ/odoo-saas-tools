@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+from odoo.tools.translate import _
+from odoo.exceptions import ValidationError
 
 
 class SaasChangePlanWizard(models.TransientModel):
@@ -39,3 +41,14 @@ class SaasChangePlanWizard(models.TransientModel):
             if not possible_plans or self.new_plan_id.id not in possible_plans.ids:
                 self.new_plan_id = False
         return {'domain': domain}
+
+    @api.multi
+    def change_saas_plan(self):
+        # TODO
+        action = self.env.ref('saas_portal.action_templates').read()[0]
+        if action:
+            action['views'] = [(self.env.ref('saas_portal.view_databases_form').id, 'form')]
+            action['res_id'] = self.new_plan_id.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action

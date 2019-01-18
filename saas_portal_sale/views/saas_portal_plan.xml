@@ -49,6 +49,9 @@
                         </field>
                     </page>
                 </xpath>
+                <field name="state" position="before">
+                    <button string="Add languages" type="action" name="%(saas_plan_add_language_templates_wizard_action)d" states="confirmed"/>
+                </field>
             </data>
         </field>
     </record>

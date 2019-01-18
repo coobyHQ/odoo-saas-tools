@@ -17,6 +17,7 @@
     ],
     'data': [
         'wizard/change_plan_of_client_view.xml',
+        'wizard/add_language_templates_view.xml',
         'views/product_template_views.xml',
         'views/product_attribute_views.xml',
         'views/saas_portal_menu.xml',

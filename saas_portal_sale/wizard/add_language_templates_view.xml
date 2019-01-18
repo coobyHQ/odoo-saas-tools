@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="saas_plan_add_language_templates_wizard_form" model="ir.ui.view">
+        <field name="name">saas_portal.add_language_templates.wizard.view</field>
+        <field name="model">saas_portal.add_language_templates.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group colspan="4" col="4">
+                    <field name="plan_id" readonly="True"/>
+                    <field name="template_id" readonly="True"/>
+                    <field name="suffix"/>
+                </group>
+                <group colspan="4" col="4">
+                    <field name="language_ids" colspan="4" nolabel="1" domain="['|', ('active', '=', True), ('active', '=', False)]"/>
+                </group>
+                <footer>
+                    <button string="Add Language Templates" name="add_language_templates" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="saas_plan_add_language_templates_wizard_action" model="ir.actions.act_window">
+        <field name="name">Add Language Templates</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.add_language_templates.wizard</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="saas_plan_add_language_templates_wizard_form"/>
+    </record>
+    <act_window id="ir_saas_plan_add_language_templates_wizard"
+            multi="True"
+            key2="client_action_multi" name="Add languages"
+            res_model="saas_portal.add_language_templates.wizard" src_model="saas_portal.plan"
+            view_mode="form" target="new" view_type="form"/>
+</odoo>

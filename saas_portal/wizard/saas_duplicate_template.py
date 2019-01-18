@@ -46,7 +46,21 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
             if self.lang:
                 with self.registry().cursor() as cr:
                     env = api.Environment(cr, SUPERUSER_ID, self._context)
+                    # load a new language:
                     load_language(env.cr, self.lang)
+                    # set this language for all partner records:
+                    for partner in env['res.partner'].search([]):
+                        partner.lang = self.lang
+                    # if website is installed, also load the language
+                    if env['ir.module.module'].search([('name', '=', 'website')]).state in ('installed', 'to upgrade'):
+                        website = env["website"].get_current_website()
+                        wiz = env["base.language.install"].create({"lang": self.lang})
+                        wiz.website_ids = website
+                        wiz.lang_install()
+                        res_lang_id = env['res.lang'].search([('code', '=', self.lang)])
+                        if res_lang_id:
+                            # make it a default website language
+                            website.default_lang_id = res_lang_id
 
             action = self.env.ref('saas_portal.action_templates').read()[0]
             if action:
