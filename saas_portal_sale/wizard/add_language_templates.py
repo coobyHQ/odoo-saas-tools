@@ -27,7 +27,8 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                                   required=True, ondelete="cascade", default=_get_plan_id)
     template_id = fields.Many2one(comodel_name="saas_portal.database", string="Template",
                                    required=True, ondelete="cascade", default=_get_template_id, auto_join=True)
-    suffix = fields.Char(string="Suffix", help="Suffix for database name (gets added to language code)", required=True)
+    prefix = fields.Char(string="Prefix", help="Prefix for database name (gets added before language code)", required=False)
+    suffix = fields.Char(string="Suffix", help="Suffix for database name (gets added after language code)", required=False)
     language_ids = fields.Many2many('res.lang', 'saas_plan_add_template_lang_rel', 'wizard_id', 'lang_id', 'Languages', domain=['|', ('active', '=', True), ('active', '=', False)])
 
     @api.multi
@@ -46,7 +47,7 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
             saas_portal_database = self.env['saas_portal.database']
             # first check if there are existing databases
             for language in self.language_ids:
-                dbname = language.iso_code + self.suffix
+                dbname = (self.prefix or '') + language.iso_code + (self.suffix or '')
                 if saas_portal_database.search([('name', '=', dbname)]):
                     raise ValidationError(
                         _("This database already exists: "
@@ -58,7 +59,7 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                         lang_attr = attr
                         break
             for language in self.language_ids:
-                dbname = language.iso_code + self.suffix
+                dbname = (self.prefix or '') + language.iso_code + (self.suffix or '')
                 db._drop_conn(self.env.cr, self.template_id.name)
                 db.exp_duplicate_database(self.template_id.name, dbname)
                 new_template = saas_portal_database.create({
@@ -86,10 +87,6 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                             website.default_lang_id = res_lang_id
                 if lang_attr:
                     attr_value = self.env['product.attribute.value'].search([('name', '=', language.name), ('attribute_id', '=', lang_attr.attribute_id.id)])
-                    #for lan in lang_attr.value_ids:
-                    #    if lan.saas_lang == language.code:
-                    #        lan.template_id = new_template.id
-                    #        break
                     if attr_value:
                         attr_value.template_id = new_template.id
                         self.plan_id.product_tmpl_id.write({
@@ -104,9 +101,6 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                                             'saas_lang': language.code,
                                             'template_id': new_template.id
                                         })]
-                    #attr_value = self.env['product.attribute.value'].search([('name', '=', language.name), ('attribute_id', '=', lang_attr.attribute_id.id)])
-                    #if attr_value:
-                    #    self.plan_id.product_tmpl_id.attribute_line_ids = [1, lang_attr.id, {'attribute_id': lang_attr.attribute_id.id, 'value_ids': [[4, attr_value.id]]}]
 
             action = {'type': 'ir.actions.act_window_close'}
             return action

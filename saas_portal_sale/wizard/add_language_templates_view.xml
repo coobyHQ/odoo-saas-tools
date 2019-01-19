@@ -8,6 +8,7 @@
                 <group colspan="4" col="4">
                     <field name="plan_id" readonly="True"/>
                     <field name="template_id" readonly="True"/>
+                    <field name="prefix"/>
                     <field name="suffix"/>
                 </group>
                 <group colspan="4" col="4">
