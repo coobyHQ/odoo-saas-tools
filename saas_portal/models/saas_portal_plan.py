@@ -139,7 +139,7 @@ class SaasPortalPlan(models.Model):
 
     @api.multi
     def _create_new_database(self, dbname=None, client_id=None,
-                             partner_id=None, user_id=None, notify_user=True,
+                             partner_id=None, user_id=None, notify_user=True, order_id=None,
                              trial=False, support_team_id=None, async=None, lang=None, template_db=None):
         self.ensure_one()
         p_client = self.env['saas_portal.client']

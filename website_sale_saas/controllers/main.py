@@ -84,10 +84,10 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             client_vals = {}
             users, storage, additional_invoice_lines = plan.get_topup_info(order, client)
             if users != max_users:
-                params_list.append({'key': 'saas_client.max_users', 'value': users})
+                params_list.append({'key': 'saas_client.max_users', 'value': users, 'hidden': True})
                 client_vals.update(max_users=str(users))
             if storage != total_storage_limit:
-                params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage})
+                params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage, 'hidden': True})
                 client_vals.update(total_storage_limit=storage)
             if params_list:
                 client.upgrade(payload={'params': params_list})
@@ -307,6 +307,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
                     redirect_url = '%s?dbname=%s&plan_id=%s&order_id=%s' % (
                         redirect, dbname, plan_id, order.id
                     )
+                    #TODO avoid redirect
                     return request.redirect(redirect_url)
                 if plan_id and client:
                     self.upgrade_client_with_topup(client, plan_id, order.id)

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Change Client plan -->
-    <record id="saas_plan_change_wizard_form" model="ir.ui.view">
-        <field name="name">saas_portal_sale.change_plan_of_client.wizard.view</field>
-        <field name="model">saas_portal_sale.change_plan_of_client.wizard</field>
+    <record id="saas_portal_plan_change_wizard_form" model="ir.ui.view">
+        <field name="name">saas_portal.change_plan_of_client.wizard.view</field>
+        <field name="model">saas_portal.change_plan_of_client.wizard</field>
         <field name="arch" type="xml">
             <form>
             <div>
@@ -40,18 +40,18 @@
         </field>
     </record>
 
-    <record id="saas_plan_change_wizard_action" model="ir.actions.act_window">
+    <record id="saas_plan_change_plan_wizard_action" model="ir.actions.act_window">
         <field name="name">Reason to change Plan</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">saas_portal_sale.change_plan_of_client.wizard</field>
+        <field name="res_model">saas_portal.change_plan_of_client.wizard</field>
         <field name="view_type">form</field>
         <field name="target">new</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="saas_plan_change_wizard_form"/>
+        <field name="view_id" ref="saas_portal_plan_change_wizard_form"/>
     </record>
-    <act_window id="ir_saas_plan_change_wizard"
+    <act_window id="ir_saas_plan_change_plan_wizard"
             multi="True"
             key2="client_action_multi" name="Change The Plan for The Client"
-            res_model="saas_portal_sale.change_plan_of_client.wizard" src_model="saas_portal.client"
+            res_model="saas_portal.change_plan_of_client.wizard" src_model="saas_portal.client"
             view_mode="form" target="new" view_type="form"/>
 </odoo>

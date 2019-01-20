@@ -14,7 +14,7 @@ class SaasPortalClient(models.Model):
     saas_contract_state = fields.Char('Contract state', compute='_compute_contract_state',)
 
     @api.multi
-    @api.depends('contract_line_ids.name', 'contract_line_ids.quantity')
+    @api.depends('contract_line_ids.product_id', 'contract_line_ids.quantity')
     def _get_user_topup_sum(self):
         for client in self:
             sum_total = 0.0
@@ -27,7 +27,7 @@ class SaasPortalClient(models.Model):
             client.topup_users = sum_total
 
     @api.multi
-    @api.depends('contract_line_ids.name', 'contract_line_ids.quantity')
+    @api.depends('contract_line_ids.product_id', 'contract_line_ids.quantity')
     def _get_storage_topup_sum(self):
         for client in self:
             sum_total = 0.0

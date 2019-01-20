@@ -5,10 +5,7 @@
         <field name="name">saas_portal.client.form</field>
         <field name="model">saas_portal.client</field>
         <field name="inherit_id" ref="saas_portal.view_clients_form"/>
-        <field name="arch" type="xml"><!-- Todo fix xpath
-            <xpath expr="//div[@button='saas_portal.sync_client']" position="after">
-            <button name="%(saas_plan_change_wizard_action)d" string="Change Plan" type="action"/>
-            </xpath>-->
+        <field name="arch" type="xml">
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="act_show_contract" type="object" class="oe_stat_button"
                         icon="fa-book" context="{'contract_type': 'sale'}"

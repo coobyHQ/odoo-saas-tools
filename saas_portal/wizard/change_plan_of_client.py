@@ -3,8 +3,8 @@ from odoo.tools.translate import _
 from odoo.exceptions import ValidationError
 
 
-class SaasChangePlanWizard(models.TransientModel):
-    _name = 'saas_portal_sale.change_plan_of_client.wizard'
+class SaasPortalChangePlanWizard(models.TransientModel):
+    _name = 'saas_portal.change_plan_of_client.wizard'
     _description = 'SaaS Portal Client Plan Change'
 
     @api.model
@@ -44,11 +44,29 @@ class SaasChangePlanWizard(models.TransientModel):
 
     @api.multi
     def change_saas_plan(self):
-        # TODO
-        action = self.env.ref('saas_portal.action_templates').read()[0]
-        if action:
-            action['views'] = [(self.env.ref('saas_portal.view_databases_form').id, 'form')]
-            action['res_id'] = self.new_plan_id.ids[0]
+        self.cur_client_id.sync_client()
+
+        if self.new_plan_id:
+            self.cur_client_id.plan_id = self.new_plan_id.id
         else:
-            action = {'type': 'ir.actions.act_window_close'}
+            raise ValidationError(
+                _("Please choose a new plan!")
+            )
+
+        new_max_users = int(self.new_plan_id.max_users) + int(self.cur_client_id.topup_users)
+        new_total_storage_limit = self.new_plan_id.total_storage_limit + self.cur_client_id.topup_storage
+
+        payload = [{'key': 'saas_client.max_users',
+                        'value': new_max_users, 'hidden': True},
+                       #{'key': 'saas_client.expiration_datetime',
+                       # 'value': self.cur_client_id.expiration_datetime,
+                       # 'hidden': True},
+                       {'key': 'saas_client.total_storage_limit',
+                        'value': new_total_storage_limit,
+                        'hidden': True}]
+        self.cur_client_id.upgrade(payload={'params': payload})
+
+        self.cur_client_id.sync_client()
+
+        action = {'type': 'ir.actions.act_window_close'}
         return action

@@ -26,6 +26,8 @@
                 <!-- todo seems confirm wizard does not work here !! -->
                 <button name="delete_database_server" type="object" attrs="{'invisible':[('state', 'in', ['draft', 'deleted'])]}"
                         icon="fa-eraser" help="Delete client database" groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
+                <button type="action" name="%(saas_portal.saas_plan_change_plan_wizard_action)d"
+                        icon="fa-cogs" help="Change Plan" groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
             </tree>
         </field>
     </record>
@@ -52,6 +54,8 @@
                     <button string="Sync client" type="object" name="sync_client" icon="fa-refresh"/>
                     <button name="%(saas_portal.action_rename_database)d" string="Rename Database" type="action"
                             groups="saas_portal.saas_group_admin"/>
+                    <button string="Change Plan" type="action" name="%(saas_portal.saas_plan_change_plan_wizard_action)d"
+                            groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
                     <field name="state" widget="statusbar" statusbar_visible="open,pending,deleted" clickable=""/>
                 </header>
                 <sheet>
