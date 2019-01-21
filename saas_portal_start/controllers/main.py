@@ -12,4 +12,7 @@ class SaasPortalStart(SaasPortal):
             'base_saas_domain': base_saas_domain,
             'plan_id': post.get('plan_id')
         }
+        if post.get('plan_id', False):
+            plan = request.env['saas_portal.plan'].sudo().browse(post.get('plan_id'))
+            if plan and plan.server_id and plan.server_id.domain: values.update(base_saas_domain = plan.server_id.domain)
         return request.render("website.start", values)

@@ -37,6 +37,7 @@ class CustomerPortal(CustomerPortal):
         instance = request.env['saas_portal.client'].sudo().browse(instance_id)
         ICPsudo = request.env['ir.config_parameter'].sudo()
         base_saas_domain = ICPsudo.get_param('base_saas_domain')
+        if instance and instance.domain and instance.domain != base_saas_domain: base_saas_domain = instance.domain
         values = {
             'domain_name': instance.name,
             'saas_portal_client': instance,

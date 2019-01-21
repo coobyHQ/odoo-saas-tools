@@ -38,7 +38,7 @@ class SaasPortalServer(models.Model):
     def _prepare_module(self, module, plan):
         attachment_name = 'addon_{0}_{1}.{2}'.format(self.odoo_version,
                                                      module['name'],
-                                                     self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain'))
+                                                     plan and plan.server_id and plan.server_id.domain or self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain'))
         ir_attachment = self.env['ir.attachment'].create(
             {'name': attachment_name, 'type': 'binary', 'db_datas': module.get('icon_image')})
         return {

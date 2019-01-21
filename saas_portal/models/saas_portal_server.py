@@ -11,12 +11,12 @@ _logger = logging.getLogger(__name__)
 
 @api.multi
 def _compute_host(self):
-    base_saas_domain = self.env['ir.config_parameter'].sudo(
-    ).get_param('saas_portal.base_saas_domain')
+    base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
     for r in self:
         host = r.name
-        if base_saas_domain and '.' not in r.name:
-            host = '%s.%s' % (r.name, base_saas_domain)
+        domain = r.domain or base_saas_domain
+        if domain and '.' not in r.name:
+            host = '%s.%s' % (r.name, domain)
         r.host = host
 
 """

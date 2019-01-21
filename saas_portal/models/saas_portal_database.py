@@ -14,8 +14,10 @@ def _compute_host(self):
     ).get_param('saas_portal.base_saas_domain')
     for r in self:
         host = r.name
-        if base_saas_domain and '.' not in r.name:
-            host = '%s.%s' % (r.name, base_saas_domain)
+        domain = r.domain or base_saas_domain
+        domain = base_saas_domain
+        if domain and '.' not in r.name:
+            host = '%s.%s' % (r.name, domain)
         r.host = host
 
 
@@ -34,6 +36,7 @@ class SaasPortalDatabase(models.Model):
         string='Server', readonly=False)
     server_db_name = fields.Char(related='server_id.name', string='Database name', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
+    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
     product_type = fields.Selection(related='server_id.product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')
     odoo_version = fields.Selection(related='server_id.odoo_version', string='Odoo version', readonly=True,
@@ -65,11 +68,11 @@ class SaasPortalDatabase(models.Model):
 
     @api.multi
     def _compute_host(self):
-        base_saas_domain = self.env['ir.config_parameter'].sudo(
-        ).get_param('saas_portal.base_saas_domain')
-        base_saas_domain_1 = '.'.join(base_saas_domain.rsplit('.', 2)[-2:])
+        base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
+        domain = self.server_id and self.server_id.domain or base_saas_domain
+        base_saas_domain_1 = '.'.join(domain.rsplit('.', 2)[-2:])
         name_dict = {
-            'base_saas_domain': base_saas_domain,
+            'base_saas_domain': domain,
             'base_saas_domain_1': base_saas_domain_1,
         }
         for record in self:

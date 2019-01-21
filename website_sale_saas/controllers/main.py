@@ -68,10 +68,14 @@ class SaasPortalOrder(SaasPortal):
 
 class SaasCreateInstanceAfterValidating(WebsiteSale):
 
-    def get_saas_domain(self):
+    def get_saas_domain(self, order):
         config = request.env['ir.config_parameter']
         full_param = 'saas_portal.base_saas_domain'
         base_saas_domain = config.sudo().get_param(full_param)
+        if order:
+            base_plan_product = order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False and product.saas_product_type == 'base')
+            if base_plan_product and base_plan_product.saas_plan_id and base_plan_product.saas_plan_id.domain:
+                base_saas_domain = base_plan_product.saas_plan_id.domain
         return base_saas_domain
 
     def upgrade_client_with_topup(self, client, plan_id, order_id):
@@ -126,7 +130,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
 
         base_saas_domain = None
         if not post.get('base_saas_domain', False):
-            base_saas_domain = self.get_saas_domain()
+            base_saas_domain = self.get_saas_domain(order)
             post['base_saas_domain'] = base_saas_domain
 
         dbname = None

@@ -18,12 +18,12 @@ _logger = logging.getLogger(__name__)
 
 @api.multi
 def _compute_host(self):
-    base_saas_domain = self.env['ir.config_parameter'].sudo(
-    ).get_param('saas_portal.base_saas_domain')
+    base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
     for r in self:
         host = r.name
-        if base_saas_domain and '.' not in r.name:
-            host = '%s.%s' % (r.name, base_saas_domain)
+        domain = r.domain or base_saas_domain
+        if domain and '.' not in r.name:
+            host = '%s.%s' % (r.name, domain)
         r.host = host
 
 
@@ -73,6 +73,7 @@ class SaasPortalPlan(models.Model):
     server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
                                 ondelete='restrict',
                                 help='Use this saas server or choose random')
+    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
     upgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_upgrade_rel', 'plan_id', 'upgrade_plan_id', string='Potential Plans To Upgrade To')
     downgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_downgrade_rel', 'plan_id', 'downgrade_plan_id', string='Potential Plans To Downgrade To')
     website_description = fields.Html('Website description')
