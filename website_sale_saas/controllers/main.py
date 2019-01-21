@@ -25,7 +25,7 @@ class SaasPortalOrder(SaasPortal):
             query = {'redirect': redirect}
             return http.local_redirect(path=url, query=query)
 
-        dbname = self.get_full_dbname(post.get('dbname'))
+        dbname = self.get_full_dbname(post.get('dbname'), int(post.get('plan_id', 0) or 0))
         user_id = request.session.uid
         partner_id = None
         if user_id:

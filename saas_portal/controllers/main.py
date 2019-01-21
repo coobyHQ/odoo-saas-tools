@@ -34,7 +34,7 @@ class SaasPortal(http.Controller):
             query = {'redirect': redirect}
             return http.local_redirect(path=url, query=query)
 
-        dbname = self.get_full_dbname(post.get('dbname'))
+        dbname = self.get_full_dbname(post.get('dbname'), int(post.get('plan_id', 0) or 0))
         user_id = request.session.uid
         partner_id = None
         if user_id:
@@ -78,10 +78,15 @@ class SaasPortal(http.Controller):
         full_param = 'saas_portal.%s' % param
         return config.sudo().get_param(full_param)
 
-    def get_full_dbname(self, dbname):
+    def get_full_dbname(self, dbname, plan_id=0):
         if not dbname:
             return None
-        full_dbname = '%s.%s' % (dbname, self.get_config_parameter('base_saas_domain'))
+        domain = self.get_config_parameter('base_saas_domain')
+        if plan_id:
+            plan = request.env['saas_portal.plan'].browse(plan_id)
+            if plan and plan.server_id and plan.server_id.domain:
+                domain = plan.server_id.domain
+        full_dbname = '%s.%s' % (dbname, domain)
         return full_dbname.replace('www.', '')
 
     def get_plan(self, plan_id=None):
@@ -96,7 +101,7 @@ class SaasPortal(http.Controller):
         return plan_obj.sudo().browse(plan_id)
 
     def exists_database(self, dbname):
-        full_dbname = self.get_full_dbname(dbname)
+        full_dbname = self.get_full_dbname(dbname, 0)
         return odoo.service.db.exp_db_exist(full_dbname)
 
     @http.route(['/publisher-warranty/'], type='http', auth='public', website=True)
