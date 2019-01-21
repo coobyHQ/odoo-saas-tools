@@ -36,13 +36,17 @@ class SaasPortalServer(models.Model):
     _inherit = ['mail.thread']
     _inherits = {'oauth.application': 'oauth_application_id'}
 
+    @api.model
+    def _get_domain(self):
+        return  self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
+
     # Attention names is used for database name, another field name_txt as Title was created,
     name_txt = fields.Char('Name', required=True)
     name = fields.Char('Database name', required=True)
     summary = fields.Char('Summary')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
-    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server')
+    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', default=_get_domain)
     sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
