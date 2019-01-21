@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Todo agent sees only their own support tickets and their customer's/-->
+        <record id="website_support_ticket_agent_personal_rule" model="ir.rule">
+            <field name="name">SaaS Support Tickets</field>
+            <field ref="model_website_support_ticket" name="model_id"/>
+            <field name="domain_force">['|',('user_id', '=', user.id),('partner_id', 'in', user.partner_id.stp_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('agent_portal.ap_group_agent'))]"/>
+        </record>
+    </data>
+</odoo>

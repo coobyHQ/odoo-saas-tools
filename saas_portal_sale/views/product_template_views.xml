@@ -15,7 +15,7 @@
         <page string="SaaS" name="saas" attrs="{'invisible': [('is_saas','=',False)]}">
           <group>
             <field name="saas_product_type"
-                   attrs="{'required': [('is_saas','=',True)], 'invisible': [('is_saas','=',False)]}"/>
+                   attrs="{'required': [('is_saas','=',True)]}"/>
             <field name="saas_base_type"
                    attrs="{'required': [('saas_product_type','=','base')], 'invisible': [('saas_product_type','=','topup')]}"/>
             <field name="saas_topup_type"
@@ -49,8 +49,8 @@
           <group>
             <field name="is_saas"/>
             <field name="saas_product_type"/>
-            <field name="saas_plan_id"/>
-            <field name="saas_default"/>
+            <field name="saas_plan_id" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
+            <field name="saas_default" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
           </group>
         </page>
       </xpath>

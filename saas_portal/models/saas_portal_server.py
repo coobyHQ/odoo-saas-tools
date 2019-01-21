@@ -36,8 +36,7 @@ class SaasPortalServer(models.Model):
     _inherit = ['mail.thread']
     _inherits = {'oauth.application': 'oauth_application_id'}
 
-    # Todo as names is used for database name another field was created, but ev. it makes sense to rename
-    #  the field name to database _name, I would prefer this LUH
+    # Attention names is used for database name, another field name_txt as Title was created,
     name_txt = fields.Char('Name', required=True)
     name = fields.Char('Database name', required=True)
     summary = fields.Char('Summary')

@@ -2,6 +2,7 @@ from odoo import models, fields, api
 from datetime import datetime
 from odoo.tools.misc import formatLang
 
+
 class SaasPortalClient(models.Model):
     _inherit = 'saas_portal.client'
 
