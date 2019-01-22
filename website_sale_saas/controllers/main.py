@@ -46,6 +46,15 @@ class SaasPortalOrder(SaasPortal):
                         if attr.saas_lang:
                             lang = attr.saas_lang
                             if attr.template_id: template_db = attr.template_id.name
+        else:
+            if post.get('trial_product_id', False):
+                #trial_product = request.env['product.product'].sudo().browse(int(post.get('trial_product_id')))
+                #for attr in trial_product.attribute_value_ids:
+                attr = request.env['product.attribute.value'].sudo().browse(int(post.get('trial_product_id')))
+                if attr.attribute_id and attr.attribute_id.saas_code == 'lang':
+                    if attr.saas_lang:
+                        lang = attr.saas_lang
+                        if attr.template_id: template_db = attr.template_id.name
         try:
             res = plan.create_new_database(dbname=dbname,
                                            user_id=user_id,

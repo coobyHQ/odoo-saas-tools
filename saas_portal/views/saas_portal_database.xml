@@ -8,6 +8,7 @@
             <tree string="Plans" create="false" edit="true" delete="false">
                  <field name="name" />
                  <field name="server_id"/>
+                 <field name="db_primary_lang"/>
                  <field name="product_type"/>
                  <field name="client_id" />
                  <field name="state" />

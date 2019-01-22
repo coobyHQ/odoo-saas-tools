@@ -83,7 +83,7 @@ class SaasPortal(http.Controller):
             return None
         domain = self.get_config_parameter('base_saas_domain')
         if plan_id:
-            plan = request.env['saas_portal.plan'].browse(plan_id)
+            plan = request.env['saas_portal.plan'].sudo().browse(plan_id)
             if plan and plan.server_id and plan.server_id.domain:
                 domain = plan.server_id.domain
         full_dbname = '%s.%s' % (dbname, domain)
