@@ -9,11 +9,11 @@
     <xpath expr="//ul[hasclass('o_portal_docs')]" position="inside">
       <li t-if="instance_count" class="list-group-item">
         <span class="badge" t-esc="instance_count"/>
-        <a href="/my/instances">Instances</a>
+        <a href="/my/instances">My Software instances</a>
       </li>
     </xpath>
   </template>
-  <template id="portal_instances" name="Instances">
+  <template id="portal_instances" name="My Software instances">
     <t t-call="portal.portal_layout">
       <h3>Instances<t t-call="portal.portal_searchbar"/></h3>
     </t>
@@ -31,6 +31,7 @@
               <tr class="active">
                 <th>Name</th>
                 <th>Plan</th>
+                <th>Max Users</th>
                 <th>Valid Until</th>
                 <th/>
               </tr>
@@ -44,6 +45,9 @@
                 </td>
                 <td>
                   <span t-field="instance.plan_id.name"/>
+                </td>
+                <td>
+                  <span t-field="instance.plan_id.max_users"/>
                 </td>
                 <td>
                   <span t-field="instance.expiration_datetime"/>
@@ -63,6 +67,36 @@
       </div>
     </t>
   </template>
+<!-- Todo this has to be in a separate view and only allowing change of subdomain name -->
+  <template id="instance_detail">
+    <t t-call="website.layout">
+      <t t-set="additional_title">SaaS Instance detail</t>
+      <div id="wrap">
+        <div class="container">
+          <h1><t t-esc="saas_portal_client.contract_id"/></h1>
+          <t t-esc="saas_portal_client.name"/>
+          <t t-esc="saas_portal_client.plan_id"/>
+          <t t-esc="saas_portal_client.server_id.name"/>
+          <form role="form" class="form-inline">
+            <input type="hidden" name="client_id" t-att-value="saas_portal_client.id"/>
+            <input type="hidden" name="base_saas_domain" t-att-value="base_saas_domain"/>
+
+            <div style="margin-top:30px;">
+              <p>Following list shows yor topups of the your instance:</p>
+              <ul>
+                <li>Addon 1   </li>
+                <li>Addon 2   </li>
+              </ul>
+              <p>Change your instance:</p>
+              <p>Go to the webshop to the category Topups and order additional storage or users,
+                or you can upgrade the plan of your instance too.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </t>
+  </template>
+<!-- Todo this has to be in a separate view and only allowing change of subdomain name -->
   <template id="change_domain">
     <t t-call="website.layout">
       <t t-set="additional_title">Domain name</t>
@@ -95,4 +129,5 @@
       </div>
     </t>
   </template>
+
 </odoo>

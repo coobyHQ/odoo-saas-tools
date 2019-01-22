@@ -1,4 +1,4 @@
 SaaS Portal Portal
 ==================
 
-Allows your customers to manage their saas services from a beautiful web interface.
+Allows your customers to see their saas services from the portal web interface.

@@ -33,7 +33,7 @@ class CustomerPortal(CustomerPortal):
         return request.render("saas_portal_portal.portal_my_instances", values)
 
     @http.route("/my/domain/<int:instance_id>", type='http', auth="user", website=True)
-    def change_domain(self, instance_id, **post):
+    def instance_detail(self, instance_id, **post):
         instance = request.env['saas_portal.client'].sudo().browse(instance_id)
         ICPsudo = request.env['ir.config_parameter'].sudo()
         base_saas_domain = ICPsudo.get_param('base_saas_domain')

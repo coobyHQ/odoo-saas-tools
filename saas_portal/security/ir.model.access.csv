@@ -10,6 +10,8 @@ access_saas_plan_admin,access_saas_plan.admin,model_saas_portal_plan,saas_portal
 access_saas_client_agent,access_saas_client.agent,model_saas_portal_client,saas_portal.saas_group_agent,1,1,0,0
 access_saas_client_moderator,access_saas_client.moderator,model_saas_portal_client,saas_portal.saas_group_moderator,1,1,1,0
 access_saas_client_admin,access_saas_client.admin,model_saas_portal_client,saas_portal.saas_group_admin,1,1,1,1
+access_saas_client_portal,access_saas_client.portal,model_saas_portal_client,base.group_portal,1,0,0,0
+access_saas_client_internal_user,access_saas_client.user,model_saas_portal_client,base.group_user,1,0,0,0
 ,,,,,,,
 saas_portal_database_agent,saas_portal.database.agent,model_saas_portal_database,saas_portal.saas_group_agent,1,0,0,0
 saas_portal_database_moderator,saas_portal.database.moderator,model_saas_portal_database,saas_portal.saas_group_moderator,1,0,0,0

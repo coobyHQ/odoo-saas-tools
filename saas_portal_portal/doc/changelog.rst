@@ -1,3 +1,8 @@
+`1.1.2`
+------------
+
+- **IMP** improved user interface direct application of own URL is not anymore available.
+
 `1.1.1`
 ------------
 
