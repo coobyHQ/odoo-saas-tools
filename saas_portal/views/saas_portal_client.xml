@@ -9,6 +9,7 @@
             <tree string="Client instance" colors="red:expired" create="false" delete="false" edit="false">
                 <field name="name"/>
                 <field name="plan_id"/>
+                <field name="client_primary_lang"/>
                 <field name="state"/>
                 <field name="last_connection"/>
                 <field name="users_len"/>

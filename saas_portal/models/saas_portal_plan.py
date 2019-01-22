@@ -184,6 +184,10 @@ class SaasPortalPlan(models.Model):
                 'support_team_id': support_team_id,
                 'expiration_datetime': client_expiration,
                 }
+        if template_db:
+            tmpl = self.env['saas_portal.database'].search([('name', '=', template_db), ('state', '=', 'template')], limit=1)
+            if tmpl and tmpl.db_primary_lang:
+                vals.update(client_primary_lang=tmpl.db_primary_lang)
         client = None
         if client_id:
             vals['client_id'] = client_id
