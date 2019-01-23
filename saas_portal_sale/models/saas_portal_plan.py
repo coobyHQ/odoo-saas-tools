@@ -68,17 +68,16 @@ class SaasPortalPlan(models.Model):
                         qty = topup_line.product_uom._compute_quantity(topup_line.product_uom_qty, mb_uom or topup_line.product_uom)
                     storage += int(qty)
                 if topup.saas_topup_contract_template_id and client and client.contract_id:
-                    for n in range(int(topup_line.product_uom_qty)):
-                        for inv_line in topup.saas_topup_contract_template_id.recurring_invoice_line_ids:
-                            additional_invoice_lines.append({
-                                'analytic_account_id': client.contract_id and client.contract_id.id or False,
-                                'product_id': inv_line.product_id.id,
-                                'name': inv_line.name,
-                                'quantity': inv_line.quantity * topup_line.product_uom_qty,
-                                'uom_id': inv_line.uom_id.id,
-                                'automatic_price': inv_line.automatic_price,
-                                'price_unit': inv_line.price_unit,
-                            })
+                    for inv_line in topup.saas_topup_contract_template_id.recurring_invoice_line_ids:
+                        additional_invoice_lines.append({
+                            'analytic_account_id': client.contract_id and client.contract_id.id or False,
+                            'product_id': inv_line.product_id.id,
+                            'name': inv_line.name,
+                            'quantity': inv_line.quantity * topup_line.product_uom_qty,
+                            'uom_id': inv_line.uom_id.id,
+                            'automatic_price': inv_line.automatic_price,
+                            'price_unit': inv_line.price_unit,
+                        })
         return users, storage, additional_invoice_lines
 
     @api.multi
