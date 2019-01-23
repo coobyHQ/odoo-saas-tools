@@ -88,7 +88,7 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                 if lang_attr:
                     attr_value = self.env['product.attribute.value'].search([('name', '=', language.name), ('attribute_id', '=', lang_attr.attribute_id.id)])
                     if attr_value:
-                        attr_value.template_id = new_template.id
+                        attr_value.template_ids = [(4, new_template.id)]
                         self.plan_id.product_tmpl_id.write({
                             'attribute_line_ids': [(1, lang_attr.id, {
                                 'value_ids': [(4, attr_value.id)]
@@ -99,7 +99,7 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                                             'name': language.name,
                                             'attribute_id': lang_attr.attribute_id.id,
                                             'saas_lang': language.code,
-                                            'template_id': new_template.id
+                                            'template_ids': [(4, new_template.id)]
                                         })]
 
             action = {'type': 'ir.actions.act_window_close'}
