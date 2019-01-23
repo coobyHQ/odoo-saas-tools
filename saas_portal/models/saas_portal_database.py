@@ -55,6 +55,7 @@ class SaasPortalDatabase(models.Model):
     public_url = fields.Char(compute='_compute_public_url')
     # Todo use of password is not yet clear?
     password = fields.Char('Default Database Password')
+    plan_ids = fields.Many2many('saas_portal.plan', 'saas_portal_database_templates', 'template_id', 'plan_id', string='SaaS Plans')
 
     @api.multi
     def name_get(self):

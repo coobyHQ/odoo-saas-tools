@@ -5,7 +5,7 @@
         <field name="name">saas_portal.databases.tree</field>
         <field name="model">saas_portal.database</field>
         <field name="arch" type="xml">
-            <tree string="Plans" create="false" edit="true" delete="false">
+            <tree string="Databases" create="false" edit="true" delete="false">
                  <field name="name" />
                  <field name="server_id"/>
                  <field name="db_primary_lang"/>
@@ -24,6 +24,7 @@
             <header>
                 <button string="Duplicate a Template" name="duplicate_template_button" type="object"
                         icon="fa-play" class="oe_highlight"/>
+                <field name="state" widget="statusbar"/>
             </header>
             <sheet>
                 <group>
@@ -34,7 +35,7 @@
                     <field name="client_id" readonly="0"/>
                     <field name="server_id" readonly="0"/>
                     <field name="server_db_name"/>
-                    <field name="state" readonly="0"/>
+                    <field name="plan_ids" widget="many2many_tags"/>
                 </group>
             </sheet>
         </form>

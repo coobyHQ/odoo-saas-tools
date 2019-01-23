@@ -82,4 +82,4 @@ class ProductAttributeValueSaaS(models.Model):
         return self.env.user.lang
 
     saas_lang = fields.Selection(scan_languages(), 'Language', default=_get_default_lang)
-    template_id = fields.Many2one('saas_portal.database', 'Template', ondelete='set null')
+    template_ids = fields.Many2many('saas_portal.database', 'product_attribute_value_saas_templates', 'value_id', 'template_id', string='SaaS Templates')

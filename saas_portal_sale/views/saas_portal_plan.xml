@@ -34,7 +34,7 @@
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="saas_lang"/>
-                                        <field name="template_id"/>
+                                        <field name="template_ids" widget="many2many_tags"/>
                                     </tree>
                                 </field>
                             </form>

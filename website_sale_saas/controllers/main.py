@@ -45,16 +45,23 @@ class SaasPortalOrder(SaasPortal):
                     if attr.attribute_id and attr.attribute_id.saas_code == 'lang':
                         if attr.saas_lang:
                             lang = attr.saas_lang
-                            if attr.template_id: template_db = attr.template_id.name
+                            if attr.template_ids:
+                                for templ in attr.template_ids:
+                                    if base_plan_product.saas_plan_id.id in templ.plan_ids.ids:
+                                        template_db = templ.name
+                                        break
         else:
             if post.get('trial_product_id', False):
-                #trial_product = request.env['product.product'].sudo().browse(int(post.get('trial_product_id')))
-                #for attr in trial_product.attribute_value_ids:
-                attr = request.env['product.attribute.value'].sudo().browse(int(post.get('trial_product_id')))
-                if attr.attribute_id and attr.attribute_id.saas_code == 'lang':
-                    if attr.saas_lang:
-                        lang = attr.saas_lang
-                        if attr.template_id: template_db = attr.template_id.name
+                trial_product = request.env['product.product'].sudo().browse(int(post.get('trial_product_id')))
+                for attr in trial_product.attribute_value_ids:
+                    if attr.attribute_id and attr.attribute_id.saas_code == 'lang':
+                        if attr.saas_lang:
+                            lang = attr.saas_lang
+                            if attr.template_ids:
+                                for templ in attr.template_ids:
+                                    if base_plan_product.saas_plan_id.id in templ.plan_ids.ids:
+                                        template_db = templ.name
+                                        break
         try:
             res = plan.create_new_database(dbname=dbname,
                                            user_id=user_id,

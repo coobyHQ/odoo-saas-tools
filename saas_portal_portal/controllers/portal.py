@@ -11,7 +11,7 @@ class CustomerPortal(CustomerPortal):
 
         SaasPortalClient = request.env['saas_portal.client']
 
-        instance_count = SaasPortalClient.search_count([
+        instance_count = SaasPortalClient.sudo().search_count([
             ('partner_id', '=', partner.id),
         ])
 
