@@ -51,6 +51,9 @@ class SaasPortalPlan(models.Model):
         additional_invoice_lines = []
         users = int(self.max_users)
         storage = int(self.total_storage_limit)
+        if client:
+            users += int(client.topup_users)
+            storage += int(client.topup_storage)
         mb_uom = self.env.ref('saas_portal_sale.product_uom_megabyte', raise_if_not_found=False)
         users_uom = self.env.ref('saas_portal_sale.product_uom_users', raise_if_not_found=False)
         topup_order_lines = order.order_line.filtered(lambda line: line.product_id.is_saas and line.product_id.saas_product_type == 'topup')

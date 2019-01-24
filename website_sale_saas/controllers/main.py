@@ -96,19 +96,19 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
 
     def upgrade_client_with_topup(self, client, plan_id, order_id):
         plan = request.env['saas_portal.plan'].sudo().browse(plan_id)
-        max_users = int(plan.max_users)
-        total_storage_limit = int(plan.total_storage_limit)
         if order_id and client:
+            max_users = int(client.max_users)
+            total_storage_limit = int(client.total_storage_limit)
             order = request.env['sale.order'].sudo().browse(int(order_id))
             params_list = []
             client_vals = {}
             users, storage, additional_invoice_lines = plan.get_topup_info(order, client)
             if users != max_users:
-                params_list.append({'key': 'saas_client.max_users', 'value': users + max_users, 'hidden': True})
-                client_vals.update(max_users=str(users + max_users))
+                params_list.append({'key': 'saas_client.max_users', 'value': users, 'hidden': True})
+                client_vals.update(max_users=str(users))
             if storage != total_storage_limit:
-                params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage + total_storage_limit, 'hidden': True})
-                client_vals.update(total_storage_limit=storage + total_storage_limit)
+                params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage, 'hidden': True})
+                client_vals.update(total_storage_limit=storage)
             if params_list:
                 client.upgrade(payload={'params': params_list})
                 if client_vals: client.write(client_vals)
@@ -165,14 +165,14 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
                 instances = SaasPortalClient.sudo().search([('partner_id.id', '=', partner.id)])
             elif base_plan_product.saas_plan_id:
                 users, storage, additional_invoice_lines = base_plan_product.saas_plan_id.get_topup_info(order, None)
-                #additional_users = base_plan_product.saas_plan_id.max_users - users
-                #additional_storage = base_plan_product.saas_plan_id.total_storage_limit - storage
+                additional_users = base_plan_product.saas_plan_id.max_users - users
+                additional_storage = base_plan_product.saas_plan_id.total_storage_limit - storage
                 plan = {
-                    #'plan_users': base_plan_product.saas_plan_id.max_users,
-                    #'additional_users': additional_users,
+                    'plan_users': base_plan_product.saas_plan_id.max_users,
+                    'additional_users': additional_users,
                     'max_allowed_users': users,
-                    #'plan_storage': base_plan_product.saas_plan_id.total_storage_limit,
-                    #'additional_storage': additional_storage,
+                    'plan_storage': base_plan_product.saas_plan_id.total_storage_limit,
+                    'additional_storage': additional_storage,
                     'max_allowed_storage': storage,
                 }
 
