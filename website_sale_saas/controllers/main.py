@@ -259,6 +259,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
         valid = True
         if order and order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False and product.saas_product_type == 'base'):
             lines = order.order_line.filtered(lambda line: line.product_id.saas_plan_id != False and line.product_id.saas_product_type == 'base')
+            if len(lines) > 1: valid = False
             for line in lines:
                 if line.product_uom_qty > 1:
                     valid = False
