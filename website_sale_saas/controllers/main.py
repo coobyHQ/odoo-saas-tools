@@ -165,8 +165,8 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
                 instances = SaasPortalClient.sudo().search([('partner_id.id', '=', partner.id)])
             elif base_plan_product.saas_plan_id:
                 users, storage, additional_invoice_lines = base_plan_product.saas_plan_id.get_topup_info(order, None)
-                additional_users = base_plan_product.saas_plan_id.max_users - users
-                additional_storage = base_plan_product.saas_plan_id.total_storage_limit - storage
+                additional_users = users - base_plan_product.saas_plan_id.max_users
+                additional_storage = storage - base_plan_product.saas_plan_id.total_storage_limit
                 plan = {
                     'plan_users': base_plan_product.saas_plan_id.max_users,
                     'additional_users': additional_users,

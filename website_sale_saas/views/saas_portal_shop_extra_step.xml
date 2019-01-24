@@ -15,18 +15,42 @@
                                               class="form-control" placeholder="your-company-name" required="required"/>
                                        <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
                                    </div>
-                                    <br/>
+                                   <br/>
                                    <h3 class="mb8 mt8" style="text-align: center; color: orange;">Your Odoo Instance Size</h3>
-                                   <div class="row" id="max_users">
-                                        <span class="col-xs-6 text-right text-muted">Max. users:</span>
+                                   <div class="col-xs-6 o_kanban_primary_left" id="plan_users">
+                                        <span class="col-xs-6 text-right text-muted">Max. users in plan:</span>
+                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                            <span t-raw="plan and plan['plan_users'] or ''" style="white-space: nowrap;"/>
+                                        </span>
+                                   </div>
+                                   <div class="col-xs-6 o_kanban_primary_right" id="plan_storage">
+                                        <span class="col-xs-6 text-right text-muted">Max. storage in plan:</span>
+                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                            <span t-raw="plan and plan['plan_storage'] or ''" style="white-space: nowrap;"/> MB
+                                        </span>
+                                   </div>
+                                   <div class="col-xs-6 o_kanban_primary_left" id="add_users">
+                                        <span class="col-xs-6 text-right text-muted">Additional users:</span>
+                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                            <span t-raw="plan and plan['additional_users'] or ''" style="white-space: nowrap;"/>
+                                        </span>
+                                   </div>
+                                   <div class="col-xs-6 o_kanban_primary_right" id="add_storage">
+                                        <span class="col-xs-6 text-right text-muted">Additional storage:</span>
+                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                            <span t-raw="plan and plan['additional_storage'] or ''" style="white-space: nowrap;"/> MB
+                                        </span>
+                                   </div>
+                                   <div class="col-xs-6 o_kanban_primary_left" id="max_users">
+                                        <span class="col-xs-6 text-right text-muted">Total max. users:</span>
                                         <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
                                             <span t-raw="plan and plan['max_allowed_users'] or ''" style="white-space: nowrap;"/>
                                         </span>
                                     </div>
-                                    <div class="row" id="max_storage">
-                                        <span class="col-xs-6 text-right text-muted">Max. storage (MB):</span>
+                                    <div class="col-xs-6 o_kanban_primary_right" id="max_storage">
+                                        <span class="col-xs-6 text-right text-muted">Total max. storage:</span>
                                         <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['max_allowed_storage'] or ''" style="white-space: nowrap;"/>
+                                            <span t-raw="plan and plan['max_allowed_storage'] or ''" style="white-space: nowrap;"/> MB
                                         </span>
                                     </div>
 
