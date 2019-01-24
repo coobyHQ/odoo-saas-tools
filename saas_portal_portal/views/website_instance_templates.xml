@@ -31,7 +31,8 @@
               <tr class="active">
                 <th>Name</th>
                 <th>Plan</th>
-                <th>Max Users</th>
+                <th>Users</th>
+                <th>Storage (MB)</th>
                 <th>Valid Until</th>
                 <th/>
               </tr>
@@ -39,7 +40,7 @@
             <t t-foreach="instances" t-as="instance">
               <tr>
                 <td>
-                  <a t-attf-href="/my/domain/#{instance.id}?#{keep_query()}">
+                  <a t-attf-href="/my/instance/#{instance.id}?#{keep_query()}">
                     <t t-esc="instance.name"/>
                   </a>
                 </td>
@@ -47,7 +48,10 @@
                   <span t-field="instance.plan_id.name"/>
                 </td>
                 <td>
-                  <span t-field="instance.plan_id.max_users"/>
+                  <span t-field="instance.users_len"/> / <span t-field="instance.max_users"/>
+                </td>
+                <td>
+                  <span t-field="instance.total_storage"/> / <span t-field="instance.total_storage_limit"/>
                 </td>
                 <td>
                   <span t-field="instance.expiration_datetime"/>
@@ -73,21 +77,55 @@
       <t t-set="additional_title">SaaS Instance detail</t>
       <div id="wrap">
         <div class="container">
-          <h1><t t-esc="saas_portal_client.contract_id"/></h1>
-          <t t-esc="saas_portal_client.name"/>
-          <t t-esc="saas_portal_client.plan_id"/>
-          <t t-esc="saas_portal_client.server_id.name"/>
+          <h1><t t-esc="saas_portal_client.contract_id.name"/></h1>
+          Domain: <strong><t t-esc="saas_portal_client.name"/></strong>
+          <a t-attf-href="/my/domain/#{saas_portal_client.id}?#{keep_query()}">
+           [ Change ]
+          </a>
+          <br/>
+          Plan: <strong><t t-esc="saas_portal_client.plan_id.name"/></strong>
+          <br/>
+          Server name: <strong><t t-esc="saas_portal_client.server_id.name"/></strong>
+          <br/>
           <form role="form" class="form-inline">
             <input type="hidden" name="client_id" t-att-value="saas_portal_client.id"/>
             <input type="hidden" name="base_saas_domain" t-att-value="base_saas_domain"/>
 
             <div style="margin-top:30px;">
-              <p>Following list shows yor topups of the your instance:</p>
-              <ul>
-                <li>Addon 1   </li>
-                <li>Addon 2   </li>
-              </ul>
-              <p>Change your instance:</p>
+              <p>Your contract items:</p>
+              <div class="table-responsive">
+                  <table class="table table-hover o_portal_my_doc_table">
+                    <thead>
+                      <tr class="active">
+                        <th>Product</th>
+                        <th>Description</th>
+                        <th>Unit</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                      </tr>
+                    </thead>
+                    <t t-foreach="saas_portal_client.contract_line_ids" t-as="line">
+                      <tr>
+                        <td>
+                          <span t-field="line.product_id.name"/>
+                        </td>
+                        <td>
+                          <span t-field="line.name"/>
+                        </td>
+                        <td>
+                          <span t-field="line.uom_id.name"/>
+                        </td>
+                        <td>
+                          <span t-field="line.price_unit"/>
+                        </td>
+                        <td>
+                          <span t-field="line.price_subtotal"/>
+                        </td>
+                      </tr>
+                    </t>
+                  </table>
+                </div>
+              <p>To change your instance:</p>
               <p>Go to the webshop to the category Topups and order additional storage or users,
                 or you can upgrade the plan of your instance too.</p>
             </div>
