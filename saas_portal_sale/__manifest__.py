@@ -12,7 +12,6 @@
         'website_sale',
         'saas_portal',
         'product_price_factor',
-        'saas_portal_start',
         'contract',
     ],
     'data': [

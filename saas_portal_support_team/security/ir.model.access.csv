@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+saas_portal_support_team_agent,saas_portal.support_team.agent,model_saas_portal_support_team,saas_portal.saas_group_agent,1,0,0,0
+saas_portal_support_team_moderator,saas_portal.support_team.moderator,model_saas_portal_support_team,saas_portal.saas_group_moderator,1,0,0,0
+saas_portal_support_team_admin,saas_portal.support_team.admin,model_saas_portal_support_team,saas_portal.saas_group_admin,1,1,1,1

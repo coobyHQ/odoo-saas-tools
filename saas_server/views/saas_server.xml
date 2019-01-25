@@ -10,13 +10,13 @@
       <field name="model">saas_server.client</field>
       <field name="priority">4</field>
       <field name="arch" type="xml">
-        <tree string="Databases" create="false" edit="false" delete="false">
+        <tree string="Databases" create="false" edit="false" delete="true">
           <field name="name"/>
           <field name="state"/>
           <field name="users_len"/>
           <field name="max_users"/>
-          <field name="file_storage"/>
-          <field name="db_storage"/>
+          <field name="total_storage"/>
+          <field name="total_storage_limit"/>
           <field name="trial"/>
           <field name="expiration_datetime"/>
         </tree>
