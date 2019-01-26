@@ -2,11 +2,11 @@
 <odoo>
     <!-- Change Client plan -->
     <record id="saas_portal_plan_change_wizard_form" model="ir.ui.view">
-        <field name="name">saas_portal.change_plan_of_client.wizard.view</field>
+        <field name="name">Change Plan/Server</field>
         <field name="model">saas_portal.change_plan_of_client.wizard</field>
         <field name="arch" type="xml">
             <form>
-            <div>
+            <div invisible="context.get('change_server_only')">
                 Select which predefined text you like to send to the Client.
                 If necessary, you can change the predefined text directly in the list.
                 There might be conditions which lead to an automatic change of a plan too!!
@@ -20,20 +20,27 @@
                 </p>
             </div>
                 <group>
-                    <field name="cur_client_id" readonly="True"/>
-
-                   <!-- <field name="old_plan_id" readonly="True" help="Old Client Grade"/> -->
-                    <field name="saas_plan_change_type"/>
-                    <field name="new_plan_id" required="True"
+                    <field name="cur_client_id" readonly="1"/>
+                    <field name="current_server_id" invisible="1"/>
+                    <field name="saas_plan_change_type" invisible="context.get('change_server_only')"/>
+                    <field name="new_plan_id"
+                           required="not context.get('change_server_only')"
+                           invisible="context.get('change_server_only')"
                            placeholder="Choose the new plan"/>
-                     <field name="plan_id_desc"/>
-                    <p></p><!--
-                    <field name="text_id" placeholder="Choose a predefined text..."/>
-                    <field name="text_template_desc"/> -->
-                    <field name="message" placeholder="Your Client Plan has been changed due to ..."/>
+                    <field name="new_server_id"
+                           domain="[('id', '!=', current_server_id)]"
+                           required="context.get('change_server_only')"
+                           invisible="not context.get('change_server_only')"
+                           placeholder="Choose the new server"/>
+                     <field name="plan_id_desc" invisible="context.get('change_server_only')"/>
+                     <field name="message" invisible="context.get('change_server_only')"
+                           placeholder="Your Client Plan has been changed due to ..."/>
                 </group>
                 <footer>
-                    <button string="Change Client Plan" name="change_saas_plan" type="object" class="btn-primary"/>
+                    <button string="Change Client Plan" invisible="context.get('change_server_only')"
+                            name="change_saas_plan" type="object" class="btn-primary"/>
+                    <button string="Change The Server" invisible="not context.get('change_server_only')"
+                            name="change_saas_server" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-default" special="cancel"/>
                 </footer>
             </form>
@@ -41,11 +48,12 @@
     </record>
 
     <record id="saas_plan_change_plan_wizard_action" model="ir.actions.act_window">
-        <field name="name">Reason to change Plan</field>
+        <field name="name">Change the Plan</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">saas_portal.change_plan_of_client.wizard</field>
         <field name="view_type">form</field>
         <field name="target">new</field>
+        <field name="context">{'change_server_only': False}</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="saas_portal_plan_change_wizard_form"/>
     </record>
@@ -53,5 +61,23 @@
             multi="True"
             key2="client_action_multi" name="Change The Plan for The Client"
             res_model="saas_portal.change_plan_of_client.wizard" src_model="saas_portal.client"
-            view_mode="form" target="new" view_type="form"/>
+            view_mode="form" target="new" view_type="form"
+            context="{'change_server_only': False}"/>
+
+    <record id="saas_plan_change_server_wizard_action" model="ir.actions.act_window">
+        <field name="name">Change the Server</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.change_plan_of_client.wizard</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+        <field name="context">{'change_server_only': True}</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="saas_portal_plan_change_wizard_form"/>
+    </record>
+    <act_window id="ir_saas_plan_change_server_wizard"
+            multi="True"
+            key2="client_action_multi" name="Change The Server for The Client"
+            res_model="saas_portal.change_plan_of_client.wizard" src_model="saas_portal.client"
+            view_mode="form" target="new" view_type="form"
+            context="{'change_server_only': True}"/>
 </odoo>

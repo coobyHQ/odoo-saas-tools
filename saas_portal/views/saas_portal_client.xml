@@ -57,6 +57,8 @@
                             groups="saas_portal.saas_group_admin"/>
                     <button string="Change Plan" type="action" name="%(saas_portal.saas_plan_change_plan_wizard_action)d"
                             groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
+                    <button string="Change Server" type="action" name="%(saas_portal.saas_plan_change_server_wizard_action)d"
+                            groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
                     <field name="state" widget="statusbar" statusbar_visible="open,pending,deleted" clickable=""/>
                 </header>
                 <sheet>

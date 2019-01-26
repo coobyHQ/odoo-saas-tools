@@ -18,14 +18,16 @@ class SaasPortalChangePlanWizard(models.TransientModel):
     old_plan_id = fields.Many2one(string="Current Plan", readonly=True, comodel_name='saas_portal.plan',
                                   related='cur_client_id.plan_id')
     new_plan_id = fields.Many2one(string="New plan", comodel_name='saas_portal.plan')
+    current_server_id = fields.Many2one(string="Current Server", readonly=True, comodel_name='saas_portal.server',
+                                  related='cur_client_id.server_id')
+    new_server_id = fields.Many2one('saas_portal.server', string='Server')
 
     saas_plan_change_type = fields.Selection([
         ('upgrade', 'Upgrade the plan'),
         ('downgrade', 'Downgrade the plan ')],
         string='SaaS Plan Change Type')
     plan_id_desc = fields.Html(string="Plan Description", readonly=True, related='new_plan_id.website_description')
-    message = fields.Text(string="Plan Change Comment", help="Comment at change of plan from Staff",
-                          required=True)
+    message = fields.Text(string="Plan Change Comment", help="Comment at change of plan from Staff")
 
     @api.onchange('saas_plan_change_type')
     def onchange_saas_plan_change_type(self):
@@ -79,7 +81,6 @@ class SaasPortalChangePlanWizard(models.TransientModel):
                 if (self.old_plan_id.domain or base_domain) in self.cur_client_id.name:
                     db_name = self.cur_client_id.name.replace((self.old_plan_id.domain or base_domain), (self.new_plan_id.domain or base_domain))
                     self.cur_client_id.rename_database(new_dbname=db_name)
-            # TODO detach oauth application from the old server and create it on the new one
             old_server_db_name = self.cur_client_id.server_id.name
             with self.registry(old_server_db_name).cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, self._context)
@@ -99,10 +100,53 @@ class SaasPortalChangePlanWizard(models.TransientModel):
                         'expiration_datetime': self.cur_client_id.expiration_datetime,
                         'trial': self.cur_client_id.trial,
                         'host': self.cur_client_id.host,
+                        'state': 'open'
                     })
             self.cur_client_id.server_id = self.new_plan_id.server_id and self.new_plan_id.server_id.id or False
 
         self.cur_client_id.plan_id = self.new_plan_id.id
+        self.cur_client_id.sync_client()
+
+        action = {'type': 'ir.actions.act_window_close'}
+        return action
+
+    @api.multi
+    def change_saas_server(self):
+        self.cur_client_id.sync_client()
+
+        if not self.new_server_id:
+            raise ValidationError(_("Please choose a new server!"))
+
+        db_name = self.cur_client_id.name
+        base_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
+        if (self.cur_client_id.server_id.domain or base_domain) != (self.new_server_id.domain or base_domain):
+            # rename the DB if a server's domain is another one
+            if (self.cur_client_id.server_id.domain or base_domain) in self.cur_client_id.name:
+                db_name = self.cur_client_id.name.replace((self.cur_client_id.server_id.domain or base_domain),
+                                                          (self.new_server_id.domain or base_domain))
+                self.cur_client_id.rename_database(new_dbname=db_name)
+        old_server_db_name = self.cur_client_id.server_id.name
+        with self.registry(old_server_db_name).cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, self._context)
+            client_obj = env['saas_server.client'].sudo()
+            app = client_obj.search([('client_id', '=', self.cur_client_id.client_id)], limit=1)
+            if app:
+                app.unlink()
+        new_server_db_name = self.new_server_id.name
+        with self.registry(new_server_db_name).cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, self._context)
+            client_obj = env['saas_server.client'].sudo()
+            app = client_obj.search([('client_id', '=', self.cur_client_id.client_id)], limit=1)
+            if not app:
+                client_obj.create({
+                    'name': db_name,
+                    'client_id': self.cur_client_id.client_id,
+                    'expiration_datetime': self.cur_client_id.expiration_datetime,
+                    'trial': self.cur_client_id.trial,
+                    'host': self.cur_client_id.host,
+                    'state': 'open'
+                })
+        self.cur_client_id.server_id = self.new_server_id and self.new_server_id.id or False
         self.cur_client_id.sync_client()
 
         action = {'type': 'ir.actions.act_window_close'}

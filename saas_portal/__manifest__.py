@@ -4,6 +4,7 @@
     'author': 'Ivan Yelizariev, Nicolas JEUDY, Antonio Buric, Lucas Huber',
     'license': 'LGPL-3',
     'category': 'SaaS',
+    'sequence': 1,
     'support': 'apps@it-projects.info',
     'website': 'https://it-projects.info',
     'summary': 'Module to manage databases, templates, products, clients and plans.',
