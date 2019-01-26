@@ -144,6 +144,12 @@ class SaasPortalDatabase(models.Model):
             'context': context
         }
 
+    @api.multi
+    def delete_template(self):
+        self.ensure_one()
+        res = self.delete_database_server(force_delete=True)
+        return res
+
     @api.model
     def _proceed_url(self, url):
         return {

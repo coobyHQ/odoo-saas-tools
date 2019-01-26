@@ -24,16 +24,18 @@
             <header>
                 <button string="Duplicate a Template" name="duplicate_template_button" type="object"
                         icon="fa-play" class="oe_highlight"/>
+                <button string="Delete a Template" name="delete_template" type="object"
+                        icon="fa-play" class="oe_highlight" confirm="Are you sure?"/>
                 <field name="state" widget="statusbar"/>
             </header>
             <sheet>
                 <group>
-                    <field name="name" />
+                    <field name="name" readonly="1"/>
                     <field name="product_type"/>
                     <field name="odoo_version"/>
-                    <field name="db_primary_lang"/>
-                    <field name="client_id" readonly="0"/>
-                    <field name="server_id" readonly="0"/>
+                    <field name="db_primary_lang" readonly="1"/>
+                    <field name="client_id" readonly="1"/>
+                    <field name="server_id" readonly="1"/>
                     <field name="server_db_name"/>
                     <field name="plan_ids" widget="many2many_tags"/>
                 </group>

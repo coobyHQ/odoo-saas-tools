@@ -84,7 +84,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="row">
-                                <div class="col-md-6 col-xs-9 col-sm-9">
+                                <div class="col-md-6 col-xs-12 col-sm-6">
                                     <h1><t t-esc="saas_portal_client.contract_id.name"/></h1>
                                     <div class="col-lg-3 text-center">
                                         <span t-field="saas_portal_client.plan_id.product_tmpl_id.image_medium" t-options="{'widget': 'image', 'class': 'img-rounded', 'style':'width: 96x;height:96px'}"/>
@@ -101,6 +101,15 @@
                                     Users: <strong><span t-field="saas_portal_client.users_len"/> / <span t-field="saas_portal_client.max_users"/></strong>
                                     <br/>
                                     Storage (MB): <strong><span t-field="saas_portal_client.total_storage"/> / <span t-field="saas_portal_client.total_storage_limit"/></strong>
+                                </div>
+                                <div class="col-xs-6" style="text-align: right;">
+                                    <a t-attf-href="/my/domain/rename/#{saas_portal_client.id}?#{keep_query()}">
+                                        [ Rename database ]
+                                    </a>
+                                    <br/>
+                                    <a t-attf-href="/my/domain/delete/#{saas_portal_client.id}?#{keep_query()}">
+                                        [ Delete database ]
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -184,6 +193,54 @@
                             <p>Be sure that the new domain name is point to our server before you apply</p>
                             <button type="submit" id="change_domain" class="btn btn-info">
                                 <strong>Apply</strong>
+                                <span class="hidden-xs"/>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="rename_database">
+        <t t-call="portal.portal_layout">
+        <t t-set="additional_title">Rename database</t>
+            <div id="wrap">
+                <div class="container">
+                    <h1><t t-esc="saas_portal_client.name"/></h1>
+                    <form role="form" class="form-inline">
+                        <input type="hidden" name="client_id" t-att-value="saas_portal_client.id"/>
+                        <input type="hidden" name="base_saas_domain" t-att-value="base_saas_domain"/>
+                        <div class="input-group">
+                            <input data-placement="bottom" name="new_domain_name" data-trigger="manual" type="text" placeholder="your-new-subdomain-name" class="form-control new_domain_name" data-original-title="" title=""/>
+                        </div>
+                        <div style="margin-top:30px;">
+                            <p>Rename your database (subdomain):</p>
+                            <button type="submit" id="rename_database" class="btn btn-info">
+                                <strong>Apply</strong>
+                                <span class="hidden-xs"/>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="delete_database">
+        <t t-call="portal.portal_layout">
+        <t t-set="additional_title">Delete database</t>
+            <div id="wrap">
+                <div class="container">
+                    <h1><t t-esc="saas_portal_client.name"/></h1>
+                    <form role="form" class="form-inline">
+                        <input type="hidden" name="client_id" t-att-value="saas_portal_client.id"/>
+                        <div style="margin-top:30px;">
+                            <p>Delete an instance:</p>
+                            <p>Warning:</p>
+                            <p>This is an irreversible action!</p>
+                            <button type="submit" id="delete_database" class="btn btn-warning">
+                                <strong>Delete</strong>
                                 <span class="hidden-xs"/>
                             </button>
                         </div>

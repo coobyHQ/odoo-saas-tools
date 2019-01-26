@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, SUPERUSER_ID
+import odoo
 from odoo.tools.translate import _
 from odoo.exceptions import ValidationError
 
@@ -43,15 +44,17 @@ class SaasPortalChangePlanWizard(models.TransientModel):
         return {'domain': domain}
 
     @api.multi
+    def registry(self, dbname, **kwargs):
+        self.ensure_one()
+        m = odoo.modules.registry.Registry
+        return m.new(dbname, **kwargs)
+
+    @api.multi
     def change_saas_plan(self):
         self.cur_client_id.sync_client()
 
-        if self.new_plan_id:
-            self.cur_client_id.plan_id = self.new_plan_id.id
-        else:
-            raise ValidationError(
-                _("Please choose a new plan!")
-            )
+        if not self.new_plan_id:
+            raise ValidationError(_("Please choose a new plan!"))
 
         new_max_users = int(self.new_plan_id.max_users) + int(self.cur_client_id.topup_users)
         new_total_storage_limit = self.new_plan_id.total_storage_limit + self.cur_client_id.topup_storage
@@ -64,8 +67,42 @@ class SaasPortalChangePlanWizard(models.TransientModel):
                        {'key': 'saas_client.total_storage_limit',
                         'value': new_total_storage_limit,
                         'hidden': True}]
+
         self.cur_client_id.upgrade(payload={'params': payload})
 
+        # if servers differ
+        if self.cur_client_id.server_id != self.new_plan_id.server_id:
+            db_name = self.cur_client_id.name
+            base_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
+            if (self.old_plan_id.domain or base_domain) != (self.new_plan_id.domain or base_domain):
+                # rename the DB if a server's domain is another one
+                if (self.old_plan_id.domain or base_domain) in self.cur_client_id.name:
+                    db_name = self.cur_client_id.name.replace((self.old_plan_id.domain or base_domain), (self.new_plan_id.domain or base_domain))
+                    self.cur_client_id.rename_database(new_dbname=db_name)
+            # TODO detach oauth application from the old server and create it on the new one
+            old_server_db_name = self.cur_client_id.server_id.name
+            with self.registry(old_server_db_name).cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, self._context)
+                client_obj = env['saas_server.client'].sudo()
+                app = client_obj.search([('client_id', '=', self.cur_client_id.client_id)], limit=1)
+                if app:
+                    app.unlink()
+            new_server_db_name = self.new_plan_id.server_id.name
+            with self.registry(new_server_db_name).cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, self._context)
+                client_obj = env['saas_server.client'].sudo()
+                app = client_obj.search([('client_id', '=', self.cur_client_id.client_id)], limit=1)
+                if not app:
+                    client_obj.create({
+                        'name': db_name,
+                        'client_id': self.cur_client_id.client_id,
+                        'expiration_datetime': self.cur_client_id.expiration_datetime,
+                        'trial': self.cur_client_id.trial,
+                        'host': self.cur_client_id.host,
+                    })
+            self.cur_client_id.server_id = self.new_plan_id.server_id and self.new_plan_id.server_id.id or False
+
+        self.cur_client_id.plan_id = self.new_plan_id.id
         self.cur_client_id.sync_client()
 
         action = {'type': 'ir.actions.act_window_close'}
