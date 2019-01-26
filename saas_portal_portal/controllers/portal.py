@@ -83,3 +83,10 @@ class CustomerPortal(CustomerPortal):
             'base_saas_domain': base_saas_domain,
         }
         return request.render("saas_portal_portal.delete_database", values)
+
+    @http.route(['/saas_portal_portal/delete_db'], type='json', auth="public", website=True)
+    def subscribe(self, client_id, **post):
+        client = request.env['saas_portal.client'].sudo().browse(int(client_id))
+        if client:
+            client._delete_database_server(force_delete=True)
+        return True
