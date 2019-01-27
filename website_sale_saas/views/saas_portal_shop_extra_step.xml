@@ -32,13 +32,13 @@
                                    <div class="col-xs-6 o_kanban_primary_left" id="add_users">
                                         <span class="col-xs-6 text-right text-muted">Additional users:</span>
                                         <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['additional_users'] or ''" style="white-space: nowrap;"/>
+                                            <span t-raw="plan and plan['additional_users'] or '0'" style="white-space: nowrap;"/>
                                         </span>
                                    </div>
                                    <div class="col-xs-6 o_kanban_primary_right" id="add_storage">
                                         <span class="col-xs-6 text-right text-muted">Additional storage:</span>
                                         <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['additional_storage'] or ''" style="white-space: nowrap;"/> MB
+                                            <span t-raw="plan and plan['additional_storage'] or '0'" style="white-space: nowrap;"/> MB
                                         </span>
                                    </div>
                                    <div class="col-xs-6 o_kanban_primary_left" id="max_users">
