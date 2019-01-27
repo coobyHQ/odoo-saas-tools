@@ -112,3 +112,10 @@ class SaasPortal(http.Controller):
             arg0 = literal_eval(arg0)
         messages = []
         return simplejson.dumps({'messages': messages})
+
+    @http.route(['/saas_portal/login_permission/<string:token>'], type='http', auth='public')
+    def confirm_login_permission(self, token=None):
+        client = request.env['saas_portal.client'].sudo().search(
+            [('login_permission_token', '=', token)], limit=1)
+        if client:
+            client.write({'login_allowed': True, 'login_permission_token': ''})

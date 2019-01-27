@@ -150,6 +150,22 @@ class SaasPortalDatabase(models.Model):
         res = self.delete_database_server(force_delete=True)
         return res
 
+    @api.multi
+    def login_to_db(self):
+        view_id = self.env.ref('saas_portal.saas_plan_duplicate_template_wizard_form')
+        context = self._context.copy()
+        context.update(active_id=self.id)
+        return {
+            'name': _('Duplicate A Template'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'saas_portal.duplicate_template.wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'views': [(view_id.id, 'form')],
+            'target': 'new',
+            'context': context
+        }
+
     @api.model
     def _proceed_url(self, url):
         return {

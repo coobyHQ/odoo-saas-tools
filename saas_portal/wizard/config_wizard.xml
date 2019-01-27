@@ -92,14 +92,18 @@
         <field name="name">saas_portal.edit_database.form</field>
         <field name="model">saas_portal.edit_database</field>
         <field name="arch" type="xml">
-            <form string="Edit Database">
+            <form string="Log in to the instance">
                 <h1>
                     <field name="name"/>
                 </h1>
-                <div>
-                    Use the following link to log in as Administrator:<br/><field class="oe_inline" name="edit_database_url" widget="url"/>
+                <field name="login_allowed" invisible="1"/>
+                <field name="active_model" invisible="1"/>
+                <div attrs="{'invisible': ['|',('login_allowed', '=', True), ('active_model', '=', 'saas_portal.plan')]}">
+                    Email of the client to send the login permission request to: <br/><field class="oe_inline" name="client_email" widget="email"/>
                 </div>
                 <footer>
+                    <button string="Request login permission" class="oe_highlight" type="object" name="request_permission" attrs="{'invisible': ['|',('login_allowed', '=', True), ('active_model', '=', 'saas_portal.plan')]}"/>
+                    <button string="Log in" class="oe_highlight" type="object" name="login_to_instance" attrs="{'invisible': [('login_allowed', '!=', True)]}"/>
                     <button string="Close" class="oe_link" special="cancel"/>
                 </footer>
             </form>

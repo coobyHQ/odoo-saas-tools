@@ -19,8 +19,12 @@
                 <field name="trial"/>
                 <field name="expiration_datetime"/>
                 <field name="expired" invisible="1"/>
+                <field name="login_allowed" invisible="1"/>
                 <button name="%(action_edit_database)d" type="action"
-                        icon="fa-sign-in" attrs="{'invisible':[('state', 'in', ['deleted', 'draft'])]}"
+                        icon="fa-sign-in" attrs="{'invisible':[('login_allowed', '=', True)]}"
+                        help="Request permission from the client to log in to the database."/>
+                <button name="%(action_edit_database)d" type="action"
+                        icon="fa-sign-in" attrs="{'invisible':[('login_allowed', '!=', True)]}"
                         help="Log in to client database."/>
                 <button name="show_upgrade_wizard" attrs="{'invisible':[('state', 'in', ['deleted'])]}"
                         type="object" icon="fa-cogs" help="Configure client database" groups="saas_portal.saas_group_admin"/>
@@ -40,8 +44,13 @@
             <form string="Clients" create="false" delete="false" edit="true">
                 <field name="expired" invisible="1"/>
                 <header>
+                    <button string="Request Login Permission" name="%(action_edit_database)d" type="action"
+                            attrs="{'invisible':[('login_allowed', '=', True)]}"
+                            icon="fa-sign-in" class="oe_highlight" groups="saas_portal.saas_group_agent"
+                            help="Request permission from the client to log in to the database."
+                            />
                     <button string="Log in" name="%(action_edit_database)d" type="action"
-                            attrs="{'invisible':[('state', 'in', ['deleted','draft'])]}"
+                            attrs="{'invisible':[('login_allowed', '!=', True)]}"
                             icon="fa-sign-in" class="oe_highlight" groups="saas_portal.saas_group_agent"
                             help="Log in to client database."
                             />
@@ -74,61 +83,62 @@
                             <label for="partner_id"/><field name="partner_id"/>
                         </div>
                     </div>
-                <group col="2" name="limits">
-                    <group string="User Limits">
-                        <field name="users_len"/>
-                        <!-- limits -->
-                        <br></br>
-                        <field name="plan_max_users"/>
-                      <!--        <field name="topup_users"/> -->
-                       <field name="max_users" style="font-weight:bold"/>
+                    <field name="login_allowed" invisible="1"/>
+                    <group col="2" name="limits">
+                        <group string="User Limits">
+                            <field name="users_len"/>
+                            <!-- limits -->
+                            <br></br>
+                            <field name="plan_max_users"/>
+                          <!--        <field name="topup_users"/> -->
+                           <field name="max_users" style="font-weight:bold"/>
+                        </group>
+                        <group string="Storage Limits">
+                            <field name="file_storage"/>
+                            <field name="db_storage"/>
+                            <field name="total_storage" style="font-weight:bold"/>
+                            <!-- limits -->
+                            <br></br>
+                            <field name="plan_max_storage"/>
+                            <!--   <field name="topup_storage_limit"/> -->
+                            <field name="total_storage_limit" style="font-weight:bold"/>
+                        </group>
                     </group>
-                    <group string="Storage Limits">
-                        <field name="file_storage"/>
-                        <field name="db_storage"/>
-                        <field name="total_storage" style="font-weight:bold"/>
-                        <!-- limits -->
-                        <br></br>
-                        <field name="plan_max_storage"/>
-                        <!--   <field name="topup_storage_limit"/> -->
-                        <field name="total_storage_limit" style="font-weight:bold"/>
-                    </group>
-                </group>
-                <group>
                     <group>
-                        <field name="client_id" readonly="1"/>
-                        <field name="server_id" readonly="1"/>
-                        <field name="notification_sent"/>
-                       <!-- moved <field name="support_team_id"/> -->
-                    </group>
-                    <group name="subscription">
-                        <field name="trial"/>
-                        <field name="trial_hours" attrs="{'invisible': [('trial', '!=', False)]}"/>
-                        <field name="expiration_datetime"/>
-                        <field name="client_primary_lang" readonly="1"/>
-                    </group>
-                </group>
-
-                <notebook>
-                    <page string="Notes" name="notes">
-
                         <group>
-                            <field name="note" nolabel="0"/>
+                            <field name="client_id" readonly="1"/>
+                            <field name="server_id" readonly="1"/>
+                            <field name="notification_sent"/>
+                           <!-- moved <field name="support_team_id"/> -->
                         </group>
-                    </page>
-                    <page string="Advanced Settings" name="settings">
-                        <group>
-                            <field name="block_on_expiration" class="oe_inline"/>
-                            <field name="block_on_storage_exceed" class="oe_inline"/>
+                        <group name="subscription">
+                            <field name="trial"/>
+                            <field name="trial_hours" attrs="{'invisible': [('trial', '!=', False)]}"/>
+                            <field name="expiration_datetime"/>
+                            <field name="client_primary_lang" readonly="1"/>
                         </group>
-                    </page>
-                </notebook>
-                </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"/>
-                    <field name="activity_ids" widget="mail_activity"/>
-                    <field name="message_ids" widget="mail_thread" options="{'display_log_button': True}"/>
-                </div>
+                    </group>
+
+                    <notebook>
+                        <page string="Notes" name="notes">
+
+                            <group>
+                                <field name="note" nolabel="0"/>
+                            </group>
+                        </page>
+                        <page string="Advanced Settings" name="settings">
+                            <group>
+                                <field name="block_on_expiration" class="oe_inline"/>
+                                <field name="block_on_storage_exceed" class="oe_inline"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" options="{'display_log_button': True}"/>
+                    </div>
             </form>
         </field>
     </record>

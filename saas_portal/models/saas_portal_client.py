@@ -44,6 +44,9 @@ class SaasPortalClient(models.Model):
                                  help='Subsription initial period in hours for trials',
                                  readonly=True)
     note = fields.Html('Note')
+    login_allowed = fields.Boolean('Login Request Allowed', default=False)
+    login_permission_token = fields.Char('Login Permission Token')
+    login_permission_url = fields.Char('Login Permission Token', compute='_get_login_permission_url')
 
     # TODO: use new api for tracking
     _track = {
@@ -58,6 +61,15 @@ class SaasPortalClient(models.Model):
     def _compute_active(self):
         for record in self:
             record.active = record.state != 'deleted'
+
+    @api.multi
+    @api.depends('login_permission_token')
+    def _get_login_permission_url(self):
+        config_obj = self.env['ir.config_parameter']
+        url = config_obj.sudo().get_param('web.base.url') + '/saas_portal/login_permission/'
+        for record in self:
+            if record.login_permission_token:
+                record.login_permission_url = url + record.login_permission_token
 
     @api.model
     def _cron_suspend_expired_clients(self):
