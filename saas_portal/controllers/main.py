@@ -119,3 +119,4 @@ class SaasPortal(http.Controller):
             [('login_permission_token', '=', token)], limit=1)
         if client:
             client.write({'login_allowed': True, 'login_permission_token': ''})
+            return request.render("saas_portal.login_permission_confirmation")

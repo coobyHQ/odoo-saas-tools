@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="login_permission_confirmation" name="Login Permission Confirmation">
+        <div class="wrap">
+            <div class="container">
+                <div class="jumbotron mt32">
+                    <h1>Login Permission Confirmed!</h1>
+                    <p>You have granted a one-time permission to CoobyCloud to access the instance!</p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</odoo>
