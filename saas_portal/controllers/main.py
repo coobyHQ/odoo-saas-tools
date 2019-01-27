@@ -113,10 +113,11 @@ class SaasPortal(http.Controller):
         messages = []
         return simplejson.dumps({'messages': messages})
 
-    @http.route(['/saas_portal/login_permission/<string:token>'], type='http', auth='public')
+    @http.route(['/saas_portal/login_permission/<string:token>'], type='http', auth='public', website=True)
     def confirm_login_permission(self, token=None):
-        client = request.env['saas_portal.client'].sudo().search(
-            [('login_permission_token', '=', token)], limit=1)
+        client = request.env['saas_portal.client'].sudo().search([('login_permission_token', '=', token)], limit=1)
         if client:
             client.write({'login_allowed': True, 'login_permission_token': ''})
             return request.render("saas_portal.login_permission_confirmation")
+        else:
+            return request.render('website.404')
