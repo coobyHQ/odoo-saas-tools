@@ -44,6 +44,9 @@ class SaasPortalServer(models.Model):
     name_txt = fields.Char('Name', required=True)
     name = fields.Char('Database name', required=True)
     summary = fields.Char('Summary')
+    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
+                                ondelete='restrict')
+    branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', default=_get_domain)
@@ -60,33 +63,25 @@ class SaasPortalServer(models.Model):
                               ],
                              'State', default='draft',
                              track_visibility='onchange')
+    branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly='True')
+    branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly='True')
     server_type = fields.Selection([
-        ('server', 'Server based'),
-        ('container', 'Container Application'),
-        ('container_kube', 'Container Kubernetes based')],
-        string='SaaS Server Type')
-    product_type = fields.Selection([
-        ('odoo', 'Odoo Server based'),
-        ('flectra', 'Flectra ERP'),
-        ('other-erp', 'Other ERP'),
-        ('other', 'Other Product'),
-        ('storage', 'Storage container or volume'),
-        ('database', 'Database Container/Server')],
-        string='Product type', help='Which product the SaaS Server is hosting')
-    odoo_version = fields.Selection([
-        ('V11', 'Odoo V 11'),
-        ('V12', 'Odoo V 12'),
-        ('V13', 'Odoo V 13')],
-        string='Odoo version', help='Which Odoo version is hosted')
-    # Todo the old Odoo version field doesn't seems to be used expect in the saas_portal_demo module
-    odoo_version_old = fields.Char('Odoo version', readonly=True)
+        ('application', 'Application'),
+        ('storage', 'Storage / volume'),
+        ('storage_container', 'Storage container / volume'),
+        ('database', 'Database Container/Server'),
+        ('webserver', 'Webserver Container/NGINX'),
+        ('other', 'Other Product')],
+        string='Server type', help='Which service the SaaS Server is providing')
+    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly='True',
+                                    help='Which Odoo version is hosted')
     container_url = fields.Char('Container URL', help="URL to the used container")
     container_name = fields.Char('Container Name')
     container_image = fields.Char('Container Image')
 
     max_client = fields.Integer('Max #of Client DB`s', default=100)
     # Todo compute number
-    number_of_clients = fields.Integer('# of Client DB`s')
+    number_of_clients = fields.Integer('# of Client DB`s', readonly='True')
     request_scheme = fields.Selection(
         [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
     verify_ssl = fields.Boolean(

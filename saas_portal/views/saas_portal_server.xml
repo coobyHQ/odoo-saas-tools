@@ -11,8 +11,8 @@
                 <field name="name_txt"/>
                 <field name="name"/>
                 <field name="server_type"/>
-                <field name="product_type"/>
-                <field name="odoo_version"/>
+                <field name="branch_product_type"/>
+                <field name="branch_id"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -46,12 +46,14 @@
                         <field name="summary"/>
                         <br></br><label for="name"/>
                         <field name="name"/>
+                         <br></br><label for="branch_id"/>
+                        <field name="branch_id"/>
                     </div>
                 <group name="base">
                     <group string="Definition">
                         <field name="server_type"/>
-                        <field name="product_type"/>
-                        <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>
+                        <field name="branch_product_type"/>
+                        <field name="odoo_version" attrs="{'required': [('branch_product_type','=','odoo')], 'invisible': [('branch_product_type','!=','odoo')]}"/>
                         <field name="client_id"/>
                         <field name="active"/>
                         <field name="max_client"/>
