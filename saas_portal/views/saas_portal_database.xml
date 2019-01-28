@@ -66,5 +66,5 @@
         <field name="context">{'search_default_template': 1}</field>
     </record>
 
-    <menuitem action="action_templates" id="menu_templates" parent="menu_saas_tech" sequence="40" groups="base.group_no_one"/>
+    <menuitem action="action_templates" id="menu_templates" parent="menu_saas_templates" sequence="4" groups="base.group_no_one"/>
 </odoo>

@@ -3,15 +3,16 @@
     <menuitem name="SaaS" id="menu_base_saas" sequence="30" web_icon="saas_portal,static/description/icon_menu.png"/>
     <menuitem name="SaaS" id="menu_saas" parent="menu_base_saas" sequence="1"/>
 
-    <menuitem id="res_partner_menu_saas"
-        parent="menu_base_saas"
-        action="base.action_partner_form"
-        sequence="2"/>
+    <menuitem id="res_partner_menu_saas"  parent="menu_base_saas"
+        action="base.action_partner_form" sequence="2"/>
 
+    <!-- Configuration -->
     <menuitem id="menu_saas_portal_config"
-        name="Configuration"
-        parent="menu_base_saas"
-        sequence="60"
-        groups="base.group_system"/>
+        name="Configuration" parent="menu_base_saas"
+        sequence="60" groups="base.group_system"/>
 
+    <!-- Config Template -->
+    <menuitem id="menu_saas_templates" parent="menu_saas_portal_config" name="Templates" sequence="5" />
+    <!-- Technical Records -->
+    <menuitem id="menu_saas_tech" parent="menu_saas_portal_config" name="Technical Records" sequence="8" />
 </odoo>
