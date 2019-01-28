@@ -20,7 +20,7 @@ class SaasPortalCategory(models.Model):
         self.display_name = name
 
     _name = "saas.portal.category"
-    _description = "SaaS Client  Category"
+    _description = "SaaS Client Category"
 
     name = fields.Char(
         "Employee Tag",

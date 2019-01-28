@@ -9,7 +9,7 @@
             <tree string="Plans">
                 <field name="sequence" invisible="1"/>
                 <field name="name"/>
-                <field name="server_id"/>
+                <field name="branch_id"/>
                 <field name="template_id"/>
                 <field name="state" />
             </tree>
@@ -65,6 +65,7 @@
                     </group>
                     <group col="2" >
                         <group col="2" string="Technical Settings">
+                            <field name="branch_id"/>
                             <field name="server_id"/>
                             <field name="template_id"/>
                         </group>
