@@ -79,7 +79,11 @@ class SaasPortalOrder(SaasPortal):
             url = request.env['ir.config_parameter'].sudo().get_param('saas_portal.page_for_maximumtrialdb', '/')
             return werkzeug.utils.redirect(url)
 
-        return werkzeug.utils.redirect(res.get('url'))
+
+        if plan and plan.on_create == 'login':
+            return werkzeug.utils.redirect(res.get('url'))
+        elif order_id:
+            return request.redirect('/shop/confirmation')
 
 
 class SaasCreateInstanceAfterValidating(WebsiteSale):

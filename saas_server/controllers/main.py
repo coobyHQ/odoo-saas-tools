@@ -90,6 +90,12 @@ class SaasServer(http.Controller):
             client_env = api.Environment(cr, SUPERUSER_ID, request.context)
             oauth_provider_id = client_env.ref('saas_client.saas_oauth_provider').id
             action_id = client_env.ref(action).id
+            if client_env['ir.module.module'].search([('name', '=', 'website')]).state in ('installed', 'to upgrade'):
+                # if website is installed redirect to homepage
+                homepage_action = client_env['ir.actions.actions'].search([('name', '=', 'Website Homepage')], limit=1)
+                if homepage_action:
+                    action_id = homepage_action.id
+
 
         url = '{public_url}saas_client/new_database'.format(public_url=public_url)
         return simplejson.dumps({

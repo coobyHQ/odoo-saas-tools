@@ -89,5 +89,27 @@
 
             ]]></field>
         </record>
+
+        <record id="login_permission_email_template" model="mail.template">
+            <field name="name">Request permission to login from the client</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Request to login to the CoobyCloud instance</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="model_id" ref="saas_portal.model_saas_portal_client"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+
+            <p>Hi,
+            <br/>
+            CoobyCloud has requested a permission from you to log-in to the client instance ${object.name}.
+            <br/><br/>
+            If you agree to give permission, please confirm this by visiting the following url:
+            <br/>
+            <a href="${object.login_permission_url}">${object.login_permission_url}</a>
+            </p>
+
+            ]]></field>
+        </record>
     </data>
 </openerp>

@@ -26,6 +26,8 @@
                         icon="fa-play" class="oe_highlight"/>
                 <button string="Delete a Template" name="delete_template" type="object"
                         icon="fa-play" class="oe_highlight" confirm="Are you sure?"/>
+                <button string="Log in to the DB" name="%(action_edit_database)d"
+                        type="action" icon="fa-play" class="oe_highlight"/>
                 <field name="state" widget="statusbar"/>
             </header>
             <sheet>

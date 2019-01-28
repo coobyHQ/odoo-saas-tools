@@ -66,6 +66,7 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                     'name': dbname,
                     'server_id': self.template_id.server_id.id,
                     'db_primary_lang': language.code,
+                    'plan_ids': [(4, self.plan_id.id)],
                     'state': 'template'
                 })
                 with self.registry(dbname).cursor() as cr:

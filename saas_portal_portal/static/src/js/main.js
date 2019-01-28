@@ -1,3 +1,8 @@
+odoo.define('saas_portal_portal.managedb', function (require) {
+    'use strict';
+
+    var ajax = require('web.ajax');
+
 $(document).ready(function() {
 
   var client_id = $("input[name='client_id']").attr('value');
@@ -60,8 +65,11 @@ $(document).ready(function() {
   };
 
     var delete_database = function($input) {
-    var new_url = _.str.sprintf('/saas_server/delete_database?client_id=%s', client_id);
-    window.location = new_url;
+        //var new_url = _.str.sprintf('/saas_server/delete_database?client_id=%s', client_id);
+        //window.location = new_url;
+        ajax.jsonRpc('/saas_portal_portal/delete_db', 'call', {'client_id': client_id}).then(function (res){
+            window.location = '/my/instances';
+        })
   };
 
 
@@ -92,4 +100,5 @@ $(document).ready(function() {
       $input.popover('hide');
   });
 
+});
 });

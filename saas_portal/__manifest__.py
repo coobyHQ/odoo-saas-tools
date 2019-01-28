@@ -29,6 +29,7 @@
         'views/saas_portal_server.xml',
         'views/saas_portal_database.xml',
         'views/saas_portal_configuration.xml',
+        'views/website_templates.xml',
         'views/res_config.xml',
         'data/ir_config_parameter.xml',
         'data/subtype.xml',
