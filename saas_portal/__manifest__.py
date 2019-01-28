@@ -26,6 +26,7 @@
         'views/saas_portal_menu.xml',
         'views/saas_portal_client.xml',
         'views/saas_portal_plan.xml',
+        'views/saas_portal_server_branch.xml',
         'views/saas_portal_server.xml',
         'views/saas_portal_database.xml',
         'views/saas_portal_configuration.xml',
