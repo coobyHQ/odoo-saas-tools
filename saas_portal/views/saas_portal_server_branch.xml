@@ -74,6 +74,7 @@
                     <page string="App Servers" name="app_servers">
                         <field name="app_server_ids" readonly="0">
                             <tree create="false" delete="false">
+                                <field name="sequence" widget="handle"/>
                                 <field name="name_txt"/>
                                 <field name="name"/>
                                 <field name="branch_type"/>
