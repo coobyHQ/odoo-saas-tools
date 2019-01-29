@@ -49,7 +49,6 @@
                     <group string="Server-side requests">
                         <field name="local_request_scheme"/>
                         <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
-                        <field name="local_host"/>
                         <field name="local_port"/>
                         <separator string="Portal requests"/>
                         <field name="request_scheme"/>
@@ -73,12 +72,14 @@
                 <notebook>
                     <page string="App Servers" name="app_servers">
                         <field name="app_server_ids" readonly="0">
-                            <tree>
+                            <tree create="false" delete="false">
+                                <field name="sequence" widget="handle"/>
                                 <field name="name_txt"/>
                                 <field name="name"/>
                                 <field name="branch_type"/>
                                 <field name="state"/>
                                 <field name="number_of_clients"/>
+                                <field name="max_client"/>
                             </tree>
                         </field>
                     </page>
@@ -94,7 +95,7 @@
                     </page>
                     <page string="Clients" name="clients">
                         <field name="client_ids" readonly="0">
-                            <tree>
+                            <tree create="false" delete="false">
                                 <field name="name"/>
                                 <field name="state"/>
                                 <field name="users_len"/>

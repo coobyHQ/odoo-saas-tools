@@ -40,6 +40,12 @@ class SaasPortalServer(models.Model):
     def _get_domain(self):
         return  self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
 
+    @api.multi
+    @api.depends('client_ids')
+    def _get_number_of_clients(self):
+        for server in self:
+            server.number_of_clients = len(server.client_ids.filtered(lambda c: c.state == 'open') or [])
+
     # Attention names is used for database name, another field name_txt as Title was created,
     name_txt = fields.Char('Name', required=True)
     name = fields.Char('Database name', required=True)
@@ -47,6 +53,7 @@ class SaasPortalServer(models.Model):
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict')
     branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')
+    client_ids = fields.One2many('saas_portal.client', 'server_id', string='Clients')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', default=_get_domain)
@@ -64,8 +71,8 @@ class SaasPortalServer(models.Model):
                               ],
                              'State', default='draft',
                              track_visibility='onchange')
-    branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly='True')
-    branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly='True')
+    branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly=True)
+    branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly=True)
     server_type = fields.Selection([
         ('application', 'Application'),
         ('storage', 'Storage / volume'),
@@ -82,21 +89,16 @@ class SaasPortalServer(models.Model):
     container_image = fields.Char('Container Image')
 
     max_client = fields.Integer('Max #of Client DB`s', default=100)
-    # Todo compute number
-    number_of_clients = fields.Integer('# of Client DB`s', readonly='True')
-    request_scheme = fields.Selection(
-        [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
-    verify_ssl = fields.Boolean(
-        'Verify SSL', default=True, help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
-    request_port = fields.Integer('Request Port', default=80)
-    client_ids = fields.One2many(
-        'saas_portal.client', 'server_id', string='Clients')
-    local_host = fields.Char(
-        'Local host', help='local host or ip address of server for server-side requests')
-    local_port = fields.Char(
-        'Local port', help='local tcp port of server for server-side requests')
-    local_request_scheme = fields.Selection(
-        [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
+    number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
+    request_scheme = fields.Selection(related='branch_id.request_scheme', string='Scheme', readonly=True)
+    verify_ssl = fields.Boolean(related='branch_id.verify_ssl', string='Verify SSL', readonly=True,
+                                help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
+    request_port = fields.Integer(related='branch_id.request_port', string='Request Port', readonly=True)
+    local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
+    local_port = fields.Char(related='branch_id.local_port', string='Local port', readonly=True,
+                             help='local tcp port of server for server-side requests')
+    local_request_scheme = fields.Selection(related='branch_id.local_request_scheme', string='Scheme', readonly=True)
+    # Todo logic of host is not yet clear? it does mot seem that the field domain is used before the one is settings (LUH)?
     host = fields.Char('Host', compute=_compute_host)
     # Todo use of password is not yet clear?
     password = fields.Char('Default Superadmin password')

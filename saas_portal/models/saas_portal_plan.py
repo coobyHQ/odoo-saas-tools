@@ -74,7 +74,7 @@ class SaasPortalPlan(models.Model):
 
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict',
-                                help='Use this Server Branch dor this plan')
+                                help='Use this Server Branch for this plan')
     server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
                                 ondelete='restrict',
                                 help='Use this saas server or choose random')
@@ -150,7 +150,15 @@ class SaasPortalPlan(models.Model):
         self.ensure_one()
         p_client = self.env['saas_portal.client']
         p_server = self.env['saas_portal.server']
-        server = self.server_id
+
+        # selecting the server to use
+        if self.branch_id:
+            if self.branch_id.domain_for_new_db:
+                server = self.branch_id.domain_for_new_db
+            else:
+                server = self.server_id
+        else:
+            server = self.server_id
         if not server:
             server = p_server.get_saas_server()
 

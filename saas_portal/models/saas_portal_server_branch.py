@@ -3,6 +3,7 @@ import werkzeug
 import requests
 import random
 from odoo import api, exceptions, fields, models
+from odoo.exceptions import ValidationError
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -31,8 +32,22 @@ class SaasPortalServerBranch(models.Model):
     def _get_domain(self):
         return self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
 
+    @api.multi
+    @api.depends('app_server_ids', 'app_server_ids.max_client', 'app_server_ids.number_of_clients', 'app_server_ids.active')
+    def _get_active_server(self):
+        for branch in self:
+            next_active_server = False
+            for server in self.env['saas_portal.server'].search([('branch_id', '=', branch.id)], order='sequence'):
+                if server.number_of_clients < server.max_client:
+                    next_active_server = server
+                    break
+            if next_active_server:
+                branch.domain_for_new_db = next_active_server.id
+
     name = fields.Char('Branch name', required=True)
-    domain_for_new_db = fields.Many2one('saas_portal.server', 'Active Domain Name', required=False, help="Active Domain for new instances")
+    domain_for_new_db = fields.Many2one('saas_portal.server', 'Active Domain Name', required=False,
+                                        compute='_get_active_server', store=True,
+                                        help="Active Domain for new instances")
     summary = fields.Char('Summary')
    # oauth_application_id = fields.Many2one(
    #     'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
@@ -75,16 +90,15 @@ class SaasPortalServerBranch(models.Model):
     # Todo compute number
     number_of_clients = fields.Integer('# of Client DB`s', readonly=True)
     request_scheme = fields.Selection(
-        [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
+        [('http', 'http'), ('https', 'https')], 'Scheme', default='https', required=True)
     verify_ssl = fields.Boolean(
         'Verify SSL', default=True, help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
-    request_port = fields.Integer('Request Port', default=80)
-    local_host = fields.Char(
-        'Local host', help='local host or ip address of server for server-side requests')
-    local_port = fields.Char(
-        'Local port', help='local tcp port of server for server-side requests')
+    request_port = fields.Integer('Request Port', default=443)
+    # Todo not necessary in branch?
+    local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
+    local_port = fields.Char('Local port', default=443, help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection(
-        [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
+        [('http', 'http'), ('https', 'https')], 'Scheme', default='https', required=True)
     host = fields.Char('Host', compute=_compute_host)
     # Todo use of password is not yet clear?
     password = fields.Char('Default Superadmin password')
