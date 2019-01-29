@@ -80,6 +80,7 @@
                                 <field name="branch_type"/>
                                 <field name="state"/>
                                 <field name="number_of_clients"/>
+                                <field name="max_client"/>
                             </tree>
                         </field>
                     </page>
