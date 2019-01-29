@@ -40,6 +40,12 @@ class SaasPortalServer(models.Model):
     def _get_domain(self):
         return  self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
 
+    @api.multi
+    @api.depends('client_ids')
+    def _get_number_of_clients(self):
+        for server in self:
+            server.number_of_clients = len(server.client_ids.filtered(lambda c: c.state == 'open') or [])
+
     # Attention names is used for database name, another field name_txt as Title was created,
     name_txt = fields.Char('Name', required=True)
     name = fields.Char('Database name', required=True)
@@ -81,7 +87,7 @@ class SaasPortalServer(models.Model):
 
     max_client = fields.Integer('Max #of Client DB`s', default=100)
     # Todo compute number
-    number_of_clients = fields.Integer('# of Client DB`s', readonly=True)
+    number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
     request_scheme = fields.Selection(
         [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
     verify_ssl = fields.Boolean(
