@@ -74,7 +74,7 @@ class SaasPortalPlan(models.Model):
 
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict',
-                                help='Use this Server Branch dor this plan')
+                                help='Use this Server Branch for this plan')
     server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
                                 ondelete='restrict',
                                 help='Use this saas server or choose random')
