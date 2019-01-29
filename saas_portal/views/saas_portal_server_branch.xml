@@ -73,7 +73,7 @@
                 <notebook>
                     <page string="App Servers" name="app_servers">
                         <field name="app_server_ids" readonly="0">
-                            <tree>
+                            <tree create="false" delete="false">
                                 <field name="name_txt"/>
                                 <field name="name"/>
                                 <field name="branch_type"/>
@@ -94,7 +94,7 @@
                     </page>
                     <page string="Clients" name="clients">
                         <field name="client_ids" readonly="0">
-                            <tree>
+                            <tree create="false" delete="false">
                                 <field name="name"/>
                                 <field name="state"/>
                                 <field name="users_len"/>
