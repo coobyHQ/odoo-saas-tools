@@ -20,6 +20,7 @@ class SaasPortalClient(models.Model):
 
     name = fields.Char(required=True, help='Client Database name')
     partner_id = fields.Many2one('res.partner', string='Partner', track_visibility='onchange', readonly=True)
+    subdomain = fields.Char('Server SaaS subdomain', help='Set a sub domain name for this SaaS server')
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
                               track_visibility='onchange', ondelete='set null', readonly=True)
     plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly='True')
