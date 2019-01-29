@@ -56,6 +56,7 @@ class SaasPortalServer(models.Model):
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', default=_get_domain)
+
     sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
@@ -77,9 +78,10 @@ class SaasPortalServer(models.Model):
         ('storage_container', 'Storage container / volume'),
         ('database', 'Database Container/Server'),
         ('webserver', 'Webserver Container/NGINX'),
+        ('identity-server', 'Identity Server/Container'),
         ('other', 'Other Product')],
-        string='Server type', help='Which service the SaaS Server is providing')
-    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly=True,
+        string='Server type', help='Which service this server is providing')
+    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly='True',
                                     help='Which Odoo version is hosted')
     container_url = fields.Char('Container URL', help="URL to the used container")
     container_name = fields.Char('Container Name')
