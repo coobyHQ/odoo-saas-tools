@@ -63,8 +63,8 @@ class SaasPortalServer(models.Model):
                               ],
                              'State', default='draft',
                              track_visibility='onchange')
-    branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly='True')
-    branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly='True')
+    branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly=True)
+    branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly=True)
     server_type = fields.Selection([
         ('application', 'Application'),
         ('storage', 'Storage / volume'),
@@ -73,7 +73,7 @@ class SaasPortalServer(models.Model):
         ('webserver', 'Webserver Container/NGINX'),
         ('other', 'Other Product')],
         string='Server type', help='Which service the SaaS Server is providing')
-    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly='True',
+    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly=True,
                                     help='Which Odoo version is hosted')
     container_url = fields.Char('Container URL', help="URL to the used container")
     container_name = fields.Char('Container Name')
@@ -81,20 +81,16 @@ class SaasPortalServer(models.Model):
 
     max_client = fields.Integer('Max #of Client DB`s', default=100)
     # Todo compute number
-    number_of_clients = fields.Integer('# of Client DB`s', readonly='True')
+    number_of_clients = fields.Integer('# of Client DB`s', readonly=True)
     request_scheme = fields.Selection(
         [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
     verify_ssl = fields.Boolean(
         'Verify SSL', default=True, help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
     request_port = fields.Integer('Request Port', default=80)
-    client_ids = fields.One2many(
-        'saas_portal.client', 'server_id', string='Clients')
-    local_host = fields.Char(
-        'Local host', help='local host or ip address of server for server-side requests')
-    local_port = fields.Char(
-        'Local port', help='local tcp port of server for server-side requests')
-    local_request_scheme = fields.Selection(
-        [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
+    client_ids = fields.One2many('saas_portal.client', 'server_id', string='Clients')
+    local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
+    local_port = fields.Char('Local port', help='local tcp port of server for server-side requests')
+    local_request_scheme = fields.Selection([('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
     host = fields.Char('Host', compute=_compute_host)
     # Todo use of password is not yet clear?
     password = fields.Char('Default Superadmin password')
