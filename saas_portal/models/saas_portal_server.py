@@ -81,7 +81,7 @@ class SaasPortalServer(models.Model):
         ('identity-server', 'Identity Server/Container'),
         ('other', 'Other Product')],
         string='Server type', help='Which service this server is providing')
-    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly='True',
+    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly=True,
                                     help='Which Odoo version is hosted')
     container_url = fields.Char('Container URL', help="URL to the used container")
     container_name = fields.Char('Container Name')

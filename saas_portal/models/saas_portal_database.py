@@ -25,6 +25,7 @@ class SaasPortalDatabase(models.Model):
     _name = 'saas_portal.database'
     _description = 'Saas database instances'
     _inherits = {'oauth.application': 'oauth_application_id'}
+    _order = 'identifier'
 
     name = fields.Char('Database name', readonly=False)
     identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
@@ -35,7 +36,7 @@ class SaasPortalDatabase(models.Model):
     # Todo needs to be readonly = False for now to work, should be taken from client form.
     server_id = fields.Many2one(
         'saas_portal.server', ondelete='restrict',
-        string='Server', readonly=False)
+        string='Server', readonly=False, required=True)
     server_db_name = fields.Char(related='server_id.name', string='Database name', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
     domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)

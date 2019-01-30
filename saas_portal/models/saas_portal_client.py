@@ -20,13 +20,12 @@ class SaasPortalClient(models.Model):
 
     name = fields.Char(required=True, help='Client Database name')
     partner_id = fields.Many2one('res.partner', string='Partner', track_visibility='onchange', readonly=True)
-    subdomain = fields.Char('Server SaaS subdomain', help='Set a sub domain name for this SaaS server')
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
                               track_visibility='onchange', ondelete='set null', readonly=True)
-    plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly='True')
-    plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly='True')
-    plan_max_storage = fields.Integer(related='plan_id.total_storage_limit', string="Plan max allowed Storage", readonly='True')
-    plan_lang = fields.Selection(related='plan_id.lang', readonly='True')
+    plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly=True)
+    plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly=True)
+    plan_max_storage = fields.Integer(related='plan_id.total_storage_limit', string="Plan max allowed Storage", readonly=True)
+    plan_lang = fields.Selection(related='plan_id.lang', readonly=True)
     user_id = fields.Many2one(
         'res.users', default=lambda self: self.env.user, string='Salesperson')
     notification_sent = fields.Boolean(
