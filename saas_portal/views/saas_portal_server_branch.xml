@@ -42,7 +42,7 @@
                         <field name="branch_type"/>
                         <field name="product_type"/>
                         <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>
-                        <field name="domain_for_new_db"/>
+                        <field name="active_server"/>
                         <field name="active"/>
                         <field name="number_of_clients"/>
                     </group>

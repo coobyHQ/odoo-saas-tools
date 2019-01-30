@@ -153,8 +153,8 @@ class SaasPortalPlan(models.Model):
 
         # selecting the server to use
         if self.branch_id:
-            if self.branch_id.domain_for_new_db:
-                server = self.branch_id.domain_for_new_db
+            if self.branch_id.active_server:
+                server = self.branch_id.active_server
             else:
                 server = self.server_id
         else:

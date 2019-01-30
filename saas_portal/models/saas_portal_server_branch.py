@@ -42,12 +42,14 @@ class SaasPortalServerBranch(models.Model):
                     next_active_server = server
                     break
             if next_active_server:
-                branch.domain_for_new_db = next_active_server.id
+                branch.active_server = next_active_server.id
 
     name = fields.Char('Branch name', required=True)
-    domain_for_new_db = fields.Many2one('saas_portal.server', 'Active Domain Name', required=False,
-                                        compute='_get_active_server', store=True,
-                                        help="Active Domain for new instances")
+    active_server = fields.Many2one('saas_portal.server', 'Active Server', required=False,
+                                    compute='_get_active_server', store=True,
+                                    help="Active Server for new instances")
+    active_domain_name = fields.Char(related='active_server.domain', string='Active Domain Name', required=False,
+                                     help="Active Domain for new instances")
     summary = fields.Char('Summary')
    # oauth_application_id = fields.Many2one(
    #     'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
