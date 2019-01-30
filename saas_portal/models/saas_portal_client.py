@@ -19,8 +19,7 @@ class SaasPortalClient(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'saas_portal.database', 'saas_base.client']
 
     name = fields.Char(required=True, help='Client Database name')
-    partner_id = fields.Many2one(
-        'res.partner', string='Partner', track_visibility='onchange', readonly=True)
+    partner_id = fields.Many2one('res.partner', string='Partner', track_visibility='onchange', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
                               track_visibility='onchange', ondelete='set null', readonly=True)
     plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly='True')

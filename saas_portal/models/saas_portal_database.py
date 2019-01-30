@@ -27,6 +27,8 @@ class SaasPortalDatabase(models.Model):
     _inherits = {'oauth.application': 'oauth_application_id'}
 
     name = fields.Char('Database name', readonly=False)
+    identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
+    summary = fields.Char('Summary')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application',
         required=True, ondelete='cascade')
@@ -66,6 +68,13 @@ class SaasPortalDatabase(models.Model):
             else:
                 res.append((record.id, record.name))
         return res
+
+    @api.model
+    def create(self, vals):
+        if vals.get('identifier', _('New')) == _('New'):
+            vals['identifier'] = self.env['ir.sequence'].next_by_code('saas_portal.database') or _('New')
+
+        return super(SaasPortalDatabase, self).create(vals)
 
     @api.multi
     def _compute_host(self):

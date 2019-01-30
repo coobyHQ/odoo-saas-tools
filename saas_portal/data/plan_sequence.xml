@@ -8,5 +8,12 @@
             <field name="padding">3</field>
         </record>
 
+        <record model="ir.sequence" id="seq_saas_database">
+            <field name="name">SaaS Portal Database</field>
+            <field name="code">saas_portal.database</field>
+            <field name="prefix">DB</field>
+            <field name="padding">6</field>
+        </record>
+
     </data>
 </openerp>
