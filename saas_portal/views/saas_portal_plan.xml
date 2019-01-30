@@ -24,7 +24,7 @@
             <form string="plans">
                 <header>
                     <button string="Create template DB" name="create_template_button" type="object"
-                            attrs="{'invisible':['|', '|', ('state','not in', ['draft']), ('server_id','=',False),
+                            attrs="{'invisible':['|', '|', ('state','not in', ['draft']), ('active_server_id','=',False),
                             ('template_id','=',False)]}" icon="fa-play" class="oe_highlight"/>
                     <button string="Log in to template DB" name="%(action_edit_database)d"
                             type="action" states="confirmed" icon="fa-edit"
@@ -66,7 +66,8 @@
                     <group col="2" >
                         <group col="2" string="Technical Settings">
                             <field name="branch_id"/>
-                            <field name="server_id"/>
+                            <field name="active_server_id"/>
+                            <field name="active_domain_name"/>
                             <field name="template_id"/>
                         </group>
                         <group col="2" string="Odoo DB Settings">

@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 
 
 
-"""
+""" 
 todo  action_create_server will ask for master password only.-->
  https: // erppeek.readthedocs.org / en / latest / api.html  # erppeek.Client.create_database-->
 button string = "Create Server"
@@ -22,10 +22,9 @@ type = "action" class ="oe_highlight" states="draft" / >
 class SaasPortalServer(models.Model):
     _name = 'saas_portal.server'
     _description = 'SaaS Server / Container'
-    _rec_name = 'name_txt'
+    _rec_name = 'name'
 
-    _inherit = ['mail.thread']
-    _inherits = {'oauth.application': 'oauth_application_id'}
+    _inherit = ['saas_portal.database']
 
     @api.model
     def _get_domain(self):
@@ -39,21 +38,18 @@ class SaasPortalServer(models.Model):
 
     # Attention names is used for database name, another field name_txt as Title was created,
     name_txt = fields.Char('Name', required=True)
-    name = fields.Char('Database name', required=True)
-    summary = fields.Char('Summary')
+
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict')
     branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')
     client_ids = fields.One2many('saas_portal.client', 'server_id', string='Clients')
-    oauth_application_id = fields.Many2one(
-        'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', required=True,
                          default=_get_domain)
+    # host = fields.Char(related='domain', string='Host')
 
-    sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
-    state = fields.Selection([('draft', 'Draft'),
+    server_state = fields.Selection([('draft', 'Draft'),
                               ('running', 'Running'),
                               ('running_full', 'Running Full'),
                               ('running_err', 'Running with Error'),
@@ -61,7 +57,7 @@ class SaasPortalServer(models.Model):
                               ('stopped', 'Stopped'),
                               ('cancelled', 'Cancelled'),
                               ],
-                             'State', default='draft',
+                             'Server State', default='draft',
                              track_visibility='onchange')
     branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly=True)
     branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly=True)
@@ -91,9 +87,9 @@ class SaasPortalServer(models.Model):
                              help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection(related='branch_id.local_request_scheme', string='Scheme', readonly=True)
 
-    # Todo use of password is not yet clear?
-    password = fields.Char('Default Superadmin password')
-    clients_host_template = fields.Char('Template for clients host names',
+    # Todo use of password and clients_host_template  is not yet clear?
+    password = fields.Char(related='branch_id.password', string='Default Superadmin password', readonly=True)
+    clients_host_template = fields.Char(related='clients_host_template', string='Template for clients host names', readonly=True,
                                         help='The possible dynamic parts of the host names are: {dbname}, {base_saas_domain}, {base_saas_domain_1}')
 
     @api.multi

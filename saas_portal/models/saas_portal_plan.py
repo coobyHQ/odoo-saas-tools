@@ -30,6 +30,7 @@ def _compute_host(self):
 class SaasPortalPlan(models.Model):
     _name = 'saas_portal.plan'
     _description = 'SaaS Plan (templates)'
+    _order = 'sequence'
 
     name = fields.Char('Plan', required=True)
     summary = fields.Char('Summary')
@@ -42,13 +43,10 @@ class SaasPortalPlan(models.Model):
         help='maximum allowed trial databases per customer', require=True, default=0)
     # Todo why char ???
     max_users = fields.Integer('Initial Max users',
-                            default='0', help='leave 0 for no limit')
-    total_storage_limit = fields.Integer(
-        'Total plan storage limit (MB)', help='leave 0 for no limit')
-    block_on_expiration = fields.Boolean(
-        'Block clients on expiration', default=False)
-    block_on_storage_exceed = fields.Boolean(
-        'Block clients on storage exceed', default=False)
+                               default='0', help='leave 0 for no limit')
+    total_storage_limit = fields.Integer('Total plan storage limit (MB)', help='leave 0 for no limit')
+    block_on_expiration = fields.Boolean('Block clients on expiration', default=False)
+    block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=False)
 
     def _get_default_lang(self):
         return self.env.user.lang
@@ -64,21 +62,20 @@ class SaasPortalPlan(models.Model):
                              'State', compute='_compute_get_state', store=True)
     expiration = fields.Integer(
         'Expiration (hours)', help='time to delete database. Use for demo')
-    _order = 'sequence'
     grace_period = fields.Integer(
         'Grace period (days)', help='initial days before expiration')
 
-    dbname_template = fields.Char(
-        'Default DB Name', help='Used for generating client database domain name. Use %i for numbering. '
+    dbname_template = fields.Char('Default DB Name', help='Used for generating client database domain name. Use %i for numbering. '
                                 'Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
 
-    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
-                                ondelete='restrict',
-                                help='Use this Server Branch for this plan')
-    server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
-                                ondelete='restrict',
-                                help='Use this saas server or choose random')
-    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch', required=True,
+                                ondelete='restrict', help='Use this Server Branch for this plan')
+    active_server_id = fields.Many2one(related='branch_id.active_server', String='Active Server', required=False,
+                                       help="Active Server for new instances")
+    active_domain_name = fields.Char(related='branch_id.active_domain_name', string='Active Domain Name', required=False,
+                                     help="Active Domain for new instances")
+    # Todo To delete
+    domain = fields.Char(related='active_domain_name', string='Server Domain', readonly=True)
     upgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_upgrade_rel', 'plan_id', 'upgrade_plan_id', string='Potential Plans To Upgrade To')
     downgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_downgrade_rel', 'plan_id', 'downgrade_plan_id', string='Potential Plans To Downgrade To')
     website_description = fields.Html('Website description')
@@ -156,9 +153,9 @@ class SaasPortalPlan(models.Model):
             if self.branch_id.active_server:
                 server = self.branch_id.active_server
             else:
-                server = self.server_id
+                server = self.active_server_id
         else:
-            server = self.server_id
+            server = self.active_server_id
         if not server:
             server = p_server.get_saas_server()
 
@@ -190,7 +187,7 @@ class SaasPortalPlan(models.Model):
 
         client_expiration = self._get_expiration(trial)
         vals = {'name': dbname or self.generate_dbname(),
-                'server_id': server.id,
+                'active_server_id': server.id,
                 'plan_id': self.id,
                 'partner_id': partner_id,
                 'trial': trial,
@@ -259,7 +256,7 @@ class SaasPortalPlan(models.Model):
 
         client.send_params_to_client_db()
         # TODO make async call of action_sync_server here
-        # client.server_id.action_sync_server()
+        # client.active_server_id.action_sync_server()
         client.sync_client()
 
         return {'url': url,
@@ -284,6 +281,7 @@ class SaasPortalPlan(models.Model):
 
     @api.multi
     def create_template(self, addons=None):
+        # Todo should allow to choose a server for a new template
         self.ensure_one()
         state = {
             'd': self.template_id.name,
@@ -294,9 +292,9 @@ class SaasPortalPlan(models.Model):
             'is_template_db': 1,
         }
         client_id = self.template_id.client_id
-        self.template_id.server_id = self.server_id
+        self.template_id.active_server_id = self.active_server_id
 
-        req, req_kwargs = self.server_id._request_server(
+        req, req_kwargs = self.active_server_id._request_server(
             path='/saas_server/new_database', state=state, client_id=client_id)
         res = requests.Session().send(req, **req_kwargs)
 
@@ -314,10 +312,11 @@ class SaasPortalPlan(models.Model):
         self.template_id.state = data.get('state')
         return data
 
+    # Todo should be replaced by syncing all the the plan linked servers.
     @api.multi
     def action_sync_server(self):
         for r in self:
-            r.server_id.action_sync_server()
+            r.active_server_id.action_sync_server()
         return True
 
     @api.multi

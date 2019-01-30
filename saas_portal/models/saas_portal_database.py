@@ -22,8 +22,10 @@ def _compute_host(self):
 
 
 class SaasPortalDatabase(models.Model):
+    # This model gets inherited by saas_portal.client and saas_portal.server
     _name = 'saas_portal.database'
     _description = 'Saas database instances'
+    _order = 'sequence'
 
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _inherits = {'oauth.application': 'oauth_application_id'}
@@ -31,22 +33,21 @@ class SaasPortalDatabase(models.Model):
     name = fields.Char('Database name', readonly=False)
     summary = fields.Char('Summary')
     # Todo RFC rename host to db_name
+    sequence = fields.Integer('Sequence')
     domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
     subdomain = fields.Char('Server SaaS subdomain', help='Set a sub domain name for this SaaS server')
     db_name = fields.Char('Database name', compute='_compute_db_name')
     # to delete host?
-    host = fields.Char('Host', compute='_compute_host')
+    host = fields.Char(related='domain', string='Host')
     server_host = fields.Char('Server Host', compute='_compute_server_host')
     public_url = fields.Char(compute='_compute_public_url')
-    oauth_application_id = fields.Many2one(
-        'oauth.application', 'OAuth Application',
-        required=True, ondelete='cascade')
+    oauth_application_id = fields.Many2one('oauth.application', 'OAuth Application',
+                                           required=True, ondelete='cascade')
     # Todo needs to be readonly = False for now to work, should be taken from client form.
     server_id = fields.Many2one('saas_portal.server', ondelete='restrict',
                                 string='Server', readonly=False, required=True)
     server_db_name = fields.Char(related='server_id.domain', string='Server Database name', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
-
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')
     odoo_version = fields.Selection(related='server_id.odoo_version', string='Odoo version', readonly=True,
