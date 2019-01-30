@@ -55,6 +55,8 @@ class SaasPortalServerBranch(models.Model):
    #     'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     app_server_ids = fields.One2many('saas_portal.server', 'branch_id', string='App Servers')
     aux_server_ids = fields.Many2many('saas_portal.server', 'branch_aux_ids', string='Auxiliary Servers', ondelete='restrict')
+    parameter_ids = fields.One2many('saas_portal.server_parameter', 'server_branch_id', string='SaaS Server Parameter',
+                                    ondelete='restrict')
     plan_ids = fields.One2many('saas_portal.plan', 'branch_id', string='Related SaaS Plans')
     client_ids = fields.One2many(related='app_server_ids.client_ids', string='Clients')
     sequence = fields.Integer('Sequence')

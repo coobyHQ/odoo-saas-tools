@@ -11,8 +11,8 @@ class SaasPortalServerParam(models.Model):
     parameter = fields.Char('Parameter')
     description = fields.Char('Description')
     value = fields.Char('Value')
-    server_id = fields.Many2one('saas_portal.server', 'parameter_ids', string='Servers')
-    server_branch_id = fields.Many2one('saas_portal.server_branch', 'parameter_ids', string='Server Branches')
+    server_id = fields.Many2one('saas_portal.server', string='Servers')
+    server_branch_id = fields.Many2one('saas_portal.server_branch', string='Server Branches')
 
 
 class SaasPortalServerParamSet(models.Model):

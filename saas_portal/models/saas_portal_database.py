@@ -38,7 +38,7 @@ class SaasPortalDatabase(models.Model):
     subdomain = fields.Char('Server SaaS subdomain', help='Set a sub domain name for this SaaS server')
     db_name = fields.Char('Database name', compute='_compute_db_name')
     # to delete host?
-    host = fields.Char(related='domain', string='Host')
+    host = fields.Char(related='db_name', string='Host')
     server_host = fields.Char('Server Host', compute='_compute_server_host')
     public_url = fields.Char(compute='_compute_public_url')
     oauth_application_id = fields.Many2one('oauth.application', 'OAuth Application',

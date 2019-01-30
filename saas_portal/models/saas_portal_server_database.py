@@ -8,52 +8,17 @@ from odoo.tools.translate import _
 import logging
 _logger = logging.getLogger(__name__)
 
-"""
-todo  action_create_server will ask for master password only.-->
- https: // erppeek.readthedocs.org / en / latest / api.html  # erppeek.Client.create_database-->
-button string = "Create Server"
-name = "%(action_create_server)d"
-type = "action" class ="oe_highlight" states="draft" / >
-"""
 
-
-class SaasPortalServer(models.Model):
-    _name = 'saas_portal.server'
+class SaasPortalServerDatabase(models.Model):
+    _name = 'saas_portal.server_database'
     _description = 'SaaS Server / Container'
-    _rec_name = 'name_txt'
+    _rec_name = 'name'
 
-    _inherit = ['mail.thread']
-    _inherits = {'oauth.application': 'oauth_application_id'}
+    _inherit = ['saas_portal.database']
 
-    @api.model
-    def _get_domain(self):
-        return  self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
 
-    @api.multi
-    @api.depends('client_ids')
-    def _get_number_of_clients(self):
-        for server in self:
-            server.number_of_clients = len(server.client_ids.filtered(lambda c: c.state == 'open') or [])
-
-    name_txt = fields.Char('Name', required=True)
-    name = fields.Char('Database name', required=True)
-    summary = fields.Char('Summary')
-    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
-                                ondelete='restrict')
-    branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')
-    parameter_ids = fields.One2many('saas_portal.server_parameter', 'server_id',  string='SaaS Server Parameter',
-                                    ondelete='restrict')
-
-    client_ids = fields.One2many('saas_portal.client', 'server_id', string='Clients')
-    oauth_application_id = fields.Many2one(
-        'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
-    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', required=True,
-                         default=_get_domain)
-    host = fields.Char(related='local_host', string='Host aka db_name')
-    sequence = fields.Integer('Sequence')
-    # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
-    state = fields.Selection([('draft', 'Draft'),
+    server_state = fields.Selection([('draft', 'Draft'),
                               ('running', 'Running'),
                               ('running_full', 'Running Full'),
                               ('running_err', 'Running with Error'),
@@ -61,40 +26,11 @@ class SaasPortalServer(models.Model):
                               ('stopped', 'Stopped'),
                               ('cancelled', 'Cancelled'),
                               ],
-                             'State', default='draft',
+                             'Server State', default='draft',
                              track_visibility='onchange')
-    branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly=True)
-    branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly=True)
-    server_type = fields.Selection([
-        ('application', 'Application'),
-        ('storage', 'Storage / volume'),
-        ('storage_container', 'Storage container / volume'),
-        ('database', 'Database Container/Server'),
-        ('webserver', 'Webserver Container/NGINX'),
-        ('identity-server', 'Identity Server/Container'),
-        ('other', 'Other Product')],
-        string='Server type', help='Which service this server is providing')
-    odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly='True',
-                                    help='Which Odoo version is hosted')
-    container_url = fields.Char('Container URL', help="URL to the used container")
-    container_name = fields.Char('Container Name')
-    container_image = fields.Char('Container Image')
 
     max_client = fields.Integer('Max #of Client DB`s', default=100)
     number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
-    request_scheme = fields.Selection(related='branch_id.request_scheme', string='Scheme', readonly=True)
-    verify_ssl = fields.Boolean(related='branch_id.verify_ssl', string='Verify SSL', readonly=True,
-                                help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
-    request_port = fields.Integer(related='branch_id.request_port', string='Request Port', readonly=True)
-    local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
-    local_port = fields.Char(related='branch_id.local_port', string='Local port', readonly=True,
-                             help='local tcp port of server for server-side requests')
-    local_request_scheme = fields.Selection(related='branch_id.local_request_scheme', string='Scheme', readonly=True)
-
-    # Todo use of password is not yet clear?
-    password = fields.Char('Default Superadmin password')
-    clients_host_template = fields.Char('Template for clients host names',
-                                        help='The possible dynamic parts of the host names are: {dbname}, {base_saas_domain}, {base_saas_domain_1}')
 
     @api.multi
     def name_get(self):
@@ -112,12 +48,6 @@ class SaasPortalServer(models.Model):
             ('name_txt', operator, name),
         ]
         return self.search(domain, limit=limit).name_get()
-
-    @api.model
-    def create(self, vals):
-        record = super(SaasPortalServer, self).create(vals)
-        record.oauth_application_id._get_access_token(create=True)
-        return record
 
     @api.multi
     def _request_params(self, path='/web', scheme=None,
@@ -228,29 +158,3 @@ class SaasPortalServer(models.Model):
         saas_server_list = p_server.sudo().search([])
         return saas_server_list[random.randint(0, len(saas_server_list) - 1)]
 
-
-class OauthApplication(models.Model):
-    _inherit = 'oauth.application'
-
-    client_id = fields.Char('Database UUID')
-    last_connection = fields.Char(compute='_compute_get_last_connection',
-                                  string='Last Connection', size=64)
-    server_db_ids = fields.One2many(
-        'saas_portal.server', 'oauth_application_id',
-        string='Server Database')
-    template_db_ids = fields.One2many(
-        'saas_portal.database', 'oauth_application_id',
-        string='Template Database')
-    client_db_ids = fields.One2many(
-        'saas_portal.client', 'oauth_application_id',
-        string='Client Database')
-
-    @api.multi
-    def _compute_get_last_connection(self):
-        for r in self:
-            oat = self.env['oauth.access_token']
-            to_search = [('application_id', '=', r.id)]
-            access_tokens = oat.search(to_search)
-            if access_tokens:
-                access_token = access_tokens[0]
-                r.last_connection = access_token.user_id.login_date
