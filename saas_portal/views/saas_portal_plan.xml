@@ -66,6 +66,8 @@
                     <group col="2" >
                         <group col="2" string="Technical Settings">
                             <field name="branch_id"/>
+                            <field name="active_server_id"/>
+                            <field name="active_domain_name"/>
                             <field name="server_id"/>
                             <field name="template_id"/>
                         </group>

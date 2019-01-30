@@ -30,25 +30,21 @@ def _compute_host(self):
 class SaasPortalPlan(models.Model):
     _name = 'saas_portal.plan'
     _description = 'SaaS Plan (templates)'
+    _order = 'sequence'
 
     name = fields.Char('Plan', required=True)
     summary = fields.Char('Summary')
-    template_id = fields.Many2one(
-        'saas_portal.database', 'Template', ondelete='restrict')
+    template_id = fields.Many2one('saas_portal.database', 'Template', ondelete='restrict')
     demo = fields.Boolean('Install Demo Data')
     maximum_allowed_dbs_per_partner = fields.Integer(
         help='maximum allowed non-trial databases per customer', require=True, default=0)
     maximum_allowed_trial_dbs_per_partner = fields.Integer(
         help='maximum allowed trial databases per customer', require=True, default=0)
     # Todo why char ???
-    max_users = fields.Integer('Initial Max users',
-                            default='0', help='leave 0 for no limit')
-    total_storage_limit = fields.Integer(
-        'Total plan storage limit (MB)', help='leave 0 for no limit')
-    block_on_expiration = fields.Boolean(
-        'Block clients on expiration', default=False)
-    block_on_storage_exceed = fields.Boolean(
-        'Block clients on storage exceed', default=False)
+    max_users = fields.Integer('Initial Max users',default='0', help='leave 0 for no limit')
+    total_storage_limit = fields.Integer('Total plan storage limit (MB)', help='leave 0 for no limit')
+    block_on_expiration = fields.Boolean('Block clients on expiration', default=False)
+    block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=False)
 
     def _get_default_lang(self):
         return self.env.user.lang
@@ -56,25 +52,23 @@ class SaasPortalPlan(models.Model):
     def _default_tz(self):
         return self.env.user.tz
 
-    lang = fields.Selection(scan_languages(), 'Language',
-                            default=_get_default_lang)
+    lang = fields.Selection(scan_languages(), 'Language', default=_get_default_lang)
     tz = fields.Selection(_tz_get, 'TimeZone', default=_default_tz)
     sequence = fields.Integer('Sequence')
     state = fields.Selection([('draft', 'Draft'), ('confirmed', 'Confirmed')],
                              'State', compute='_compute_get_state', store=True)
-    expiration = fields.Integer(
-        'Expiration (hours)', help='time to delete database. Use for demo')
-    _order = 'sequence'
-    grace_period = fields.Integer(
-        'Grace period (days)', help='initial days before expiration')
-
+    expiration = fields.Integer('Expiration (hours)', help='time to delete database. Use for demo')
+    grace_period = fields.Integer('Grace period (days)', help='initial days before expiration')
     dbname_template = fields.Char(
         'Default DB Name', help='Used for generating client database domain name. Use %i for numbering. '
                                 'Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
-
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
-                                ondelete='restrict',
+                                ondelete='restrict', required=True,
                                 help='Use this Server Branch for this plan')
+    active_server_id = fields.Many2one(related='branch_id.active_server', String='Active Server',
+                                       help="Active Server for new instances")
+    active_domain_name = fields.Char(related='branch_id.active_domain_name', string='Active Domain Name',
+                                     help="Active Domain for new instances")
     server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
                                 ondelete='restrict',
                                 help='Use this saas server or choose random')
@@ -83,7 +77,6 @@ class SaasPortalPlan(models.Model):
     downgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_downgrade_rel', 'plan_id', 'downgrade_plan_id', string='Potential Plans To Downgrade To')
     website_description = fields.Html('Website description')
     logo = fields.Binary('Logo')
-
     on_create = fields.Selection([
         ('login', 'Log into just created instance'),
     ], string="Workflow on create", default='login')
@@ -153,8 +146,8 @@ class SaasPortalPlan(models.Model):
 
         # selecting the server to use
         if self.branch_id:
-            if self.branch_id.domain_for_new_db:
-                server = self.branch_id.domain_for_new_db
+            if self.branch_id.active_server:
+                server = self.branch_id.active_server
             else:
                 server = self.server_id
         else:
