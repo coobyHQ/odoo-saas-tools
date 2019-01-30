@@ -9,15 +9,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-@api.multi
-def _compute_host(self):
-    base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
-    for r in self:
-        host = r.name
-        domain = r.domain or base_saas_domain
-        if domain and '.' not in r.name:
-            host = '%s.%s' % (r.name, domain)
-        r.host = host
 
 """
 todo  action_create_server will ask for master password only.-->
@@ -56,7 +47,8 @@ class SaasPortalServer(models.Model):
     client_ids = fields.One2many('saas_portal.client', 'server_id', string='Clients')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
-    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', default=_get_domain)
+    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', required=True,
+                         default=_get_domain)
 
     sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
@@ -98,8 +90,7 @@ class SaasPortalServer(models.Model):
     local_port = fields.Char(related='branch_id.local_port', string='Local port', readonly=True,
                              help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection(related='branch_id.local_request_scheme', string='Scheme', readonly=True)
-    # Todo logic of host is not yet clear? it does mot seem that the field domain is used before the one is settings (LUH)?
-    host = fields.Char('Host', compute=_compute_host)
+
     # Todo use of password is not yet clear?
     password = fields.Char('Default Superadmin password')
     clients_host_template = fields.Char('Template for clients host names',

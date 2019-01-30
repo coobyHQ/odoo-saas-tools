@@ -16,10 +16,10 @@ class SaasPortalClient(models.Model):
     _mail_flat_thread = False
     _rec_name = 'name'
 
-    _inherit = ['mail.thread', 'mail.activity.mixin', 'saas_portal.database', 'saas_base.client']
+    _inherit = ['saas_portal.database', 'saas_base.client']
 
     name = fields.Char(required=True, help='Client Database name')
-    subdomain = fields.Char('Server SaaS subdomain', help='Set a sub domain name for this SaaS server')
+
     partner_id = fields.Many2one(
         'res.partner', string='Partner', track_visibility='onchange', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',

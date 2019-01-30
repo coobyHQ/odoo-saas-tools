@@ -24,19 +24,28 @@ def _compute_host(self):
 class SaasPortalDatabase(models.Model):
     _name = 'saas_portal.database'
     _description = 'Saas database instances'
+
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _inherits = {'oauth.application': 'oauth_application_id'}
 
     name = fields.Char('Database name', readonly=False)
+    # Todo RFC rename host to db_name
+    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+    subdomain = fields.Char('Server SaaS subdomain', help='Set a sub domain name for this SaaS server')
+    db_name = fields.Char('Database name', compute='_compute_db_name')
+    # to delete host?
+    host = fields.Char('Host', compute='_compute_host')
+    server_host = fields.Char('Server Host', compute='_compute_server_host')
+    public_url = fields.Char(compute='_compute_public_url')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application',
         required=True, ondelete='cascade')
     # Todo needs to be readonly = False for now to work, should be taken from client form.
-    server_id = fields.Many2one(
-        'saas_portal.server', ondelete='restrict',
-        string='Server', readonly=False)
+    server_id = fields.Many2one('saas_portal.server', ondelete='restrict',
+                                string='Server', readonly=False, required=True)
     server_db_name = fields.Char(related='server_id.name', string='Database name', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
-    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')
     odoo_version = fields.Selection(related='server_id.odoo_version', string='Odoo version', readonly=True,
@@ -50,13 +59,14 @@ class SaasPortalDatabase(models.Model):
                               ],
                              'State', default='draft',
                              track_visibility='onchange')
-    host = fields.Char('Host', compute='_compute_host')
+
     db_primary_lang = fields.Selection(scan_languages(), 'Database primary language')
-    public_url = fields.Char(compute='_compute_public_url')
+
     # Todo use of password is not yet clear?
     password = fields.Char('Default Database Password')
     plan_ids = fields.Many2many('saas_portal.plan', 'saas_portal_database_templates', 'template_id', 'plan_id', string='SaaS Plans')
 
+    # used for what (LUH)
     @api.multi
     def name_get(self):
         res = []
@@ -66,6 +76,32 @@ class SaasPortalDatabase(models.Model):
             else:
                 res.append((record.id, record.name))
         return res
+
+    @api.multi
+    def _compute_server_domain(self):
+        base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
+        for r in self:
+            host = r.name
+            domain = r.domain or base_saas_domain
+            if domain and '.' not in r.name:
+                host = '%s.%s' % (r.name, domain)
+            r.host = host
+
+    @api.multi
+    def _compute_db_name(self):
+        for r in self:
+            db_name = '%s.%s' % (r.subdomain, r.domain)
+            r.db_name = db_name
+
+    @api.multi
+    def _compute_server_host(self):
+        base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
+        for r in self:
+            host = r.name
+            domain = r.domain or base_saas_domain
+            if domain and '.' not in r.name:
+                host = '%s.%s' % (r.name, domain)
+            r.host = host
 
     @api.multi
     def _compute_host(self):
