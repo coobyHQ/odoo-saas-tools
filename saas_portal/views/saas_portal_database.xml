@@ -6,7 +6,8 @@
         <field name="model">saas_portal.database</field>
         <field name="arch" type="xml">
             <tree string="Databases" create="false" edit="true" delete="false">
-                 <field name="name" />
+                 <field name="name"/>
+                 <field name="db_name"/>
                  <field name="server_id"/>
                  <field name="db_primary_lang"/>
                  <field name="product_type"/>
@@ -31,14 +32,37 @@
                 <field name="state" widget="statusbar"/>
             </header>
             <sheet>
-                <group>
-                    <field name="name" readonly="1"/>
-                    <field name="product_type"/>
-                    <field name="odoo_version"/>
-                    <field name="db_primary_lang" readonly="1"/>
-                    <field name="client_id" readonly="1"/>
-                    <field name="server_id" readonly="1"/>
-                    <field name="server_db_name"/>
+                <div class="oe_button_box" name="button_box">
+                   <!-- placeholder -->
+                </div>
+                <div class="oe_title" style="width: 390px;">
+                    <label class="oe_edit_only" for="name" string="Name"/>
+                    <h1><field name="name" class="oe_inline"/></h1>
+                    <label for="subdomain" string="Subdomain"/>
+                    <field name="subdomain" style="font-weight:bold"/>
+                    <br></br><label for="db_name"/>
+                    <field name="db_name"/>
+                     <br></br><label for="server_id"/>
+                    <field name="server_id"/>
+                </div>
+                <group name="base">
+                    <group string="Definition">
+                        <field name="summary"/>
+                        <field name="db_type" readonly="0"/>
+                        <field name="db_primary_lang" readonly="1"/>
+                        <field name="client_id" readonly="1"/>
+                        <field name="password" readonly="1"/>
+                        <field name="public_url" widget="url"/>
+
+                    </group>
+                    <group string="Server-side">
+                        <field name="product_type"/>
+                        <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>
+                        <field name="server_db_name"/>
+                    </group>
+                </group>
+
+                <group string="Plans">
                     <field name="plan_ids" widget="many2many_tags"/>
                 </group>
             </sheet>
@@ -52,7 +76,7 @@
         <field name="arch" type="xml">
             <search string="Search Databases">
                 <field name="name" string="Database Name"/>
-                <filter string="Templates" name="template" domain="[('state', '=','template')]"/>
+                <filter string="Templates" name="template" domain="[('db_type', '=','template')]"/>
             </search>
         </field>
     </record>

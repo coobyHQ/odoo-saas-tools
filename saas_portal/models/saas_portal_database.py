@@ -29,6 +29,7 @@ class SaasPortalDatabase(models.Model):
     _inherits = {'oauth.application': 'oauth_application_id'}
 
     name = fields.Char('Database name', readonly=False)
+    summary = fields.Char('Summary')
     # Todo RFC rename host to db_name
     domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
     subdomain = fields.Char('Server SaaS subdomain', help='Set a sub domain name for this SaaS server')
@@ -43,7 +44,7 @@ class SaasPortalDatabase(models.Model):
     # Todo needs to be readonly = False for now to work, should be taken from client form.
     server_id = fields.Many2one('saas_portal.server', ondelete='restrict',
                                 string='Server', readonly=False, required=True)
-    server_db_name = fields.Char(related='server_id.name', string='Database name', readonly=True)
+    server_db_name = fields.Char(related='server_id.domain', string='Server Database name', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
 
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
@@ -54,17 +55,33 @@ class SaasPortalDatabase(models.Model):
                               ('open', 'Running'),
                               ('cancelled', 'Cancelled'),
                               ('pending', 'Pending'),
+                              ('running_err', 'Running with Error'),
+                              ('running_failed', 'Running Failed'),
                               ('deleted', 'Deleted'),
-                              ('template', 'Template'),
                               ],
-                             'State', default='draft',
-                             track_visibility='onchange')
+                             'State', default='draft', track_visibility='onchange')
 
+    db_type = fields.Selection([('server', 'Server'),
+                               ('client', 'Client'),
+                               ('template', 'Template'),
+                               ('pending', 'Pending'),
+                                ],
+                               'DB Type', default='client', track_visibility='onchange')
     db_primary_lang = fields.Selection(scan_languages(), 'Database primary language')
 
     # Todo use of password is not yet clear?
     password = fields.Char('Default Database Password')
     plan_ids = fields.Many2many('saas_portal.plan', 'saas_portal_database_templates', 'template_id', 'plan_id', string='SaaS Plans')
+
+    @api.onchange('db_type, db_name')
+    def _change_name(self):
+        for r in self:
+            name = r.name
+            if r.db_type == 'template':
+                name = '%s, %s' % (r.db_type, r.db_name)
+            else:
+                name = '%s, %s' % (r.name, r.db.name)
+            r.name = name
 
     # used for what (LUH)
     @api.multi
@@ -93,6 +110,7 @@ class SaasPortalDatabase(models.Model):
             db_name = '%s.%s' % (r.subdomain, r.domain)
             r.db_name = db_name
 
+    # Todo to delete
     @api.multi
     def _compute_server_host(self):
         base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
@@ -124,7 +142,7 @@ class SaasPortalDatabase(models.Model):
     def _compute_public_url(self):
         for record in self:
             scheme = record.server_id.request_scheme
-            host = record.host
+            host = record.db_name
             port = record.server_id.request_port
             public_url = "%s://%s" % (scheme, host)
             if scheme == 'http' and port != 80 or scheme == 'https' and port != 443:
