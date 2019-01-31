@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Parameter sets -->
+    <record id="view_server_parameter_set_tree" model="ir.ui.view">
+        <field name="name">saas_portal.server_parameter_set.tree</field>
+        <field name="model">saas_portal.server_parameter_set</field>
+        <field name="priority">4</field>
+        <field name="arch" type="xml">
+            <tree create="true" delete="true">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="parameter_type"/>
+                <field name="server_branch_ids" widget="many2many_tags"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_server_parameter_set_form" model="ir.ui.view">
+        <field name="name">saas_portal.server_parameter_set.form</field>
+        <field name="model">saas_portal.server_parameter_set</field>
+        <field name="arch" type="xml">
+            <form string="Parameter sets">
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_title" style="width: 390px;">
+                        <label class="oe_edit_only" for="name" string="Name"/>
+                        <h1><field name="name" class="oe_inline"/></h1>
+                        <label for="server_branch_ids"/><br></br>
+                        <field name="server_branch_ids" widget="many2many_tags"/>
+                    </div>
+                    <group col="2">
+                        <group string="Parameter">
+                            <field name="parameter_type"/>
+                            <field name="description"/>
+                        </group>
+                        <group string="">
+
+                        </group>
+                    </group>
+                        <field name="parameter_ids" readonly="0">
+                            <tree create="true" delete="true">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="parameter_type"/>
+                                <field name="parameter"/>
+                                <field name="description"/>
+                                <field name="default"/>
+                                <field name="value"/>
+                            </tree>
+                        </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_server_parameter_set" model="ir.actions.act_window">
+        <field name="name">Parameter sets</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.server_parameter_set</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_server_parameter_set" id="menu_parameter_set" parent="menu_saas_portal_config" sequence="1"/>
+
+
+   <record id="view_server_parameter_form" model="ir.ui.view">
+        <field name="name">saas_portal.server_parameter.form</field>
+        <field name="model">saas_portal.server_parameter</field>
+        <field name="arch" type="xml">
+            <form string="Parameter">
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_title" style="width: 390px;">
+                        <label class="oe_edit_only" for="name" string="Name"/>
+                        <h1><field name="name" class="oe_inline"/></h1>
+                        <label for="server_branch_id"/><br></br>
+                        <field name="server_branch_id" readonly="1"/>
+                    </div>
+                    <group col="2">
+                        <group string="Parameter">
+                            <field name="parameter"/>
+                            <field name="default"/>
+                            <field name="value"/>
+                        </group>
+                        <group string="">
+                            <field name="parameter_type"/>
+                            <field name="docker_image"/>
+                            <field name="server_branch_id" readonly="1"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
