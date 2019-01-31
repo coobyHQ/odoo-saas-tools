@@ -53,6 +53,8 @@ class SaasPortalServer(models.Model):
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict')
     branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')
+    parameter_ids = fields.One2many('saas_portal.server_parameter', 'server_id',  string='SaaS Server Parameter',
+                                    ondelete='restrict')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', default=_get_domain)
@@ -90,16 +92,20 @@ class SaasPortalServer(models.Model):
     max_client = fields.Integer('Max #of Client DB`s', default=100)
     # Todo compute number
     number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
-    request_scheme = fields.Selection(
-        [('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
-    verify_ssl = fields.Boolean(
-        'Verify SSL', default=True, help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
-    request_port = fields.Integer('Request Port', default=80)
-    client_ids = fields.One2many('saas_portal.client', 'server_id', string='Clients')
+    client_ids = fields.One2many('saas_portal.client', 'server_id', string='Client instances')
+    database_ids = fields.One2many('saas_portal.database', 'server_id', string='Database Instances')
+    # RPC Server side
     local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
-    local_port = fields.Char('Local port', help='local tcp port of server for server-side requests')
-    local_request_scheme = fields.Selection([('http', 'http'), ('https', 'https')], 'Scheme', default='http', required=True)
+    local_port = fields.Char(related='branch_id.local_port', string='Local port', readonly=True,
+                             help='local tcp port of server for server-side requests')
+    local_request_scheme = fields.Selection(related='branch_id.local_request_scheme', string='Scheme', readonly=True)
+    # RPC Portal side
     host = fields.Char('Host', compute=_compute_host)
+    request_scheme = fields.Selection(related='branch_id.request_scheme', string='Scheme', readonly=True)
+    verify_ssl = fields.Boolean(related='branch_id.verify_ssl', string='Verify SSL', readonly=True,
+                                help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
+    request_port = fields.Integer(related='branch_id.request_port', string='Request Port', readonly=True)
+
     # Todo use of password is not yet clear?
     password = fields.Char('Default Superadmin password')
     clients_host_template = fields.Char('Template for clients host names',

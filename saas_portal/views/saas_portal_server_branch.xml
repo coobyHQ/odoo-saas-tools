@@ -105,8 +105,17 @@
                             </tree>
                         </field>
                    </page>
+                    <page string="Parameters Sets" name="parameters">
+                        <field name="parameter_ids" readonly="0">
+                            <tree create="true" delete="true">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="parameter_type"/>
+                                <field name="description"/>
+                            </tree>
+                        </field>
+                    </page>
                 </notebook>
-
                 </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>

@@ -51,6 +51,7 @@
                     </div>
                 <group name="base">
                     <group string="Definition">
+                        <field name="domain" placeholder="e.g. s1.cooby.online"/>
                         <field name="server_type"/>
                         <field name="branch_product_type"/>
                         <field name="odoo_version" attrs="{'required': [('branch_product_type','=','odoo')], 'invisible': [('branch_product_type','!=','odoo')]}"/>
@@ -60,13 +61,13 @@
                         <field name="number_of_clients" readonly="1"/>
                     </group>
                     <group string="Server-side requests">
-                        <field name="domain" placeholder="e.g. s1.cooby.online"/>
                         <field name="local_request_scheme"/>
                         <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
                         <field name="local_host"/>
                         <field name="local_port"/>
                         <separator string="Portal requests"/>
                         <field name="request_scheme"/>
+                        <field name="host"/>
                         <field name="request_port"/>
                     </group>
                 </group>
@@ -82,16 +83,43 @@
                           <field name="clients_host_template"/>
                     </group>
                 </group>
-
-                <field name="client_ids" readonly="0">
-                    <tree>
-                        <field name="name"/>
-                        <field name="state"/>
-                        <field name="users_len"/>
-                        <field name="file_storage"/>
-                        <field name="db_storage"/>
-                    </tree>
-                </field>
+                <notebook>
+                    <page string="Client Instances" name="clients">
+                        <field name="client_ids" readonly="0">
+                            <tree>
+                                <field name="name"/>
+                                <field name="state"/>
+                                <field name="users_len"/>
+                                <field name="file_storage"/>
+                                <field name="db_storage"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Template Instances" name="templates">
+                        <field name="database_ids" readonly="0">
+                            <tree>
+                                <field name="name"/>
+                                <field name="identifier"/>
+                                <field name="db_primary_lang" readonly="1"/>
+                                <field name="state" readonly="1"/>
+                                <field name="public_url" widget="url"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Parameters" name="parameters">
+                        <field name="parameter_ids" readonly="0">
+                            <tree create="true" delete="true">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="set_id"/>
+                                <field name="parameter"/>
+                                <field name="description"/>
+                                <field name="default"/>
+                                <field name="value"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
