@@ -37,11 +37,11 @@ class SaasPortalPlan(models.Model):
     template_id = fields.Many2one('saas_portal.database', 'Template', ondelete='restrict')
     demo = fields.Boolean('Install Demo Data')
     maximum_allowed_dbs_per_partner = fields.Integer(
-        help='maximum allowed non-trial databases per customer', require=True, default=0)
+        help='maximum allowed non-trial databases per customer', require=True, default=10)
     maximum_allowed_trial_dbs_per_partner = fields.Integer(
-        help='maximum allowed trial databases per customer', require=True, default=0)
+        help='maximum allowed trial databases per customer', require=True, default=2)
     # Todo why char ???
-    max_users = fields.Integer('Initial Max users',default='0', help='leave 0 for no limit')
+    max_users = fields.Integer('Initial Max users', default='0', help='leave 0 for no limit')
     total_storage_limit = fields.Integer('Total plan storage limit (MB)', help='leave 0 for no limit')
     block_on_expiration = fields.Boolean('Block clients on expiration', default=False)
     block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=False)
@@ -57,11 +57,10 @@ class SaasPortalPlan(models.Model):
     sequence = fields.Integer('Sequence')
     state = fields.Selection([('draft', 'Draft'), ('confirmed', 'Confirmed')],
                              'State', compute='_compute_get_state', store=True)
-    expiration = fields.Integer('Expiration (hours)', help='time to delete database. Use for demo')
-    grace_period = fields.Integer('Grace period (days)', help='initial days before expiration')
-    dbname_template = fields.Char(
-        'Default DB Name', help='Used for generating client database domain name. Use %i for numbering. '
-                                'Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
+    expiration = fields.Integer('Expiration (hours)', default=48, help='time to delete database. Use for demo')
+    grace_period = fields.Integer('Grace period (days)', default=14, help='initial days before expiration')
+    dbname_template = fields.Char('Default DB Name', help='Used for generating client database domain name. Use %i for numbering. '
+                                  'Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict', required=True,
                                 help='Use this Server Branch for this plan')
