@@ -55,7 +55,7 @@
                         <field name="public_url" widget="url"/>
                     </group>
                     <group string="Server-side">
-                        <field name="server_id" readonly="1"/>
+                        <field name="server_id" readonly="0"/>
                         <field name="server_db_name"/>
                         <field name="product_type"/>
                         <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>

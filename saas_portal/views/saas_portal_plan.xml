@@ -11,6 +11,8 @@
                 <field name="name"/>
                 <field name="branch_id"/>
                 <field name="template_id"/>
+                <field name="max_users"/>
+                <field name="total_storage_limit"/>
                 <field name="state" />
             </tree>
         </field>
@@ -24,7 +26,7 @@
             <form string="plans">
                 <header>
                     <button string="Create template DB" name="create_template_button" type="object"
-                            attrs="{'invisible':['|', '|', ('state','not in', ['draft']), ('server_id','=',False),
+                            attrs="{'invisible':['|', '|', ('state','not in', ['draft']), ('active_server_id','=',False),
                             ('template_id','=',False)]}" icon="fa-play" class="oe_highlight"/>
                     <button string="Log in to template DB" name="%(action_edit_database)d"
                             type="action" states="confirmed" icon="fa-edit"
@@ -68,6 +70,7 @@
                             <field name="branch_id"/>
                             <field name="active_server_id"/>
                             <field name="active_domain_name"/>
+                       <!-- not needed -->
                             <field name="server_id"/>
                             <field name="template_id"/>
                         </group>

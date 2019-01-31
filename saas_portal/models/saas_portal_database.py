@@ -27,6 +27,8 @@ class SaasPortalDatabase(models.Model):
     _inherits = {'oauth.application': 'oauth_application_id'}
     _order = 'identifier'
 
+    _sql_constraints = [('name_uniq', 'unique (name)', "Database name already exists!")]
+
     name = fields.Char('Database name', readonly=False)
     identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
     summary = fields.Char('Summary')

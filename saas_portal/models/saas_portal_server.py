@@ -32,6 +32,7 @@ class SaasPortalServer(models.Model):
     _name = 'saas_portal.server'
     _description = 'SaaS Server / Container'
     _rec_name = 'name_txt'
+    _order = 'sequence'
 
     _inherit = ['mail.thread']
     _inherits = {'oauth.application': 'oauth_application_id'}

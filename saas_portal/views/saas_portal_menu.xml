@@ -12,7 +12,7 @@
         sequence="60" groups="base.group_system"/>
 
     <!-- Config Template -->
-    <menuitem id="menu_saas_templates" parent="menu_saas_portal_config" name="Templates" sequence="5" />
+    <menuitem id="menu_saas_templates" parent="menu_saas_portal_config" name="Templates" sequence="6" />
     <!-- Technical Records -->
     <menuitem id="menu_saas_tech" parent="menu_saas_portal_config" name="Technical Records" sequence="8" />
 </odoo>
