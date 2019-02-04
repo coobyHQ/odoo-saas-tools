@@ -22,6 +22,7 @@ def _compute_host(self):
 
 
 class SaasPortalDatabase(models.Model):
+    # gets inherited by saas_portal.client
     _name = 'saas_portal.database'
     _description = 'Saas database instances'
     _inherits = {'oauth.application': 'oauth_application_id'}
@@ -47,6 +48,8 @@ class SaasPortalDatabase(models.Model):
                                     help='Which Odoo version is hosted')
     state = fields.Selection([('draft', 'New'),
                               ('open', 'Running'),
+                              ('open_err', 'Running with Error'),
+                              ('open_failed', 'Running Failed'),
                               ('cancelled', 'Cancelled'),
                               ('pending', 'Pending'),
                               ('deleted', 'Deleted'),
@@ -54,6 +57,12 @@ class SaasPortalDatabase(models.Model):
                               ],
                              'State', default='draft',
                              track_visibility='onchange')
+    db_type = fields.Selection([('client', 'Client'),
+                               ('template', 'Template'),
+                               ('other', 'Other'),
+                                ],
+                               'DB Type', default='client', track_visibility='onchange')
+
     host = fields.Char('Host', compute='_compute_host')
     db_primary_lang = fields.Selection(scan_languages(), 'Database primary language')
     public_url = fields.Char(compute='_compute_public_url')
