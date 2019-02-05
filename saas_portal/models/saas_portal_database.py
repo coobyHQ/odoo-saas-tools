@@ -30,7 +30,8 @@ class SaasPortalDatabase(models.Model):
 
     _sql_constraints = [('name_uniq', 'unique (name)', "Database name already exists!")]
 
-    name = fields.Char('Database name', readonly=False)
+    name = fields.Char('Database name', readonly=True, compute='_compute_db_name')
+    name_txt = fields.Char('Name', required=True)
     identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
     summary = fields.Char('Summary')
     oauth_application_id = fields.Many2one(
@@ -39,9 +40,11 @@ class SaasPortalDatabase(models.Model):
     # Todo needs to be readonly = False for now to work, should be taken from client form.
     server_id = fields.Many2one('saas_portal.server', ondelete='restrict',
                                 string='Server', readonly=False, required=True)
-    server_db_name = fields.Char(related='server_id.name', string='Database name', readonly=True)
+    server_db_name = fields.Char(related='server_id.name', string='Server Database name', readonly=True)
+    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
     domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+    subdomain = fields.Char('Sub Domain')
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')
     odoo_version = fields.Selection(related='server_id.odoo_version', string='Odoo version', readonly=True,
@@ -63,7 +66,7 @@ class SaasPortalDatabase(models.Model):
                                 ],
                                'DB Type', default='client', track_visibility='onchange')
 
-    host = fields.Char('Host', compute='_compute_host')
+    host = fields.Char(related='server_id.host', string='Host', readonly=True)
     db_primary_lang = fields.Selection(scan_languages(), 'Database primary language')
     public_url = fields.Char(compute='_compute_public_url')
     # Todo use of password is not yet clear?
@@ -88,6 +91,16 @@ class SaasPortalDatabase(models.Model):
         return super(SaasPortalDatabase, self).create(vals)
 
     @api.multi
+    def _compute_db_name(self):
+        for record in self:
+            subdomain = record.subdomain
+            domain = record.domain
+            port = record.server_id.request_port
+            db_name = "%s.%s" % (subdomain, domain)
+            record.name = db_name
+
+    """     obsolete    
+    @api.multi
     def _compute_host(self):
         base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
         domain = self.server_id and self.server_id.domain or base_saas_domain
@@ -103,14 +116,14 @@ class SaasPortalDatabase(models.Model):
                     **name_dict)
             else:
                 _compute_host(self)
-
+    """
     @api.multi
     def _compute_public_url(self):
         for record in self:
             scheme = record.server_id.request_scheme
-            host = record.host
+            db_name = record.name
             port = record.server_id.request_port
-            public_url = "%s://%s" % (scheme, host)
+            public_url = "%s://%s" % (scheme, db_name)
             if scheme == 'http' and port != 80 or scheme == 'https' and port != 443:
                 public_url = public_url + ':' + str(port)
             record.public_url = public_url + '/'
