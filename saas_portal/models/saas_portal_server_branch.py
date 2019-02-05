@@ -26,7 +26,6 @@ class SaasPortalServerBranch(models.Model):
     _rec_name = 'name'
 
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _inherits = {'oauth.application': 'oauth_application_id'}
 
     @api.model
     def _get_domain(self):
