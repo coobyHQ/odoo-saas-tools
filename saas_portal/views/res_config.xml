@@ -8,18 +8,38 @@
     <field name="arch" type="xml">
       <xpath expr="//div[hasclass('settings')]" position="inside">
         <div class="app_settings_block" id="saas_portal" data-string="Saas Portal" string="Saas Portal" data-key="saas_portal">
-          <h2>Domain</h2>
+          <h2>Default Domain</h2>
           <div class="row mt16 o_settings_container">
             <div class="col-xs-12 col-md-12 o_setting_box">
               <div>
                 <label for="base_saas_domain"/>
                 <div class="text-muted">
-                                    Set base domain name for your saas env.
-                                </div>
-                <field name="base_saas_domain" placeholder="odoo.com"/>
+                  Set default base domain name for your SaaS env.
+                </div>
+                <field name="base_saas_domain" placeholder="yourserver.com"/>
               </div>
             </div>
           </div>
+           <h2>Identity Provider</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-xs-12 col-md-12 o_setting_box">
+              <div>
+                <label for="use_ext_oauth"/>
+                <div class="text-muted">
+                  Use an external Identity Provider for your SaaS env.
+                </div>
+                <field name="use_ext_oauth"/>
+              </div>
+              <div attrs="{'invisible': [('use_ext_oauth', '=', False)]}">
+                <label for="base_sso_domain"/>
+                <div class="text-muted">
+                  Set base Identity Server domain name SaaS env.
+                </div>
+                <field name="base_sso_domain" placeholder="sso.yourserver.com"/>
+               </div>
+            </div>
+          </div>
+
           <h2>Error pages</h2>
           <div class="row mt16 o_settings_container">
             <div class="col-xs-12 col-md-4 o_setting_box">

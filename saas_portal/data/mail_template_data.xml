@@ -1,5 +1,6 @@
-<openerp>
+<odoo>
     <data noupdate="1">
+        <!-- Notification to client about instance creation  -->
         <record id="email_template_create_saas" model="mail.template">
             <field name="name">Send SaaS credentials to the buyer of the SaaS</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
@@ -17,6 +18,7 @@
             ]]></field>
         </record>
 
+        <!-- Expiration date has changed  -->
         <record id="email_template_expiration_datetime_updated" model="mail.template">
             <field name="name">Send information about expiration date update to partner</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
@@ -26,11 +28,12 @@
             <field name="model_id" ref="saas_portal.model_saas_portal_client"/>
             <field name="body_html"><![CDATA[
 
-            <p>You expiration date is now: ${object.expiration_datetime}</p>
+            <p>Your expiration date is now: ${object.expiration_datetime}</p>
             <p>${format_tz(object.expiration_datetime, tz=object.partner_id.tz, context={'lang':object.partner_id.lang})}</p>
             ]]></field>
         </record>
 
+       <!-- Subscription will expire soon  -->
         <record id="email_template_expiration_notify" model="mail.template">
             <field name="name">Notify clients about oncoming expiration</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
@@ -42,12 +45,13 @@
             <field name="body_html"><![CDATA[
 
             <p>
-            Less than ${ctx["days"]} day(s) left before expiration.
+            Less than ${ctx["days"]} day(s) left before expiration of ${object.name}.
             </p>
 
             ]]></field>
         </record>
 
+        <!-- Subscription has expired  -->
         <record id="email_template_has_expired_notify" model="mail.template">
             <field name="name">Notify clients about expired service</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
@@ -72,6 +76,7 @@
             ]]></field>
         </record>
 
+        <!-- Subscription storage exceed -->
         <record id="email_template_storage_exceed" model="mail.template">
             <field name="name">Notify clients about storage exceed</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
@@ -90,6 +95,7 @@
             ]]></field>
         </record>
 
+        <!-- Ask for SaaS Admin to login in client instance  -->
         <record id="login_permission_email_template" model="mail.template">
             <field name="name">Request permission to login from the client</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
@@ -112,4 +118,4 @@
             ]]></field>
         </record>
     </data>
-</openerp>
+</odoo>

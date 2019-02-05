@@ -1,4 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+saas_portal_server_branch_agent,saas_portal.server.branch.agent,model_saas_portal_server_branch,saas_portal.saas_group_agent,1,0,0,0
+saas_portal_server_branch_moderator,saas_portal.server.branch.moderator,model_saas_portal_server_branch,saas_portal.saas_group_moderator,1,0,0,0
+saas_portal_server_branch_admin,saas_portal.server.branch.admin,model_saas_portal_server_branch,saas_portal.saas_group_admin,1,1,1,1
+,,,,,,,
 saas_portal_server_agent,saas_portal.server.agent,model_saas_portal_server,saas_portal.saas_group_agent,1,0,0,0
 saas_portal_server_moderator,saas_portal.server.moderator,model_saas_portal_server,saas_portal.saas_group_moderator,1,0,0,0
 saas_portal_server_admin,saas_portal.server.admin,model_saas_portal_server,saas_portal.saas_group_admin,1,1,1,1

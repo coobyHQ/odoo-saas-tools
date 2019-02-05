@@ -5,6 +5,8 @@ class SaasPortalConfigWizard(models.TransientModel):
     _inherit = 'res.config.settings'
 
     base_saas_domain = fields.Char('Base SaaS domain')
+    use_ext_oauth = fields.Boolean('Use external OAuth Provider')
+    base_sso_domain = fields.Char('Base Single Sign On (OAuth) domain')
 
     page_for_maximumdb = fields.Char(help='Redirection url for maximum non-trial databases limit exception')
     page_for_maximumtrialdb = fields.Char(help='Redirection url for maximum trial databases limit exception')
@@ -19,7 +21,9 @@ class SaasPortalConfigWizard(models.TransientModel):
     def set_values(self):
         super(SaasPortalConfigWizard, self).set_values()
         ICPSudo = self.env['ir.config_parameter'].sudo()
-        ICPSudo.set_param("saas_portal.base_saas_domain", self.base_saas_domain)
+        ICPSudo.set_param("saas_portal.base_saas_domain", self.base_sso_domain)
+        ICPSudo.set_param("saas_portal.use_ext_oauth", self.use_ext_oauth)
+        ICPSudo.set_param("saas_portal.base_sso_domain", self.base_sso_domain)
         ICPSudo.set_param("saas_portal.page_for_maximumdb", self.page_for_maximumdb)
         ICPSudo.set_param("saas_portal.page_for_maximumtrialdb", self.page_for_maximumtrialdb)
         ICPSudo.set_param("saas_portal.page_for_nonfree_subdomains", self.page_for_nonfree_subdomains)
@@ -31,6 +35,8 @@ class SaasPortalConfigWizard(models.TransientModel):
         ICPSudo = self.env['ir.config_parameter'].sudo()
         res.update(
             base_saas_domain=ICPSudo.get_param('saas_portal.base_saas_domain'),
+            use_ext_oauth=ICPSudo.get_param('saas_portal.use_ext_oauth'),
+            base_sso_domain=ICPSudo.get_param('saas_portal.base_sso_domain'),
             page_for_maximumdb=ICPSudo.get_param('saas_portal.page_for_maximumdb'),
             page_for_maximumtrialdb=ICPSudo.get_param('saas_portal.page_for_maximumtrialdb'),
             page_for_nonfree_subdomains=ICPSudo.get_param('saas_portal.page_for_nonfree_subdomains'),
