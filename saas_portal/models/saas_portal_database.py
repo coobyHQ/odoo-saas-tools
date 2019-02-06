@@ -44,7 +44,7 @@ class SaasPortalDatabase(models.Model):
     domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
     domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
-    subdomain = fields.Char('Sub Domain')
+    subdomain = fields.Char('Sub Domain', required=True)
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')
     odoo_version = fields.Selection(related='server_id.odoo_version', string='Odoo version', readonly=True,

@@ -242,7 +242,7 @@ class SaasPortalRenameDatabase(models.TransientModel):
     def _default_client_id(self):
         return self._context.get('active_id')
 
-    name = fields.Char('New Name', required=True)
+    subdomain = fields.Char('New Subdomain', required=True)
     client_id = fields.Many2one(
         'saas_portal.client', string='Base Client',
         readonly=True, default=_default_client_id)
@@ -250,7 +250,7 @@ class SaasPortalRenameDatabase(models.TransientModel):
     @api.multi
     def apply(self):
         self.ensure_one()
-        self.client_id.rename_database(new_dbname=self.name)
+        self.client_id.rename_database(new_dbname=self.subdomain)
         return {
             'type': 'ir.actions.act_window_close',
         }
