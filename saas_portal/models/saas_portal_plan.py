@@ -59,7 +59,7 @@ class SaasPortalPlan(models.Model):
                              'State', compute='_compute_get_state', store=True)
     expiration = fields.Integer('Expiration (hours)', default=48, help='time to delete database. Use for demo')
     grace_period = fields.Integer('Grace period (days)', default=14, help='initial days before expiration')
-    dbname_template = fields.Char('Default DB Name', help='Used for generating client database domain name. Use %i for numbering. '
+    dbname_template = fields.Char('Default DB subdomain', help='Used for generating client database domain name. Use %i for numbering. '
                                   'Ignore if you use manually created db names', placeholder='crm-%i.odoo.com')
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict', required=True,
@@ -265,7 +265,7 @@ class SaasPortalPlan(models.Model):
         if not self.dbname_template:
             if raise_error:
                 raise exceptions.Warning(
-                    _('Template for db name is not configured'))
+                    _('Template for db subdomain is not configured'))
             return ''
         sequence = self.env['ir.sequence'].get('saas_portal.plan')
         return self.dbname_template.replace('%i', sequence)

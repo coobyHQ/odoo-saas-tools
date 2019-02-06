@@ -44,6 +44,7 @@ class SaasPortalServerBranch(models.Model):
                 branch.active_server = next_active_server.id
 
     name = fields.Char('Branch name', required=True)
+    prefix = fields.Char('Branch domain Prefix', required=True)
     active_server = fields.Many2one('saas_portal.server', 'Active Server', required=False,
                                         compute='_get_active_server', store=True,
                                         help="Active Server for new instances")
@@ -80,9 +81,9 @@ class SaasPortalServerBranch(models.Model):
         ('other', 'Other Product')],
         string='Product type', help='Which product the SaaS Server is hosting')
     odoo_version = fields.Selection([
-        ('V11', 'Odoo V 11'),
-        ('V12', 'Odoo V 12'),
-        ('V13', 'Odoo V 13')],
+        ('V11', 'Odoo V11'),
+        ('V12', 'Odoo V12'),
+        ('V13', 'Odoo V13')],
         string='Odoo version', help='Which Odoo version is hosted')
 
     server_url = fields.Char('Container URL', help="URL to the used container")
