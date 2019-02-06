@@ -58,7 +58,9 @@ class SaasPortalServer(models.Model):
                                     ondelete='restrict')
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
-    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server', default=_get_domain)
+    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server as '
+                                                    '"Branch Prefix.Server ID.Domain"/b1-s1.mydomain.com ', default=_get_domain)
+    branch_prefix = fields.Char(related='branch_id.prefix', string='Branch Domain Prefix', readonly=True)
 
     sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
@@ -96,9 +98,8 @@ class SaasPortalServer(models.Model):
     client_ids = fields.One2many('saas_portal.client', 'server_id', string='Client instances')
     database_ids = fields.One2many('saas_portal.database', 'server_id', string='Database Instances')
     # RPC Server side
-    local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
-    local_port = fields.Char(related='branch_id.local_port', string='Local port', readonly=True,
-                             help='local tcp port of server for server-side requests')
+    local_host = fields.Char('Local host', help='localhost or ip address of server for server-side requests')
+    local_port = fields.Char('Local port', default=8069, help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection(related='branch_id.local_request_scheme', string='Scheme', readonly=True)
     # RPC Portal side
     host = fields.Char('Host', compute=_compute_host)
