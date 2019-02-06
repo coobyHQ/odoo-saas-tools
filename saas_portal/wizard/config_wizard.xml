@@ -69,7 +69,7 @@
         <field name="arch" type="xml">
             <form string="Change Domain">
                  <group>
-                    <field name="name"/>
+                    <field name="subdomain"/>
                  </group>
                  <footer>
                     <button name="apply" string="Rename" type="object" class="oe_highlight"/>

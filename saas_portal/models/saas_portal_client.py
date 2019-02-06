@@ -18,10 +18,22 @@ class SaasPortalClient(models.Model):
 
     _inherit = ['mail.thread', 'mail.activity.mixin', 'saas_portal.database', 'saas_base.client']
 
-    # domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+    def _get_default_name_txt(self):
+        plan = self.plan_id
+        domainname = self.name
+        client = self.user_id
+        new_name = "%s, %s, %s" % (plan, domainname, client)
+        return new_name
+
+    name_txt = fields.Char('Sub Domain', default=_get_default_name_txt)
     partner_id = fields.Many2one('res.partner', string='Partner', track_visibility='onchange', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
                               track_visibility='onchange', ondelete='set null', readonly=True)
+
+    def _get_default_subdomain(self):
+        return self.plan_id.dbname_template
+
+    subdomain = fields.Char('Sub Domain', default=_get_default_subdomain)
     plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly=True)
     plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly=True)
     plan_max_storage = fields.Integer(related='plan_id.total_storage_limit', string="Plan max allowed Storage", readonly=True)
