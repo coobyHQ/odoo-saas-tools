@@ -7,6 +7,7 @@
         <field name="priority">4</field>
         <field name="arch" type="xml">
             <tree string="Client instance" colors="red:expired" create="false" delete="false" edit="false">
+                <field name="identifier"/>
                 <field name="name"/>
                 <field name="plan_id"/>
                 <field name="client_primary_lang"/>

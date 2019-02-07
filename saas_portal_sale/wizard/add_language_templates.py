@@ -47,7 +47,7 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
             saas_portal_database = self.env['saas_portal.database']
             # first check if there are existing databases
             for language in self.language_ids:
-                dbname = (self.prefix or '') + language.iso_code + (self.suffix or '')
+                dbname = (self.prefix or '') + language.iso_code + (self.suffix or '') + '.' + self.template_id.domain
                 if saas_portal_database.search([('name', '=', dbname)]):
                     raise ValidationError(
                         _("This database already exists: "

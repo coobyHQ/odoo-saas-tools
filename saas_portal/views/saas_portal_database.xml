@@ -36,24 +36,25 @@
                 <div class="oe_title">
                     <label class="oe_edit_only" for="name_txt" string="Name"/>
                     <h1><field name="name_txt" class="oe_inline"/></h1>
-                    <label  for="name" string="Subdomain / Database Name"/>
-                    <h2><field name="subdomain" style="font-weight:bold"/> / <field name="name" class="oe_inline"/></h2>
-                    <label for="identifier"/><field name="identifier" nolabel="1" style="font-weight:bold" colspan="4"/>
-                    <br/>
-                    <label for="db_primary_lang"/><field name="db_primary_lang" readonly="1"/>
-                    <br/>
-                    <!--field name="client_id" readonly="1"/-->
                 </div>
+                <div class="oe_title">
+                    <label for="subdomain" string="Subdomain / Database Name" colspan="4"/>
+                    <h2><field name="subdomain" nolabel="1" colspan="2" attrs="{'readonly': [('id','!=',False)]}"/>
+                    <strong>.<field name="domain" nolabel="1" colspan="2"/></strong></h2>
+                </div>
+                <group>
+                    <label for="identifier"/><field name="identifier" nolabel="1" style="font-weight:bold"/>
+                    <field name="db_primary_lang" readonly="1" colspan="4"/>
+                    <!--field name="client_id" readonly="1"/-->
+                </group>
                 <group name="base">
                     <group string="Definition">
-                        <field name="db_type" readonly="0"/>
-                        <field name="db_primary_lang" readonly="1"/>
                         <field name="client_id" readonly="1"/>
                         <field name="password" readonly="1"/>
                         <field name="public_url" widget="url"/>
                     </group>
                     <group string="Server-side">
-                        <field name="server_id" readonly="0"/>
+                        <field name="server_id" readonly="1"/>
                         <field name="server_db_name"/>
                         <field name="product_type"/>
                         <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>
@@ -63,6 +64,7 @@
                 <group string="Plans">
                     <field name="plan_ids" widget="many2many_tags"/>
                 </group>
+                <field name="id" invisible="1"/>
             </sheet>
         </form>
         </field>

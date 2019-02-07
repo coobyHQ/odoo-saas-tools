@@ -70,9 +70,11 @@
                             <field name="branch_id"/>
                             <field name="active_server_id"/>
                             <field name="active_domain_name"/>
-                       <!-- not needed -->
                             <field name="server_id"/>
-                            <field name="template_id"/>
+                            <field name="template_id"
+                                   attrs="{'readonly':[('server_id', '=', False)]}"
+                                   domain="[('server_id', '=', server_id)]"
+                                   context="{'default_server_id': server_id}"/>
                         </group>
                         <group col="2" string="Odoo DB Settings">
                             <field name="demo"/>

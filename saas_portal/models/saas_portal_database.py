@@ -10,12 +10,10 @@ _logger = logging.getLogger(__name__)
 
 @api.multi
 def _compute_host(self):
-    base_saas_domain = self.env['ir.config_parameter'].sudo(
-    ).get_param('saas_portal.base_saas_domain')
+    base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
     for r in self:
         host = r.name
         domain = r.domain or base_saas_domain
-        domain = base_saas_domain
         if domain and '.' not in r.name:
             host = '%s.%s' % (r.name, domain)
         r.host = host
@@ -30,7 +28,7 @@ class SaasPortalDatabase(models.Model):
 
     _sql_constraints = [('name_uniq', 'unique (name)', "Database name already exists!")]
 
-    name = fields.Char('Database name', readonly=True, compute='_compute_db_name')
+    name = fields.Char('Database name', readonly=True, compute='_compute_db_name', store=True)
     name_txt = fields.Char('Name', required=True)
     identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
     summary = fields.Char('Summary')
@@ -41,10 +39,9 @@ class SaasPortalDatabase(models.Model):
     server_id = fields.Many2one('saas_portal.server', ondelete='restrict',
                                 string='Server', readonly=False, required=True)
     server_db_name = fields.Char(related='server_id.name', string='Server Database name', readonly=True)
+    subdomain = fields.Char('Sub Domain', required=True)
     domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
-    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
-    subdomain = fields.Char('Sub Domain', required=True)
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')
     odoo_version = fields.Selection(related='server_id.odoo_version', string='Odoo version', readonly=True,
@@ -87,17 +84,18 @@ class SaasPortalDatabase(models.Model):
     def create(self, vals):
         if vals.get('identifier', _('New')) == _('New'):
             vals['identifier'] = self.env['ir.sequence'].next_by_code('saas_portal.database') or _('New')
-
+        if vals.get('name') and not vals.get('subdomain', False) and not vals.get('name_txt', False):
+            vals['subdomain'] = vals['name']
+            vals['name_txt'] = vals['name']
         return super(SaasPortalDatabase, self).create(vals)
 
     @api.multi
+    @api.depends('subdomain', 'domain')
     def _compute_db_name(self):
         for record in self:
             subdomain = record.subdomain
             domain = record.domain
-            port = record.server_id.request_port
-            db_name = "%s.%s" % (subdomain, domain)
-            record.name = db_name
+            record.name = "%s.%s" % (subdomain, domain)
 
     """     obsolete    
     @api.multi
