@@ -18,7 +18,7 @@
         'security/ir.model.access.csv',
        # 'security/saas_portal_support_security.xml',
         'views/saas_portal_client_view.xml',
-       # 'views/website_support_ticket_view.xml',
+        'views/website_support_ticket_view.xml',
   ],
     'demo': [
     ],

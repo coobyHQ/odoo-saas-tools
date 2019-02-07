@@ -62,7 +62,7 @@
         view_mode="form"
         view_type="form"
         />
-
+    <!-- Rename Databse -->
     <record id="saas_portal_rename_database_view_form" model="ir.ui.view">
         <field name="name">saas_portal.rename_database.form</field>
         <field name="model">saas_portal.rename_database</field>

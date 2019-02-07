@@ -127,7 +127,6 @@
 
                     <notebook>
                         <page string="Notes" name="notes">
-
                             <group>
                                 <field name="note" nolabel="0"/>
                             </group>

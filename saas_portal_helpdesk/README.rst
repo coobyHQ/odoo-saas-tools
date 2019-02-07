@@ -6,9 +6,13 @@
 SaaS Portal Helpdesk Integration
 =================================
 
-This module adds the support for the SythilTech helpdesk app into the SaaS portal.
+This module adds the access for the SythilTech helpdesk app into the SaaS portal.
 
-It allows agents toa act as helpdesk ta k providers.
+- get it from: https://github.com/SythilTech/Odoo/tree/11.0
+- or: https://github.com/coobyHQ/Odoo/tree/11.0
+
+
+It allows agents and moderator to issue helpdesk ticket per client instance.
 
 Installation
 ============
