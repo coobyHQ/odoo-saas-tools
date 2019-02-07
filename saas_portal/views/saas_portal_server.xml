@@ -39,90 +39,90 @@
                      <div class="oe_button_box" name="button_box">
                        <!-- placeholder -->
                      </div>
-                    <div class="oe_title" style="width: 390px;">
-                        <label class="oe_edit_only" for="name_txt" string="Name"/>
-                        <h1><field name="name_txt" class="oe_inline"/></h1>
-                        <label class="oe_edit_only" for="summary" string="Summary"/>
-                        <field name="summary"/>
-                        <br></br><label for="name"/>
-                        <field name="name"/>
-                        <div attrs="{'invisible': [('server_type','!=','application')]}">
-                        <br></br><label for="branch_id"/>
-                        <field name="branch_id"/>
+                    <div class="oe_left">
+                        <div class="oe_title" >
+                            <label class="oe_edit_only" for="name_txt" string="Name"/>
+                            <h1><field name="name_txt" class="oe_inline"/></h1>
+                            <label  for="subdomain" string="Subdomain / Database Name"/>
+                            <h2><field name="subdomain" class="oe_inline" nolabel="1" attrs="{'readonly': [('id','!=',False)]}"/>.<field name="domain" class="oe_inline" placeholder="e.g. b1-s1.cooby.online" attrs="{'readonly': [('id','!=',False)]}"/></h2>
+                            <label class="oe_edit_only" for="summary" string="Summary"/>
+                            <field name="summary"/>
+                            <div attrs="{'invisible': [('server_type','!=','application')]}">
+                                <br></br><label for="branch_id"/>
+                                <field name="branch_id"/>
+                            </div>
                         </div>
                     </div>
-                <group name="base">
-                    <group string="Definition">
-                        <field name="branch_prefix" class="oe_inline"/>
-                        <field name="domain" placeholder="e.g. b1-s1.cooby.online"/>
-                        <field name="server_type"/>
-                        <field name="branch_product_type"/>
-                        <field name="odoo_version" attrs="{'required': [('branch_product_type','=','odoo')], 'invisible': [('branch_product_type','!=','odoo')]}"/>
-                        <field name="client_id"/>
-                        <field name="active"/>
-                        <field name="max_client"/>
-                        <field name="number_of_clients" readonly="1"/>
+                    <group name="base">
+                        <group string="Definition">
+                            <field name="branch_prefix" class="oe_inline"/>
+                            <field name="server_type"/>
+                            <field name="branch_product_type"/>
+                            <field name="odoo_version" attrs="{'required': [('branch_product_type','=','odoo')], 'invisible': [('branch_product_type','!=','odoo')]}"/>
+                            <field name="client_id"/>
+                            <field name="active"/>
+                            <field name="max_client"/>
+                            <field name="number_of_clients" readonly="1"/>
+                        </group>
+                        <group string="Server-side requests">
+                            <field name="local_request_scheme"/>
+                            <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
+                            <field name="local_host"/>
+                            <field name="local_port"/>
+                            <separator string="Portal requests"/>
+                            <field name="request_scheme"/>
+                            <field name="request_port"/>
+                        </group>
                     </group>
-                    <group string="Server-side requests">
-                        <field name="local_request_scheme"/>
-                        <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
-                        <field name="local_host"/>
-                        <field name="local_port"/>
-                        <separator string="Portal requests"/>
-                        <field name="request_scheme"/>
-                        <field name="host"/>
-                        <field name="request_port"/>
+                    <group name="settings">
+                        <group string="Container settings" name="container" attrs="{'invisible': [('server_type', '=', 'server')]}">
+                            <field name="container_name"/>
+                            <field name="container_image"/>
+                            <field name="container_url" widget="url"
+                                   placeholder="e.g. https://rancher.cooby.tech/p/c-l9x86:p-x5w2v/workload/deployment:odoo:odoo-odoo"/>
+                        </group>
+                        <group string="Client Settings" name="client">
+                              <field name="password" password="True"/>
+                        </group>
                     </group>
-                </group>
-                <group name="settings">
-                    <group string="Container settings" name="container" attrs="{'invisible': [('server_type', '=', 'server')]}">
-                        <field name="container_name"/>
-                        <field name="container_image"/>
-                        <field name="container_url" widget="url"
-                               placeholder="e.g. https://rancher.cooby.tech/p/c-l9x86:p-x5w2v/workload/deployment:odoo:odoo-odoo"/>
-                    </group>
-                    <group string="Client Settings" name="client">
-                          <field name="password" password="True"/>
-                          <field name="clients_host_template"/>
-                    </group>
-                </group>
-                <notebook>
-                    <page string="Client Instances" name="clients">
-                        <field name="client_ids" readonly="0">
-                            <tree>
-                                <field name="name"/>
-                                <field name="state"/>
-                                <field name="users_len"/>
-                                <field name="file_storage"/>
-                                <field name="db_storage"/>
-                            </tree>
-                        </field>
-                    </page>
-                    <page string="Template Instances" name="templates">
-                        <field name="database_ids" readonly="0">
-                            <tree>
-                                <field name="name"/>
-                                <field name="identifier"/>
-                                <field name="db_primary_lang" readonly="1"/>
-                                <field name="state" readonly="1"/>
-                                <field name="public_url" widget="url"/>
-                            </tree>
-                        </field>
-                    </page>
-                    <page string="Parameters" name="parameters">
-                        <field name="parameter_ids" readonly="0">
-                            <tree create="true" delete="true">
-                                <field name="sequence" widget="handle"/>
-                                <field name="name"/>
-                                <field name="set_id"/>
-                                <field name="parameter"/>
-                                <field name="description"/>
-                                <field name="default"/>
-                                <field name="value"/>
-                            </tree>
-                        </field>
-                    </page>
-                </notebook>
+                    <notebook>
+                        <page string="Client Instances" name="clients">
+                            <field name="client_ids" readonly="0">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                    <field name="users_len"/>
+                                    <field name="file_storage"/>
+                                    <field name="db_storage"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Template Instances" name="templates">
+                            <field name="database_ids" readonly="0">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="identifier"/>
+                                    <field name="db_primary_lang" readonly="1"/>
+                                    <field name="state" readonly="1"/>
+                                    <field name="public_url" widget="url"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Parameters" name="parameters">
+                            <field name="parameter_ids" readonly="0">
+                                <tree create="true" delete="true">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="set_id"/>
+                                    <field name="parameter"/>
+                                    <field name="description"/>
+                                    <field name="default"/>
+                                    <field name="value"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <field name="id" invisible="1"/>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>

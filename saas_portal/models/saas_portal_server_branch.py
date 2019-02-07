@@ -9,17 +9,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-@api.multi
-def _compute_host(self):
-    base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
-    for r in self:
-        host = r.name
-        domain = r.domain or base_saas_domain
-        if domain and '.' not in r.name:
-            host = '%s.%s' % (r.name, domain)
-        r.host = host
-
-
 class SaasPortalServerBranch(models.Model):
     _name = 'saas_portal.server_branch'
     _description = 'SaaS Server/Product Branch'
@@ -100,9 +89,4 @@ class SaasPortalServerBranch(models.Model):
     local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
     local_port = fields.Char('Local port', help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection([('http', 'http'), ('https', 'https')], 'Scheme', default='https', required=True)
-    host = fields.Char('Host', compute=_compute_host)
-    # Todo use of password is not yet clear?
-    password = fields.Char('Default Superadmin password')
-    clients_host_template = fields.Char('Template for clients host names',
-                                        help='The possible dynamic parts of the host names are: {dbname}, {base_saas_domain}, {base_saas_domain_1}')
 

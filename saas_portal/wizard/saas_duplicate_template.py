@@ -23,11 +23,11 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
     def registry(self, new=False, **kwargs):
         self.ensure_one()
         m = odoo.modules.registry.Registry
-        return m.new(self.new_name, **kwargs)
+        return m.new(self.new_name + '.' + self.template_id.domain, **kwargs)
 
     @api.multi
     def duplicate_template(self):
-        new_db = self.new_name
+        new_db = self.new_name + '.' + self.template_id.domain
         if self.template_id:
             saas_portal_database = self.env['saas_portal.database']
             if saas_portal_database.search([('name', '=', new_db)]):
@@ -38,7 +38,7 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
             db._drop_conn(self.env.cr, self.template_id.name)
             db.exp_duplicate_database(self.template_id.name, new_db)
             new_template = saas_portal_database.create({
-                'name': new_db,
+                'subdomain': self.new_name,
                 'server_id': self.template_id.server_id.id,
                 'db_primary_lang': self.lang,
                 'state': 'template'
