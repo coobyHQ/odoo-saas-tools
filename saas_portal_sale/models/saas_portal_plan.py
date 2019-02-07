@@ -37,7 +37,7 @@ class SaasPortalPlan(models.Model):
 
         if not vals.get('trial', False):
             contract = self.env['account.analytic.account'].sudo().create({
-                'name': vals['name'],
+                'name': vals['subdomain'],
                 'partner_id': vals['partner_id'],
                 'recurring_invoices': True,
                 'contract_template_id': self.contract_template_id and self.contract_template_id.id or False
