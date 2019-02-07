@@ -82,14 +82,18 @@
                             <label class="oe_edit_only" for="name_txt" string="Name"/>
                             <h1><field name="name_txt" class="oe_inline"/></h1>
                             <label  for="subdomain" string="Subdomain / Database Name"/>
-                            <h2><field name="subdomain" nolabel="1"/>.<field name="domain" class="oe_inline"/></h2>
+                            <h3><field name="subdomain" nolabel="1"/>.<field name="domain" class="oe_inline"/></h3>
                         </div>
                     </div>
-                    <group>
-                        <label for="identifier"/><field name="identifier" nolabel="1" style="font-weight:bold" colspan="4"/><br/>
-                        <label for="plan_id"/><field name="plan_id"/><br/>
-                        <label for="partner_id"/><field name="partner_id"/>
-                    </group>
+                     <group col="2" name="limits">
+                        <group>
+                            <field name="identifier" style="font-weight:bold" colspan="4"/><br/>
+                            <field name="partner_id"/>
+                         </group>
+                         <group>
+                             <field name="plan_id"/><br/>
+                         </group>
+                     </group>
                     <field name="login_allowed" invisible="1"/>
                     <group col="2" name="limits">
                         <group string="User Limits">
