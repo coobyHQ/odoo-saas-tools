@@ -8,4 +8,6 @@ class WebsiteSupportTicket(models.Model):
     _inherit = "website.support.ticket"
 
     saas_client_id = fields.Many2one('saas_portal.client', string='SaaS Client Instance')
+    saas_client_ident = fields.Char(related='saas_client_id.identifier', string='Identifier')
+
 

@@ -5,31 +5,36 @@
         <field name="name">saas_portal.client.helpdesk.form</field>
         <field name="model">saas_portal.client</field>
         <field name="inherit_id" ref="saas_portal.view_clients_form"/>
-        <field name="arch" type="xml"><!-- Todo fix xpath
-            <xpath expr="//div[@button='saas_portal.sync_client']" position="after">
-            <button name="%(saas_plan_change_wizard_action)d" string="Change Plan" type="action"/>
-            </xpath>-->
-
-                <xpath expr="//div[@name='button_box']" position="inside">
-                    <button class="oe_inline oe_stat_button" type="action" name="%(website_support.website_support_ticket_action_partner)d"
-                            context="{'search_default_client_id': saas_client_id}"
-                            icon="fa-ticket">
-                        <field name="support_ticket_string" string="Support Tickets" widget="statinfo"/>
-                    </button>
-
-                </xpath>
-                <!-- <notebook position="inside"> -->
-                <xpath expr="//page[@name='service_policy']" position="after">
-                    <page string="Assigned Support Tickets" name="assigned_support_ticket_page">
-                        <group>
-                            <label for="assigned_support_ticket_ids"/>
-                            <field name="assigned_support_ticket_ids" nolabel="1"/>
-                        </group>
-                    </page>
-                </xpath>
+        <field name="arch" type="xml"><!-- Todo fix context -->
+            <!-- context="{'search_default_client_id': saas_client_id}" -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_inline oe_stat_button" type="action" name="%(website_support.website_support_ticket_action_partner)d"
+                        icon="fa-ticket">
+                    <field name="ticket_nr_text" string="Support Tickets" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='settings']" position="before">
+                <page string="Assigned Support Tickets" name="assigned_support_ticket_page">
+                    <separator string="Assigned Tickets"/>
+                    <field name="ticket_ids" nolabel="1">
+                        <tree colors="black:ticket_color==False">
+                            <field name="create_user_id" invisible="True"/>
+                            <field name="ticket_color" invisible="True"/>
+                            <field name="create_date"/>
+                            <field name="ticket_number"/>
+                            <field name="priority_id"/>
+                            <field name="parent_company_id"/>
+                            <field name="person_name"/>
+                            <field name="category"/>
+                            <field name="state"/>
+                            <field name="subject"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
         </field>
     </record>
-
+    <!--
     <record id="website_support_ticket_view_search_user" model="ir.ui.view">
         <field name="name">website.support.ticket.form.user.search</field>
         <field name="model">website.support.ticket</field>
@@ -53,5 +58,6 @@
             </p>
         </field>
     </record>
+    -->
 
 </odoo>
