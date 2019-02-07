@@ -8,17 +8,6 @@ from odoo.tools.translate import _
 import logging
 _logger = logging.getLogger(__name__)
 
-
-@api.multi
-def _compute_host(self):
-    base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
-    for r in self:
-        host = r.name
-        domain = r.domain or base_saas_domain
-        if domain and '.' not in r.name:
-            host = '%s.%s' % (r.name, domain)
-        r.host = host
-
 """
 todo  action_create_server will ask for master password only.-->
  https: // erppeek.readthedocs.org / en / latest / api.html  # erppeek.Client.create_database-->
@@ -42,6 +31,14 @@ class SaasPortalServer(models.Model):
         return  self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
 
     @api.multi
+    @api.depends('subdomain', 'domain')
+    def _compute_db_name(self):
+        for record in self:
+            subdomain = record.subdomain
+            domain = record.domain
+            record.name = "%s.%s" % (subdomain, domain)
+
+    @api.multi
     @api.depends('client_ids')
     def _get_number_of_clients(self):
         for server in self:
@@ -49,19 +46,18 @@ class SaasPortalServer(models.Model):
 
     # Attention names is used for database name, another field name_txt as Title was created,
     name_txt = fields.Char('Name', required=True)
-    name = fields.Char('Database name', required=True)
-    summary = fields.Char('Summary')
-    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
-                                ondelete='restrict')
+    name = fields.Char('Database name', readonly=True, compute='_compute_db_name', store=True)
+    subdomain = fields.Char('Sub Domain', required=True)
+    domain = fields.Char('Server SaaS domain',
+                         help='Set base domain name for this SaaS server as "Branch Prefix.Server ID.Domain"/b1-s1.mydomain.com ',
+                         default=_get_domain, required=True)
+    branch_prefix = fields.Char(related='branch_id.prefix', string='Branch Domain Prefix', readonly=True)
+    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch', ondelete='restrict')
     branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')
     parameter_ids = fields.One2many('saas_portal.server_parameter', 'server_id',  string='SaaS Server Parameter',
                                     ondelete='restrict')
-    oauth_application_id = fields.Many2one(
-        'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
-    domain = fields.Char('Server SaaS domain', help='Set base domain name for this SaaS server as '
-                                                    '"Branch Prefix.Server ID.Domain"/b1-s1.mydomain.com ', default=_get_domain)
-    branch_prefix = fields.Char(related='branch_id.prefix', string='Branch Domain Prefix', readonly=True)
-
+    oauth_application_id = fields.Many2one('oauth.application', 'OAuth Application', required=True, ondelete='cascade')
+    summary = fields.Char('Summary')
     sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
@@ -85,7 +81,7 @@ class SaasPortalServer(models.Model):
         ('webserver', 'Webserver Container/NGINX'),
         ('identity-server', 'Identity Server/Container'),
         ('other', 'Other Product')],
-        string='Server type', help='Which service this server is providing')
+        string='Server type', help='Which service this server is providing', default='application', required=True)
     odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly=True,
                                     help='Which Odoo version is hosted')
     container_url = fields.Char('Container URL', help="URL to the used container")
@@ -93,16 +89,14 @@ class SaasPortalServer(models.Model):
     container_image = fields.Char('Container Image')
 
     max_client = fields.Integer('Max #of Client DB`s', default=100)
-    # Todo compute number
     number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
     client_ids = fields.One2many('saas_portal.client', 'server_id', string='Client instances')
-    database_ids = fields.One2many('saas_portal.database', 'server_id', string='Database Instances')
+    database_ids = fields.One2many('saas_portal.database', 'server_id', string='Template Databases')
     # RPC Server side
     local_host = fields.Char('Local host', help='localhost or ip address of server for server-side requests')
     local_port = fields.Char('Local port', default=8069, help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection(related='branch_id.local_request_scheme', string='Scheme', readonly=True)
     # RPC Portal side
-    host = fields.Char('Host', compute=_compute_host)
     request_scheme = fields.Selection(related='branch_id.request_scheme', string='Scheme', readonly=True)
     verify_ssl = fields.Boolean(related='branch_id.verify_ssl', string='Verify SSL', readonly=True,
                                 help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
@@ -110,8 +104,6 @@ class SaasPortalServer(models.Model):
 
     # Todo use of password is not yet clear?
     password = fields.Char('Default Superadmin password')
-    clients_host_template = fields.Char('Template for clients host names',
-                                        help='The possible dynamic parts of the host names are: {dbname}, {base_saas_domain}, {base_saas_domain_1}')
 
     @api.multi
     def name_get(self):
@@ -142,8 +134,8 @@ class SaasPortalServer(models.Model):
         self.ensure_one()
         if not state:
             state = {}
-        scheme = scheme or self.request_scheme
-        port = port or self.request_port
+        scheme = scheme or self.request_scheme or 'http'
+        port = port or self.request_port or 80
         scope = scope or ['userinfo', 'force_login', 'trial', 'skiptheuse']
         scope = ' '.join(scope)
         client_id = client_id or self.env['oauth.application'].generate_client_id(
@@ -151,7 +143,7 @@ class SaasPortalServer(models.Model):
         params = {
             'scope': scope,
             'state': simplejson.dumps(state),
-            'redirect_uri': '{scheme}://{saas_server}:{port}{path}'.format(scheme=scheme, port=port, saas_server=self.host, path=path),
+            'redirect_uri': '{scheme}://{saas_server}:{port}{path}'.format(scheme=scheme, port=port, saas_server=self.name, path=path),
             'response_type': 'token',
             'client_id': client_id,
         }
@@ -167,9 +159,9 @@ class SaasPortalServer(models.Model):
     @api.multi
     def _request_server(self, path=None, scheme=None, port=None, **kwargs):
         self.ensure_one()
-        scheme = scheme or self.local_request_scheme or self.request_scheme
-        host = self.local_host or self.host
-        port = port or self.local_port or self.request_port
+        scheme = scheme or self.local_request_scheme or self.request_scheme or 'http'
+        host = self.local_host or self.name
+        port = port or self.local_port or self.request_port or 80
         params = self._request_params(**kwargs)
         access_token = self.oauth_application_id.sudo()._get_access_token(create=True)
         params.update({
@@ -180,7 +172,7 @@ class SaasPortalServer(models.Model):
         url = '{scheme}://{host}:{port}{path}'.format(
             scheme=scheme, host=host, port=port, path=path)
         req = requests.Request('GET', url, data=params,
-                               headers={'host': self.host})
+                               headers={'host': self.name})
         req_kwargs = {'verify': self.verify_ssl}
         return req.prepare(), req_kwargs
 
@@ -188,7 +180,7 @@ class SaasPortalServer(models.Model):
     def action_redirect_to_server(self):
         r = self[0]
         url = '{scheme}://{saas_server}:{port}{path}'.format(
-            scheme=r.request_scheme, saas_server=r.host, port=r.request_port, path='/web')
+            scheme=r.request_scheme or 'http', saas_server=r.name, port=r.request_port or 80, path='/web')
         return {
             'type': 'ir.actions.act_url',
             'target': 'new',
@@ -229,8 +221,7 @@ class SaasPortalServer(models.Model):
                 client = server.env['saas_portal.client'].with_context(
                     active_test=False).search([('client_id', '=', r.get('client_id'))])
                 if not client:
-                    database = server.env['saas_portal.database'].search(
-                        [('client_id', '=', r.get('client_id'))])
+                    database = server.env['saas_portal.database'].search([('client_id', '=', r.get('client_id'))])
                     if database:
                         database.write(r)
                         continue

@@ -250,7 +250,8 @@ class SaasPortalRenameDatabase(models.TransientModel):
     @api.multi
     def apply(self):
         self.ensure_one()
-        self.client_id.rename_database(new_dbname=self.subdomain)
+        dbname = "%s.%s" % (self.subdomain, self.domain)
+        self.client_id.rename_database(new_dbname=dbname)
         return {
             'type': 'ir.actions.act_window_close',
         }

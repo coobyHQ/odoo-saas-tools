@@ -59,11 +59,12 @@ class SaasAddLangTemplatesWizard(models.TransientModel):
                         lang_attr = attr
                         break
             for language in self.language_ids:
-                dbname = (self.prefix or '') + language.iso_code + (self.suffix or '')
+                subdomain = (self.prefix or '') + language.iso_code + (self.suffix or '')
+                dbname = "%s.%s" % (subdomain, self.template_id.domain)
                 db._drop_conn(self.env.cr, self.template_id.name)
                 db.exp_duplicate_database(self.template_id.name, dbname)
                 new_template = saas_portal_database.create({
-                    'name': dbname,
+                    'subdomain': subdomain,
                     'server_id': self.template_id.server_id.id,
                     'db_primary_lang': language.code,
                     'plan_ids': [(4, self.plan_id.id)],

@@ -66,10 +66,6 @@
                         <field name="rancher_project"/>
                         <field name="rancher_namespace"/>
                     </group>
-                    <group string="Client Settings" name="client">
-                          <field name="password" password="True"/>
-                          <field name="clients_host_template"/>
-                    </group>
                 </group>
                 <notebook>
                     <page string="App Servers" name="app_servers">

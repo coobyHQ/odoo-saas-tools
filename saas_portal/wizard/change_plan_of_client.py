@@ -99,7 +99,7 @@ class SaasPortalChangePlanWizard(models.TransientModel):
                         'client_id': self.cur_client_id.client_id,
                         'expiration_datetime': self.cur_client_id.expiration_datetime,
                         'trial': self.cur_client_id.trial,
-                        'host': self.cur_client_id.host,
+                        'host': self.cur_client_id.name,
                         'state': 'open'
                     })
             self.cur_client_id.server_id = self.new_plan_id.server_id and self.new_plan_id.server_id.id or False
@@ -143,7 +143,7 @@ class SaasPortalChangePlanWizard(models.TransientModel):
                     'client_id': self.cur_client_id.client_id,
                     'expiration_datetime': self.cur_client_id.expiration_datetime,
                     'trial': self.cur_client_id.trial,
-                    'host': self.cur_client_id.host,
+                    'host': self.cur_client_id.name,
                     'state': 'open'
                 })
         self.cur_client_id.server_id = self.new_server_id and self.new_server_id.id or False

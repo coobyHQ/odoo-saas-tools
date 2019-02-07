@@ -8,17 +8,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-@api.multi
-def _compute_host(self):
-    base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
-    for r in self:
-        host = r.name
-        domain = r.domain or base_saas_domain
-        if domain and '.' not in r.name:
-            host = '%s.%s' % (r.name, domain)
-        r.host = host
-
-
 class SaasPortalDatabase(models.Model):
     # gets inherited by saas_portal.client
     _name = 'saas_portal.database'
@@ -26,10 +15,11 @@ class SaasPortalDatabase(models.Model):
     _inherits = {'oauth.application': 'oauth_application_id'}
     _order = 'identifier'
 
-    _sql_constraints = [('name_uniq', 'unique (name)', "Database name already exists!")]
+    def _get_default_name_txt(self):
+        return "%s %s" % (self.name or '', self.db_primary_lang or '')
 
     name = fields.Char('Database name', readonly=True, compute='_compute_db_name', store=True)
-    name_txt = fields.Char('Name', required=True)
+    name_txt = fields.Char('Name', required=True, default=_get_default_name_txt)
     identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
     summary = fields.Char('Summary')
     oauth_application_id = fields.Many2one(
@@ -63,7 +53,7 @@ class SaasPortalDatabase(models.Model):
                                 ],
                                'DB Type', default='client', track_visibility='onchange')
 
-    host = fields.Char(related='server_id.host', string='Host', readonly=True)
+    host = fields.Char(related='server_id.name', string='Host', readonly=True)
     db_primary_lang = fields.Selection(scan_languages(), 'Database primary language')
     public_url = fields.Char(compute='_compute_public_url')
     # Todo use of password is not yet clear?
@@ -97,24 +87,6 @@ class SaasPortalDatabase(models.Model):
             domain = record.domain
             record.name = "%s.%s" % (subdomain, domain)
 
-    """     obsolete    
-    @api.multi
-    def _compute_host(self):
-        base_saas_domain = self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain')
-        domain = self.server_id and self.server_id.domain or base_saas_domain
-        base_saas_domain_1 = '.'.join(domain.rsplit('.', 2)[-2:])
-        name_dict = {
-            'base_saas_domain': domain,
-            'base_saas_domain_1': base_saas_domain_1,
-        }
-        for record in self:
-            if record.server_id.clients_host_template:
-                name_dict.update({'dbname': record.name})
-                record.host = record.server_id.clients_host_template.format(
-                    **name_dict)
-            else:
-                _compute_host(self)
-    """
     @api.multi
     def _compute_public_url(self):
         for record in self:
