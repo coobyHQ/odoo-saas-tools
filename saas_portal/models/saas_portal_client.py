@@ -14,7 +14,6 @@ class SaasPortalClient(models.Model):
     _name = 'saas_portal.client'
     _description = 'Client Instances'
     _mail_flat_thread = False
-    _rec_name = 'name'
 
     _inherit = ['mail.thread', 'mail.activity.mixin', 'saas_portal.database', 'saas_base.client']
 
