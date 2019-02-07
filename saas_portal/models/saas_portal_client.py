@@ -18,10 +18,10 @@ class SaasPortalClient(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'saas_portal.database', 'saas_base.client']
 
     def _get_default_name_txt(self):
-        plan = self.plan_id
-        domainname = self.name
-        client = self.user_id
-        new_name = "%s, %s, %s" % (plan, domainname, client)
+        plan = self.plan_id and self.plan_id.name or ''
+        domain_name = self.name or ''
+        client = self.partner_id and self.partner_id.name or ''
+        new_name = "%s, %s, %s" % (plan, domain_name, client)
         return new_name
 
     name_txt = fields.Char('Sub Domain', default=_get_default_name_txt)
