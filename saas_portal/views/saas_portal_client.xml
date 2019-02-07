@@ -80,14 +80,16 @@
                         <field name="plan_image" widget="image" class="oe_avatar oe_left"/>
                         <div class="oe_title" style="width: 410px;">
                             <label class="oe_edit_only" for="name_txt" string="Name"/>
-                            <h2><field name="name_txt" class="oe_inline"/></h2>
-                            <label  for="name" string="Subdomain / Database Name"/>
-                            <h3><field name="subdomain" style="font-weight:bold"/> / <field name="name" class="oe_inline"/></h3>
-                            <label for="identifier"/><field name="identifier" nolabel="1" style="font-weight:bold" colspan="4"/><br/>
-                            <label for="plan_id"/><field name="plan_id"/><br/>
-                            <label for="partner_id"/><field name="partner_id"/>
+                            <h1><field name="name_txt" class="oe_inline"/></h1>
+                            <label  for="subdomain" string="Subdomain / Database Name"/>
+                            <h2><field name="subdomain" nolabel="1"/>.<field name="domain" class="oe_inline"/></h2>
                         </div>
                     </div>
+                    <group>
+                        <label for="identifier"/><field name="identifier" nolabel="1" style="font-weight:bold" colspan="4"/><br/>
+                        <label for="plan_id"/><field name="plan_id"/><br/>
+                        <label for="partner_id"/><field name="partner_id"/>
+                    </group>
                     <field name="login_allowed" invisible="1"/>
                     <group col="2" name="limits">
                         <group string="User Limits">

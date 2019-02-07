@@ -181,7 +181,7 @@ class SaasPortalPlan(models.Model):
                                               'maximum': self.maximum_allowed_trial_dbs_per_partner})
 
         client_expiration = self._get_expiration(trial)
-        vals = {'name': dbname or self.generate_dbname(),
+        vals = {'subdomain': dbname or self.generate_dbname(),
                 'server_id': server.id,
                 'plan_id': self.id,
                 'partner_id': partner_id,
