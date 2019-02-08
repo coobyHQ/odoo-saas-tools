@@ -67,7 +67,7 @@
                         <b>Product Type:</b> ${object.product_type}<br/>
                         <b>Instance Name:</b> ${object.name_txt}<br/>
                         <b>Instance ID:</b> ${object.identifier}<br/>
-                        <b>Instance URL:</b> ${object.public_url}<br/>
+                        <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
                         <b>Instance Type:</b> ${object.odoo_version}<br/>
                     </p>
                     <p>
@@ -121,7 +121,7 @@
                         <b>Product Type:</b> ${object.product_type}<br/>
                         <b>Instance Name:</b> ${object.name_txt}<br/>
                         <b>Instance ID:</b> ${object.identifier}<br/>
-                        <b>Instance URL:</b> ${object.public_url}<br/>
+                        <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
                         <b>Instance Type:</b> ${object.odoo_version}<br/>
                     </p>
                     <p>

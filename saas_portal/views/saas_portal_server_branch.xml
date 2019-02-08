@@ -40,6 +40,7 @@
                 <group name="base">
                     <group string="Definition">
                         <field name="prefix"/>
+                        <field name="branch_domain"/>
                         <field name="branch_type"/>
                         <field name="product_type"/>
                         <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>
@@ -50,8 +51,6 @@
                     <group string="Server-side requests">
                         <field name="local_request_scheme"/>
                         <field name="verify_ssl" attrs="{'invisible': [('local_request_scheme', '!=', 'https')]}"/>
-                        <field name="local_host"/>
-                        <field name="local_port"/>
                         <separator string="Portal requests"/>
                         <field name="request_scheme"/>
                         <field name="request_port"/>

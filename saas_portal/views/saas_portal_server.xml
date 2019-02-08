@@ -43,8 +43,9 @@
                         <div class="oe_title" >
                             <label class="oe_edit_only" for="name_txt" string="Name"/>
                             <h1><field name="name_txt" class="oe_inline"/></h1>
-                            <label  for="subdomain" string="Subdomain / Database Name"/>
-                            <h2><field name="subdomain" class="oe_inline" nolabel="1" attrs="{'readonly': [('id','!=',False)]}"/>.<field name="domain" class="oe_inline" placeholder="e.g. b1-s1.cooby.online" attrs="{'readonly': [('id','!=',False)]}"/></h2>
+                            <label  for="subdomain" string="Subdomain.Domain > Database Name"/>
+                            <h2><field name="subdomain" class="oe_inline" nolabel="1"/>.<field name="domain"
+                                                                                               class="oe_inline"/></h2>
                             <label class="oe_edit_only" for="summary" string="Summary"/>
                             <field name="summary"/>
                             <div attrs="{'invisible': [('server_type','!=','application')]}">
