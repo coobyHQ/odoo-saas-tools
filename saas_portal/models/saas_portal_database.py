@@ -15,10 +15,19 @@ class SaasPortalDatabase(models.Model):
     _inherits = {'oauth.application': 'oauth_application_id'}
     _order = 'identifier'
 
+    @api.model
     def _get_default_name_txt(self):
         return "%s %s" % (self.name or '', self.db_primary_lang or '')
 
-    name = fields.Char('Database name', readonly=True, compute='_compute_db_name', store=True)
+    @api.multi
+    @api.depends('subdomain', 'domain')
+    def _compute_db_name(self):
+        for record in self:
+            subdomain = record.subdomain
+            domain = record.domain
+            record.name = "%s.%s" % (subdomain, domain)
+
+    name = fields.Char('Database name', compute='_compute_db_name', store=True)
     name_txt = fields.Char('Name', required=True, default=_get_default_name_txt)
     identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
     summary = fields.Char('Summary')
@@ -30,7 +39,7 @@ class SaasPortalDatabase(models.Model):
                                 string='Server', readonly=False, required=True)
     server_db_name = fields.Char(related='server_id.name', string='Server Database name', readonly=True)
     subdomain = fields.Char('Sub Domain', required=True)
-    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+    domain = fields.Char(related='server_id.name', string='Server Domain', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')
@@ -78,14 +87,6 @@ class SaasPortalDatabase(models.Model):
             vals['subdomain'] = vals['name']
             vals['name_txt'] = vals['name']
         return super(SaasPortalDatabase, self).create(vals)
-
-    @api.multi
-    @api.depends('subdomain', 'domain')
-    def _compute_db_name(self):
-        for record in self:
-            subdomain = record.subdomain
-            domain = record.domain
-            record.name = "%s.%s" % (subdomain, domain)
 
     @api.multi
     def _compute_public_url(self):

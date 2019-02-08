@@ -16,14 +16,16 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
 
     template_id = fields.Many2one(comodel_name="saas_portal.database", string="Template",
                                    required=True, ondelete="cascade", default=_get_template_id, auto_join=True)
-    new_name = fields.Char(string="New name")
+    new_name = fields.Char(string="New subdomain name")
     lang = fields.Selection(scan_languages(), 'Language')
 
     @api.multi
     def registry(self, new=False, **kwargs):
         self.ensure_one()
         m = odoo.modules.registry.Registry
-        return m.new(self.new_name + '.' + self.template_id.domain, **kwargs)
+        return m.new(self.new_name, **kwargs)
+ #      return m.new(self.new_name + '.' + self.template_id.domain, **kwargs)
+
 
     @api.multi
     def duplicate_template(self):
@@ -38,7 +40,7 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
             db._drop_conn(self.env.cr, self.template_id.name)
             db.exp_duplicate_database(self.template_id.name, new_db)
             new_template = saas_portal_database.create({
-                'subdomain': self.new_name,
+                'subdomain': new_db,
                 'server_id': self.template_id.server_id.id,
                 'db_primary_lang': self.lang,
                 'state': 'template'
