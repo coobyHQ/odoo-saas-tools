@@ -28,7 +28,7 @@ class SaasPortalServer(models.Model):
 
     @api.model
     def _get_domain(self):
-        return  self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
+        return self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
 
     @api.multi
     @api.depends('subdomain', 'domain')
@@ -48,9 +48,7 @@ class SaasPortalServer(models.Model):
     name_txt = fields.Char('Name', required=True)
     name = fields.Char('Database name', readonly=True, compute='_compute_db_name', store=True)
     subdomain = fields.Char('Sub Domain', required=True)
-    domain = fields.Char('Server SaaS domain',
-                         help='Set base domain name for this SaaS server as "Branch Prefix.Server ID.Domain"/b1-s1.mydomain.com ',
-                         default=_get_domain, required=True)
+    domain = fields.Char(related='branch_id.branch_domain', string='Server SaaS domain', readonly=True)
     branch_prefix = fields.Char(related='branch_id.prefix', string='Branch Domain Prefix', readonly=True)
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch', ondelete='restrict')
     branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')

@@ -34,6 +34,8 @@ class SaasPortalServerBranch(models.Model):
 
     name = fields.Char('Branch name', required=True)
     prefix = fields.Char('Branch domain Prefix', required=True)
+    branch_domain = fields.Char('Branch domain', help='Set base domain name for this Branch',
+                                default=_get_domain, required=True)
     active_server = fields.Many2one('saas_portal.server', 'Active Server', required=False,
                                         compute='_get_active_server', store=True,
                                         help="Active Server for new instances")
