@@ -51,6 +51,7 @@
                     <group string="Definition">
                         <field name="client_id" readonly="1"/>
                         <field name="password" readonly="1"/>
+                        <field name="db_type" readonly="1"/>
                         <field name="public_url" widget="url"/>
                     </group>
                     <group string="Server-side">

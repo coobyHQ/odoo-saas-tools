@@ -26,7 +26,6 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
         return m.new(self.new_name, **kwargs)
  #      return m.new(self.new_name + '.' + self.template_id.domain, **kwargs)
 
-
     @api.multi
     def duplicate_template(self):
         new_db = self.new_name + '.' + self.template_id.domain
@@ -43,7 +42,8 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
                 'subdomain': new_db,
                 'server_id': self.template_id.server_id.id,
                 'db_primary_lang': self.lang,
-                'state': 'template'
+                'state': 'template',
+                'db_type': 'template'
             })
             if self.lang:
                 with self.registry().cursor() as cr:
