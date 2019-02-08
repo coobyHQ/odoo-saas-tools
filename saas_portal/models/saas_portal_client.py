@@ -17,17 +17,10 @@ class SaasPortalClient(models.Model):
 
     _inherit = ['mail.thread', 'mail.activity.mixin', 'saas_portal.database', 'saas_base.client']
 
-    def _get_default_name_txt(self):
-        plan = self.plan_id and self.plan_id.name or ''
-        domain_name = self.name or ''
-        client = self.partner_id and self.partner_id.name or ''
-        new_name = "%s, %s, %s" % (plan, domain_name, client)
-        return new_name
-
     def _get_default_subdomain(self):
         return self.plan_id.dbname_template
 
-    name_txt = fields.Char('Sub Domain', default=_get_default_name_txt)
+    name_txt = fields.Char('Sub Domain', compute='get_compose_name_txt', store=True)
     partner_id = fields.Many2one('res.partner', string='Partner', track_visibility='onchange', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
                               track_visibility='onchange', ondelete='set null', readonly=True)
@@ -64,6 +57,16 @@ class SaasPortalClient(models.Model):
             lambda self, cr, uid, obj, ctx=None: obj.expired
         }
     }
+
+    # TODO: does not update records
+    @api.multi
+    def _get_compose_name_txt(self):
+        for record in self:
+            plan = record.plan_id and record.plan_id.name or ''
+            domain_name = record.name or ''
+            client = record.partner_id and record.partner_id.name or ''
+            new_name = "%s, %s, %s" % (plan, domain_name, client)
+            record.name_txt = new_name
 
     @api.multi
     @api.depends('state')
