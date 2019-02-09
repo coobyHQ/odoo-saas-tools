@@ -13,7 +13,7 @@
                     <field name="ticket_nr_text" string="Support Tickets" widget="statinfo"/>
                 </button>
             </xpath>
-            <xpath expr="//page[@name='settings']" position="before">
+            <xpath expr="//page[@name='notifications']" position="after">
                 <page string="Assigned Support Tickets" name="assigned_support_ticket_page">
                     <separator string="Assigned Tickets"/>
                     <field name="ticket_ids" nolabel="1">

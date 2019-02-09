@@ -79,23 +79,24 @@
                      <div class="oe_left" style="width: 500px;">
                         <field name="plan_image" widget="image" class="oe_avatar oe_left"/>
                         <div class="oe_title" style="width: 410px;">
-                            <label class="oe_edit_only" for="name_txt" string="Name"/>
-                            <h1><field name="name_txt" class="oe_inline"/></h1>
+                            <label class="oe_edit_only" for="identifier" string="Identifier"/>
+                            <h1><field name="identifier" class="oe_inline"/></h1>
                             <label  for="subdomain" string="Subdomain / Database Name"/>
-                            <h3><field name="subdomain" nolabel="1"/>.<field name="domain" class="oe_inline"/></h3>
+                            <h3><field name="subdomain" nolabel="1" style="font-weight:bold"/>.<field name="domain" class="oe_inline"/></h3>
                         </div>
                     </div>
-                     <group col="2" name="limits">
+                     <group name="infos">
                         <group>
-                            <field name="identifier" style="font-weight:bold" colspan="4"/><br/>
-                            <field name="partner_id"/>
+                            <field name="summary"/>
+                            <field name="partner_id" style="font-weight:bold"/>
                          </group>
                          <group>
-                             <field name="plan_id"/><br/>
+                             <field name="plan_id"/>
+                             <field name="public_url" widget="url"/>
                          </group>
                      </group>
                     <field name="login_allowed" invisible="1"/>
-                    <group col="2" name="limits">
+                    <group name="limits">
                         <group string="User Limits">
                             <field name="users_len"/>
                             <!-- limits -->
@@ -116,18 +117,17 @@
                         </group>
                     </group>
                     <group>
-                        <group>
+                        <group name="settings">
                             <field name="client_id" readonly="1"/>
                             <field name="server_id" readonly="1"/>
-                            <field name="notification_sent"/>
-                            <field name="domain"/>
-                           <!-- moved <field name="support_team_id"/> -->
+                            <field name="block_on_expiration" class="oe_inline"/>
+                            <field name="block_on_storage_exceed" class="oe_inline"/>
                         </group>
                         <group name="subscription">
                             <field name="trial"/>
-                            <field name="trial_hours" attrs="{'invisible': [('trial', '!=', False)]}"/>
+                            <field name="trial_hours" attrs="{'invisible': [('trial', '=', False)]}"/>
                             <field name="expiration_datetime"/>
-                            <field name="client_primary_lang" readonly="1"/>
+                            <field name="client_primary_lang" readonly="0"/>
                         </group>
                     </group>
 
@@ -137,10 +137,16 @@
                                 <field name="note" nolabel="0"/>
                             </group>
                         </page>
-                        <page string="Advanced Settings" name="settings">
+                        <page string="Notifications" name="notifications">
                             <group>
-                                <field name="block_on_expiration" class="oe_inline"/>
-                                <field name="block_on_storage_exceed" class="oe_inline"/>
+                                <group string="Expiration">
+                                    <field name="notification_sent"/>
+                                    <field name="expired"/>
+                                </group>
+                                <group string="Storage Limit">
+                                    <field name="notification_storage"/>
+                                    <field name="storage_exceed"/>
+                                </group>
                             </group>
                         </page>
                     </notebook>

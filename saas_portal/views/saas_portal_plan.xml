@@ -12,7 +12,7 @@
                 <field name="branch_id"/>
                 <field name="template_id"/>
                 <field name="max_users"/>
-                <field name="total_storage_limit"/>
+                <field name="plan_max_storage"/>
                 <field name="state" />
             </tree>
         </field>
@@ -51,7 +51,7 @@
                     <group col="2">
                         <group string="Client Settings">
                             <field name="max_users" class="oe_inline"/>
-                            <field name="total_storage_limit" class="oe_inline"/>
+                            <field name="plan_max_storage" class="oe_inline"/>
                             <field name="block_on_expiration" class="oe_inline"/>
                             <field name="block_on_storage_exceed" class="oe_inline"/>
                             <field name="on_create"/>
