@@ -29,9 +29,11 @@ class SaasPortalPlan(models.Model):
         help='maximum allowed non-trial databases per customer', require=True, default=10)
     maximum_allowed_trial_dbs_per_partner = fields.Integer(
         help='maximum allowed trial databases per customer', require=True, default=2)
-    # Todo why char ???
+
     max_users = fields.Integer('Initial Max users', default='0', help='leave 0 for no limit')
-    total_storage_limit = fields.Integer('Total plan storage limit (MB)', help='leave 0 for no limit')
+    plan_max_storage = fields.Integer('Total plan storage limit (MB)', oldname='total_storage_limit',
+                                      Default=200, help='leave 0 for no limit')
+    # total_storage_limit = fields.Integer('Total plan storage limit (MB)', )
     block_on_expiration = fields.Boolean('Block clients on expiration', default=False)
     block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=False)
 
@@ -46,7 +48,7 @@ class SaasPortalPlan(models.Model):
     sequence = fields.Integer('Sequence')
     state = fields.Selection([('draft', 'Draft'), ('confirmed', 'Confirmed')],
                              'State', compute='_compute_get_state', store=True)
-    expiration = fields.Integer('Expiration (hours)', default=48, help='time to delete database. Use for demo')
+    expiration = fields.Integer('Expiration (hours)', default=48, help='time to delete database. Use for trial')
     grace_period = fields.Integer('Grace period (days)', default=14, help='initial days before expiration')
     dbname_template = fields.Char('Default DB subdomain', help='Used for generating client database subdomain name. Use %i for numbering. '
                                   'Ignore if you use manually created db names', default='trial%i', placeholder='trial-crm-%i')
@@ -85,8 +87,8 @@ class SaasPortalPlan(models.Model):
         self.ensure_one()
         vals['max_users'] = vals.get('max_users',
                                      self.max_users)
-        vals['total_storage_limit'] = vals.get('total_storage_limit',
-                                               self.total_storage_limit)
+        # vals['total_storage_limit'] = vals.get('total_storage_limit',
+        #                                       self.total_storage_limit)
         vals['block_on_expiration'] = vals.get('block_on_expiration',
                                                self.block_on_expiration)
         vals['block_on_storage_exceed'] = vals.get('block_on_storage_exceed',

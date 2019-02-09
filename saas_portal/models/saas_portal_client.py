@@ -20,30 +20,32 @@ class SaasPortalClient(models.Model):
     def _get_default_subdomain(self):
         return self.plan_id.dbname_template
 
-    name_txt = fields.Char('Sub Domain', compute='get_compose_name_txt', store=True)
+    name_txt = fields.Char('to delete', store=True)
+    summary = fields.Char('Summary', compute='_get_compose_summary', store=True)
     partner_id = fields.Many2one('res.partner', string='Partner', track_visibility='onchange', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Plan',
                               track_visibility='onchange', ondelete='set null', readonly=True)
     subdomain = fields.Char('Sub Domain', default=_get_default_subdomain)
     plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly=True)
     plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly=True)
-    plan_max_storage = fields.Integer(related='plan_id.total_storage_limit', string="Plan max allowed Storage", readonly=True)
+    plan_max_storage = fields.Integer(related='plan_id.plan_max_storage', string="Plan max allowed Storage", readonly=True)
+    topup_storage = fields.Integer('Additional storage (MB)', help='from Topups', default=0, readonly=True)
+    total_storage_limit = fields.Integer('Total storage limit (MB)', readonly=True,
+                                         compute='_compute_total_storage_limit', help='Overall storage limit')
     plan_lang = fields.Selection(related='plan_id.lang', readonly=True)
     user_id = fields.Many2one(
         'res.users', default=lambda self: self.env.user, string='Salesperson')
-    notification_sent = fields.Boolean(
-        default=False, readonly=True, help='notification about oncoming expiration has sent')
-    active = fields.Boolean(
-        default=True, compute='_compute_active', store=True)
-    block_on_expiration = fields.Boolean(
-        'Block clients on expiration', default=False)
-    block_on_storage_exceed = fields.Boolean(
-        'Block clients on storage exceed', default=False)
-    storage_exceed = fields.Boolean(
-        'Storage limit has been exceed', default=False)
+    notification_sent = fields.Boolean(string='Notification about expiration sent', default=False, readonly=True,
+                                       help='Notification about oncoming expiration has sent')
+    notification_storage = fields.Boolean(string='Notification storage limit sent', default=False, readonly=True,
+                                             help='Notification about oncoming storage exceed has sent')
+    active = fields.Boolean(default=True, compute='_compute_active', store=True)
+    block_on_expiration = fields.Boolean('Block clients on expiration', default=False)
+    block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=False)
+    storage_exceed = fields.Boolean('Storage limit has been exceed', default=False)
     # Todo, field not used?? Better taking from plan. LUH
-    trial_hours = fields.Integer('Initial period for trial (hours)',
-                                 help='Subsription initial period in hours for trials',
+    trial_hours = fields.Integer(related='plan_id.expiration', string='Initial period for trial (hours)',
+                                 help='Initial period in hours for trials',
                                  readonly=True)
     note = fields.Html('Note')
     login_allowed = fields.Boolean('Login Request Allowed', default=False)
@@ -58,15 +60,21 @@ class SaasPortalClient(models.Model):
         }
     }
 
-    # TODO: does not update records
     @api.multi
-    def _get_compose_name_txt(self):
+    def _compute_total_storage_limit(self):
+        for client in self:
+            plan_storage = client.plan_max_storage
+            topup_storage = client.topup_storage
+            client.total_storage_limit = plan_storage + topup_storage
+
+    @api.multi
+    def _get_compose_summary(self):
         for record in self:
             plan = record.plan_id and record.plan_id.name or ''
-            domain_name = record.name or ''
+            subdomain = record.subdomain or ''
             client = record.partner_id and record.partner_id.name or ''
-            new_name = "%s, %s, %s" % (plan, domain_name, client)
-            record.name_txt = new_name
+            new_name = "%s, %s, %s" % (plan, subdomain, client)
+            record.summary = new_name
 
     @api.multi
     @api.depends('state')
@@ -265,6 +273,7 @@ class SaasPortalClient(models.Model):
             }
             self.env['saas.config'].do_upgrade_database(payload, record)
 
+    # send email about change of expiration date
     @api.multi
     def send_expiration_info_to_partner(self):
         for record in self:
@@ -274,6 +283,19 @@ class SaasPortalClient(models.Model):
                 record.message_post_with_template(
                     template.id, composition_mode='comment')
 
+    # Subscription storage upcoming exceed
+    @api.multi
+    def storage_usage_near_limit(self):
+        for r in self:
+            if r.total_storage_limit < r.total_storage - 20 and r.notification_storage is False:
+                r.write({'notification_storage': True})
+                template = self.env.ref('saas_portal.email_template_storage_upcoming_exceed')
+                r.message_post_with_template(
+                    template.id, composition_mode='comment')
+            if r.total_storage_limit < r.total_storage - 25 and r.notification_storage is True:
+                r.write({'notification_storage': False})
+
+    # Subscription storage exceeded
     @api.multi
     def storage_usage_monitoring(self):
         payload = {
