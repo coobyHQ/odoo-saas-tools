@@ -5,11 +5,16 @@
         <field name="model">saas_portal.duplicate_template.wizard</field>
         <field name="arch" type="xml">
             <form>
-                <group>
+                <group colspan="4" col="4">
                     <field name="template_id" readonly="True"/>
-                    <field name="new_name"/>
                     <field name="lang"/>
                 </group>
+                <div class="oe_title">
+                    <label for="new_name"/>
+                    <group col="4">
+                        <p><field name="new_name" class="oe_inline" nolabel="1"/>.<field name="template_domain" class="oe_inline" nolabel="1"/></p>
+                    </group>
+                </div>
                 <footer>
                     <button string="Duplicate" name="duplicate_template" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-default" special="cancel"/>
