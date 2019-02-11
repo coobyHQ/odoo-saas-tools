@@ -69,6 +69,7 @@
         <field name="arch" type="xml">
             <form string="Change Domain">
                  <group>
+                    <field name="domain"/>
                     <field name="subdomain"/>
                  </group>
                  <footer>

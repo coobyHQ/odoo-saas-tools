@@ -158,8 +158,9 @@ class SaasPortalClient(models.Model):
     @api.multi
     def rename_subdomain(self, new_subdomain):
         self.ensure_one()
-        # TODO async
-        new_name = new_subdomain
+        subdomain = new_subdomain
+        domain = self.domain
+        new_name = "%s.%s" % (subdomain, domain)
         state = {
             'd': self.name,
             'client_id': self.client_id,
