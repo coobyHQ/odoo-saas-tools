@@ -60,10 +60,10 @@
                         </tbody>
                     </table>
 
-                    <p>Hello ${object.partner_id},</p>
+                    <p>Hello ${object.partner_id.name},</p><br/>
 
                    <p>
-                    You have the following Software Instance running on our platform:<br/>
+                    You have the following software instance running on our platform:<br/>
                         <b>Product Type:</b> ${object.product_type}<br/>
                         <b>Summary:</b> ${object.summary}<br/>
                         <b>Instance ID:</b> ${object.identifier}<br/>
@@ -114,10 +114,10 @@
                         </tbody>
                     </table>
 
-                    <p>Hello ${object.partner_id},</p>
+                    <p>Hello ${object.partner_id.name},</p><br/>
 
                    <p>
-                    You had the following Software Instance running on our platform:<br/>
+                    You had the following software instance running on our platform:<br/>
                         <b>Product Type:</b> ${object.product_type}<br/>
                         <b>Summary:</b> ${object.summary}<br/>
                         <b>Instance ID:</b> ${object.identifier}<br/>
@@ -125,7 +125,7 @@
                         <b>Instance Type:</b> ${object.odoo_version}<br/>
                     </p>
                     <p>
-                        Please notice, that your Software Instance is now expired and can't longer get used.
+                        Please notice, that your software instance is now expired and can't longer get used.
                         % if object.block_on_expiration:
                         and blocked!
                         % else:
@@ -167,9 +167,9 @@
                         </tbody>
                     </table>
 
-                    <p>Hello ${object.partner_id},</p>
+                    <p>Hello ${object.partner_id.name},</p><br/>
                     <p>
-                    You have the following Software Instance running on our platform:<br/>
+                    You have the following software instance running on our platform:<br/>
                         <b>Product Type:</b> ${object.product_type}<br/>
                         <b>Summary:</b> ${object.summary}<br/>
                         <b>Instance ID:</b> ${object.identifier}<br/>
@@ -217,8 +217,8 @@
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
 
-            <p>Hi,
-            <br/>
+            <p>Hello ${object.partner_id.name},</p><br/>
+            <p>
             CoobyCloud has requested a permission from you to log-in to the client instance ${object.name}.
             <br/><br/>
             If you agree to give permission, please confirm this by visiting the following url:

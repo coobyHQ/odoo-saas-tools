@@ -120,14 +120,12 @@
                         <group name="settings">
                             <field name="client_id" readonly="1"/>
                             <field name="server_id" readonly="1"/>
-                            <field name="block_on_expiration" class="oe_inline"/>
-                            <field name="block_on_storage_exceed" class="oe_inline"/>
+                            <field name="client_primary_lang" readonly="0"/>
                         </group>
                         <group name="subscription">
                             <field name="trial"/>
-                            <field name="trial_hours" attrs="{'invisible': [('trial', '=', False)]}"/>
+                            <field name="trial_hours" class="oe_inline" attrs="{'invisible': [('trial', '=', False)]}"/>
                             <field name="expiration_datetime"/>
-                            <field name="client_primary_lang" readonly="0"/>
                         </group>
                     </group>
 
@@ -138,14 +136,16 @@
                             </group>
                         </page>
                         <page string="Notifications" name="notifications">
-                            <group>
+                            <group name="notifications">
                                 <group string="Expiration">
                                     <field name="notification_sent"/>
                                     <field name="expired"/>
+                                    <field name="block_on_expiration"/>
                                 </group>
                                 <group string="Storage Limit">
                                     <field name="notification_storage"/>
                                     <field name="storage_exceed"/>
+                                    <field name="block_on_storage_exceed"/>
                                 </group>
                             </group>
                         </page>

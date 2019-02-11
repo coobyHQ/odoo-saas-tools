@@ -30,7 +30,7 @@ class SaasPortalDatabase(models.Model):
     name = fields.Char('Database name', compute='_compute_db_name', store=True)
     name_txt = fields.Char('Name', required=True, default=_get_default_name_txt)
     identifier = fields.Char('Identifier', readonly=True, default=lambda self: _('New'))
-    summary = fields.Char('Summary')
+    summary = fields.Char('Summary', compute='_get_compose_summary', store=True)
     oauth_application_id = fields.Many2one(
         'oauth.application', 'OAuth Application',
         required=True, ondelete='cascade')
@@ -69,6 +69,9 @@ class SaasPortalDatabase(models.Model):
     password = fields.Char('Default Database Password')
     plan_ids = fields.Many2many('saas_portal.plan', 'saas_portal_database_templates', 'template_id', 'plan_id', string='SaaS Plans')
 
+    _sql_constraints = [('name_unique', 'unique(name)',
+                         'Database name already exists.')]
+
     @api.multi
     def name_get(self):
         res = []
@@ -78,6 +81,14 @@ class SaasPortalDatabase(models.Model):
             else:
                 res.append((record.id, record.name))
         return res
+
+    @api.multi
+    def _get_compose_summary(self):
+        for record in self:
+            subdomain = record.subdomain or ''
+            lang = record.db_primary_lang or ''
+            summary = "Template %s, %s" % (subdomain, lang)
+            record.summary = summary
 
     @api.model
     def create(self, vals):
