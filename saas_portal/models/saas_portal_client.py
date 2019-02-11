@@ -35,14 +35,14 @@ class SaasPortalClient(models.Model):
     plan_lang = fields.Selection(related='plan_id.lang', readonly=True)
     user_id = fields.Many2one(
         'res.users', default=lambda self: self.env.user, string='Salesperson')
-    notification_sent = fields.Boolean(string='Notification about expiration sent', default=False, readonly=True,
-                                       help='Notification about oncoming expiration has sent')
-    notification_storage = fields.Boolean(string='Notification storage limit sent', default=False, readonly=True,
-                                             help='Notification about oncoming storage exceed has sent')
+    notification_sent = fields.Boolean(string='Notification on upcoming expiration sent', default=False, readonly=True,
+                                       help='Notification on the upcoming expiration has been sent')
+    notification_storage = fields.Boolean(string='Notification on storage limit sent', default=False, readonly=True,
+                                             help='Notification on reaching the storage limit has been sent')
     active = fields.Boolean(default=True, compute='_compute_active', store=True)
     block_on_expiration = fields.Boolean(related='plan_id.block_on_expiration', readonly=True)
     block_on_storage_exceed = fields.Boolean(related='plan_id.block_on_storage_exceed', readonly=True)
-    storage_exceed = fields.Boolean('Storage limit has been exceed', default=False)
+    storage_exceed = fields.Boolean('Storage limit exceeded', default=False)
     # Todo, field not used?? Better taking from plan. LUH
     trial_hours = fields.Integer(related='plan_id.expiration', string='Initial period for trial (hours)',
                                  help='Initial period in hours for trials',
@@ -311,13 +311,12 @@ class SaasPortalClient(models.Model):
     @api.multi
     def storage_usage_near_limit(self):
         for r in self:
-            print(r.name, r.total_storage_limit, r.total_storage, r.notification_storage)
-            if r.total_storage_limit < r.total_storage - 20 and r.notification_storage is False:
+            if (r.total_storage > r.total_storage_limit - 20) and not r.notification_storage: # if the db grows to within 20MB of limit?
                 r.write({'notification_storage': True})
                 template = self.env.ref('saas_portal.email_template_storage_upcoming_exceed')
                 r.message_post_with_template(
                     template.id, composition_mode='comment')
-            if r.total_storage_limit < r.total_storage - 25 and r.notification_storage is True:
+            if (r.total_storage > r.total_storage_limit - 25) and r.notification_storage: # if it falls back to 25MB less?
                 r.write({'notification_storage': False})
 
     # Subscription storage exceeded

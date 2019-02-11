@@ -34,7 +34,7 @@ class SaasPortalPlan(models.Model):
     max_storage = fields.Integer('Total storage limit (MB)',
                                       Default=200, help='leave 0 for no limit')
     block_on_expiration = fields.Boolean('Block clients on expiration', default=True)
-    block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=True)
+    block_on_storage_exceed = fields.Boolean('Block clients when they reach the storage limit', default=True)
 
     def _get_default_lang(self):
         return self.env.user.lang
