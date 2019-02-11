@@ -43,49 +43,46 @@
             <field name="auto_delete" eval="True"/>
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
-               <!--  <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; "> -->
-                <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <!--  <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; "> -->
+            <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <table cellspacing="0" cellpadding="0" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="padding:2px;width:30%;">
+                            <img src="web/static/src/img/logo.png"/>
+                        </td>
+                        <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
+                            <a href="web/my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
+                             #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">My Account</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+               <p>Hello ${object.partner_id.name},</p><br/>
+               <p>
+                You have the following software instance running on our platform:<br/>
+                    <b>Product Type:</b> ${object.product_type}<br/>
+                    <b>Summary:</b> ${object.summary}<br/>
+                    <b>Instance ID:</b> ${object.identifier}<br/>
+                    <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
+                    <b>Instance Type:</b> ${object.odoo_version}<br/>
+                </p>
+                <p>
+                    Please notice, that less than ${ctx["days"]} day(s) are left before the expiration of Instance.
+                </p>
 
-                    <table cellspacing="0" cellpadding="0" style="width:100%;">
-                        <tbody>
-                            <tr>
-                                <td style="padding:2px;width:30%;">
-                                    <img src="web/static/src/img/logo.png"/>
-                                </td>
-                                <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
-                                    <a href="web/my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
-                                     #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">Go to Portal</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <p>You can reply to this email if you have any questions.</p>
+                <p>Thank you,</p>
 
-                    <p>Hello ${object.partner_id.name},</p><br/>
-
-                   <p>
-                    You have the following software instance running on our platform:<br/>
-                        <b>Product Type:</b> ${object.product_type}<br/>
-                        <b>Summary:</b> ${object.summary}<br/>
-                        <b>Instance ID:</b> ${object.identifier}<br/>
-                        <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                        <b>Instance Type:</b> ${object.odoo_version}<br/>
-                    </p>
-                    <p>
-                        Please notice, that less than ${ctx["days"]} day(s) are left before the expiration of Instance.
-                    </p>
-
-                    <p>You can reply to this email if you have any questions.</p>
-                    <p>Thank you,</p>
-
-                    <p style="color:#888888;">
-                    % if object.user_id and object.user_id.signature:
-                        ${object.user_id.signature | safe}
-                    % endif
-                    </p>
-                    </div>
+                <p style="color:#888888;">
+                % if object.user_id and object.user_id.signature:
+                    ${object.user_id.signature | safe}
+                % endif
+                </p>
                 </div>
-                ]]>
-           </field>
+            </div>
+            ]]>
+       </field>
         </record>
 
         <!-- Subscription has expired  -->
@@ -98,47 +95,46 @@
             <field name="auto_delete" eval="True"/>
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
-                <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+                <table cellspacing="0" cellpadding="0" style="width:100%;">
+                    <tbody>
+                        <tr>
+                            <td style="padding:2px;width:30%;">
+                                <img src="web/static/src/img/logo.png"/>
+                            </td>
+                            <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
+                                <a href="my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
+                                 #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">My Account</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <table cellspacing="0" cellpadding="0" style="width:100%;">
-                        <tbody>
-                            <tr>
-                                <td style="padding:2px;width:30%;">
-                                    <img src="web/static/src/img/logo.png"/>
-                                </td>
-                                <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
-                                    <a href="my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
-                                     #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">Go to Portal</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <p>Hello ${object.partner_id.name},</p><br/>
 
-                    <p>Hello ${object.partner_id.name},</p><br/>
+               <p>
+                You had the following software instance running on our platform:<br/>
+                    <b>Product Type:</b> ${object.product_type}<br/>
+                    <b>Summary:</b> ${object.summary}<br/>
+                    <b>Instance ID:</b> ${object.identifier}<br/>
+                    <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
+                    <b>Instance Type:</b> ${object.odoo_version}<br/>
+                </p>
+                <p>
+                    Please notice, that your software instance is now expired and can't longer get used.
+                    % if object.block_on_expiration:
+                    and blocked!
+                    % else:
+                    you have to pay now in order to continue using the service!
+                    % endif
+                </p>
+                <p>
+                    % if object.trial:
+                    Your trial service ${object.name} has expired
+                    % endif
+                </p>
 
-                   <p>
-                    You had the following software instance running on our platform:<br/>
-                        <b>Product Type:</b> ${object.product_type}<br/>
-                        <b>Summary:</b> ${object.summary}<br/>
-                        <b>Instance ID:</b> ${object.identifier}<br/>
-                        <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                        <b>Instance Type:</b> ${object.odoo_version}<br/>
-                    </p>
-                    <p>
-                        Please notice, that your software instance is now expired and can't longer get used.
-                        % if object.block_on_expiration:
-                        and blocked!
-                        % else:
-                        you have to pay now in order to continue using the service!
-                        % endif
-                    </p>
-                    <p>
-                        % if object.trial:
-                        Your trial service ${object.name} has expired
-                        % endif
-                    </p>
-
-            ]]></field>
+        ]]></field>
         </record>
 
         <!-- Subscription storage upcoming exceed -->
@@ -151,40 +147,39 @@
             <field name="auto_delete" eval="True"/>
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
-                <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+                <table cellspacing="0" cellpadding="0" style="width:100%;">
+                    <tbody>
+                        <tr>
+                            <td style="padding:2px;width:30%;">
+                                <img src="web/static/src/img/logo.png"/>
+                            </td>
+                            <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
+                                <a href="my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
+                                 #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">My Account</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <table cellspacing="0" cellpadding="0" style="width:100%;">
-                        <tbody>
-                            <tr>
-                                <td style="padding:2px;width:30%;">
-                                    <img src="web/static/src/img/logo.png"/>
-                                </td>
-                                <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
-                                    <a href="my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
-                                     #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">Go to Portal</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <p>Hello ${object.partner_id.name},</p><br/>
+                <p>
+                You have the following software instance running on our platform:<br/>
+                    <b>Product Type:</b> ${object.product_type}<br/>
+                    <b>Summary:</b> ${object.summary}<br/>
+                    <b>Instance ID:</b> ${object.identifier}<br/>
+                    <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
+                    <b>Instance Type:</b> ${object.odoo_version}<br/>
+                    <b>Current Storage limit:</b> ${object.total_storage_limit}<br/>
+                    <b>Current Storage use:</b> ${object.total_storage}<br/>
+                </p>
 
-                    <p>Hello ${object.partner_id.name},</p><br/>
-                    <p>
-                    You have the following software instance running on our platform:<br/>
-                        <b>Product Type:</b> ${object.product_type}<br/>
-                        <b>Summary:</b> ${object.summary}<br/>
-                        <b>Instance ID:</b> ${object.identifier}<br/>
-                        <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                        <b>Instance Type:</b> ${object.odoo_version}<br/>
-                        <b>Current Storage limit:</b> ${object.total_storage_limit}<br/>
-                        <b>Current Storage use:</b> ${object.total_storage}<br/>
-                    </p>
-                    
-                    
-                    <p>
-                    Storage limit ${object.total_storage_limit} of ${object.name} has been nearly reached.
-                    Contact your system administrator in order to don't risk exceeding the limit and get blocked.
-                    </p>
-                ]]></field>
+
+                <p>
+                Storage limit ${object.total_storage_limit} of ${object.name} has been nearly reached.
+                Contact your system administrator in order to don't risk exceeding the limit and get blocked.
+                </p>
+            ]]></field>
         </record>
         
         <!-- Subscription storage exceed -->
@@ -197,7 +192,20 @@
             <field name="auto_delete" eval="True"/>
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
-
+            <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <table cellspacing="0" cellpadding="0" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="padding:2px;width:30%;">
+                            <img src="web/static/src/img/logo.png"/>
+                        </td>
+                        <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
+                            <a href="my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
+                             #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">My Account</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <p>
             Storage limit ${object.total_storage_limit} of ${object.name} has been exceeded.
             Contact your system administrator in order to resume using your service.
@@ -216,7 +224,20 @@
             <field name="auto_delete" eval="False"/>
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
-
+            <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <table cellspacing="0" cellpadding="0" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="padding:2px;width:30%;">
+                            <img src="web/static/src/img/logo.png"/>
+                        </td>
+                        <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
+                            <a href="my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
+                             #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">My Account</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <p>Hello ${object.partner_id.name},</p><br/>
             <p>
             CoobyCloud has requested a permission from you to log-in to the client instance ${object.name}.

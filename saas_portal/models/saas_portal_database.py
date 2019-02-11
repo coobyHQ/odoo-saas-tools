@@ -39,7 +39,7 @@ class SaasPortalDatabase(models.Model):
                                 string='Server', readonly=False, required=True)
     server_db_name = fields.Char(related='server_id.name', string='Server Database name', readonly=True)
     subdomain = fields.Char('Sub Domain', required=True)
-    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+    domain = fields.Char(related='server_id.name', string='Server Domain', readonly=True)
     server_type = fields.Selection(related='server_id.server_type', string='SaaS Server Type', readonly=True)
     product_type = fields.Selection(related='server_id.branch_product_type', string='Product type', readonly=True,
                                     help='Which product the SaaS Server is hosting')

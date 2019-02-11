@@ -15,7 +15,7 @@ class SaasDuplicateTemplateWizard(models.TransientModel):
         return self._context.get('active_id', False)
 
     template_id = fields.Many2one(comodel_name="saas_portal.database", string="Template",
-                                   required=True, ondelete="cascade", default=_get_template_id, auto_join=True)
+                                  required=True, ondelete="cascade", default=_get_template_id, auto_join=True)
     template_domain = fields.Char(related='template_id.domain', store=True, string='Domain', readonly=True)
     new_name = fields.Char(string="New subdomain name")
     lang = fields.Selection(scan_languages(), 'Language')
