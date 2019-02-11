@@ -6,8 +6,11 @@
         <field name="name">oauth.application.tree</field>
         <field name="model">oauth.application</field>
         <field name="arch" type="xml">
-            <tree create="false" delete="false" edit="false">
+            <tree create="false" delete="true" edit="false">
                <field name="client_id"/>
+               <field name="server_db_ids"/>
+               <field name="template_db_ids"/>
+               <field name="client_db_ids"/>
                <field name="last_connection"/>
             </tree>
         </field>

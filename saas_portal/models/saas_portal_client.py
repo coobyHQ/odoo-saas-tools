@@ -30,7 +30,7 @@ class SaasPortalClient(models.Model):
     plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly=True)
     plan_max_storage = fields.Integer(related='plan_id.plan_max_storage', string="Plan max allowed Storage", readonly=True)
     topup_storage = fields.Integer('Additional storage (MB)', help='from Topups', default=0, readonly=True)
-    total_storage_limit = fields.Integer('Total storage limit (MB)', readonly=True,
+    total_storage_limit = fields.Integer('Total storage limit (MB)', store=True,
                                          compute='_compute_total_storage_limit', help='Overall storage limit')
     plan_lang = fields.Selection(related='plan_id.lang', readonly=True)
     user_id = fields.Many2one(
@@ -40,8 +40,8 @@ class SaasPortalClient(models.Model):
     notification_storage = fields.Boolean(string='Notification storage limit sent', default=False, readonly=True,
                                              help='Notification about oncoming storage exceed has sent')
     active = fields.Boolean(default=True, compute='_compute_active', store=True)
-    block_on_expiration = fields.Boolean('Block clients on expiration', default=False)
-    block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=False)
+    block_on_expiration = fields.Boolean(related='plan_id.block_on_expiration', readonly=True)
+    block_on_storage_exceed = fields.Boolean(related='plan_id.block_on_storage_exceed', readonly=True)
     storage_exceed = fields.Boolean('Storage limit has been exceed', default=False)
     # Todo, field not used?? Better taking from plan. LUH
     trial_hours = fields.Integer(related='plan_id.expiration', string='Initial period for trial (hours)',
@@ -154,6 +154,23 @@ class SaasPortalClient(models.Model):
         result = super(SaasPortalClient, self).write(values)
 
         return result
+
+    @api.multi
+    def rename_subdomain(self, new_subdomain):
+        self.ensure_one()
+        # TODO async
+        new_name = new_subdomain
+        state = {
+            'd': self.name,
+            'client_id': self.client_id,
+            'new_name': new_name,
+        }
+        req, req_kwargs = self.server_id._request_server(
+            path='/saas_server/rename_database', state=state, client_id=self.client_id)
+        res = requests.Session().send(req, **req_kwargs)
+        _logger.info('delete database: %s', res.text)
+        if res.status_code != 500:
+            self.subdomain = new_subdomain
 
     @api.multi
     def rename_database(self, new_dbname):
@@ -287,6 +304,7 @@ class SaasPortalClient(models.Model):
     @api.multi
     def storage_usage_near_limit(self):
         for r in self:
+            print(r.name, r.total_storage_limit, r.total_storage, r.notification_storage)
             if r.total_storage_limit < r.total_storage - 20 and r.notification_storage is False:
                 r.write({'notification_storage': True})
                 template = self.env.ref('saas_portal.email_template_storage_upcoming_exceed')

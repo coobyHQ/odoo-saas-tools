@@ -31,11 +31,12 @@ class SaasPortalPlan(models.Model):
         help='maximum allowed trial databases per customer', require=True, default=2)
 
     max_users = fields.Integer('Initial Max users', default='0', help='leave 0 for no limit')
-    plan_max_storage = fields.Integer('Total plan storage limit (MB)', oldname='total_storage_limit',
+    plan_max_storage = fields.Integer('Total plan storage limit (MB)',
                                       Default=200, help='leave 0 for no limit')
-    # total_storage_limit = fields.Integer('Total plan storage limit (MB)', )
-    block_on_expiration = fields.Boolean('Block clients on expiration', default=False)
-    block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=False)
+    # Todo remove this field after updating website_sale_saas module
+    total_storage_limit = fields.Integer(related='plan_max_storage', string='plan storage')
+    block_on_expiration = fields.Boolean('Block clients on expiration', default=True)
+    block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=True)
 
     def _get_default_lang(self):
         return self.env.user.lang
