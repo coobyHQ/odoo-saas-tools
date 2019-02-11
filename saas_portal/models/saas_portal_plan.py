@@ -31,10 +31,8 @@ class SaasPortalPlan(models.Model):
         help='maximum allowed trial databases per customer', require=True, default=2)
 
     max_users = fields.Integer('Initial Max users', default='0', help='leave 0 for no limit')
-    plan_max_storage = fields.Integer('Total plan storage limit (MB)',
+    max_storage = fields.Integer('Total storage limit (MB)',
                                       Default=200, help='leave 0 for no limit')
-    # Todo remove this field after updating website_sale_saas module
-    total_storage_limit = fields.Integer(related='plan_max_storage', string='plan storage')
     block_on_expiration = fields.Boolean('Block clients on expiration', default=True)
     block_on_storage_exceed = fields.Boolean('Block clients on storage exceed', default=True)
 
@@ -56,14 +54,11 @@ class SaasPortalPlan(models.Model):
     branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch',
                                 ondelete='restrict', required=True,
                                 help='Use this Server Branch for this plan')
-    active_server_id = fields.Many2one(related='branch_id.active_server', String='Active Server',
+    server_id = fields.Many2one(related='branch_id.active_server', String='Active Server',
                                        help="Active Server for new instances")
     active_domain_name = fields.Char(related='branch_id.active_domain_name', string='Active Domain Name',
                                      help="Active Domain for new instances")
-    server_id = fields.Many2one('saas_portal.server', string='SaaS Server',
-                                ondelete='restrict',
-                                help='Use this saas server or choose random')
-    domain = fields.Char(related='server_id.domain', string='Server Domain', readonly=True)
+    domain = fields.Char(related='branch_id.active_server.domain', string='Server Domain', readonly=True)
     upgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_upgrade_rel', 'plan_id', 'upgrade_plan_id', string='Potential Plans To Upgrade To')
     downgrade_path_ids = fields.Many2many('saas_portal.plan', 'saas_portal_plan_downgrade_rel', 'plan_id', 'downgrade_plan_id', string='Potential Plans To Downgrade To')
     website_description = fields.Html('Website description')
@@ -135,14 +130,10 @@ class SaasPortalPlan(models.Model):
         p_client = self.env['saas_portal.client']
         p_server = self.env['saas_portal.server']
 
+        server = False
         # selecting the server to use
-        if self.branch_id:
-            if self.branch_id.active_server:
-                server = self.branch_id.active_server
-            else:
-                server = self.server_id
-        else:
-            server = self.server_id
+        if self.branch_id and self.branch_id.active_server:
+            server = self.branch_id.active_server
         if not server:
             server = p_server.get_saas_server()
 

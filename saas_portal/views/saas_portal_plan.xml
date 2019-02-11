@@ -12,7 +12,7 @@
                 <field name="branch_id"/>
                 <field name="template_id"/>
                 <field name="max_users"/>
-                <field name="plan_max_storage"/>
+                <field name="max_storage"/>
                 <field name="state" />
             </tree>
         </field>
@@ -26,7 +26,7 @@
             <form string="plans">
                 <header>
                     <button string="Create template DB" name="create_template_button" type="object"
-                            attrs="{'invisible':['|', '|', ('state','not in', ['draft']), ('active_server_id','=',False),
+                            attrs="{'invisible':['|', '|', ('state','not in', ['draft']), ('server_id','=',False),
                             ('template_id','=',False)]}" icon="fa-play" class="oe_highlight"/>
                     <button string="Log in to template DB" name="%(action_edit_database)d"
                             type="action" states="confirmed" icon="fa-edit"
@@ -44,14 +44,14 @@
                         <div class="oe_title" style="width: 390px;">
                             <label class="oe_edit_only" for="name" string="Name"/>
                             <h1><field name="name" class="oe_inline"/></h1>
-                            <br></br><label class="oe_edit_only" for="summary" string="Summary"/>
+                            <br/><label class="oe_edit_only" for="summary" string="Summary"/>
                             <field name="summary"/>
                         </div>
                     </div>
                     <group col="2">
                         <group string="Client Settings">
                             <field name="max_users" class="oe_inline"/>
-                            <field name="plan_max_storage" class="oe_inline"/>
+                            <field name="max_storage" class="oe_inline"/>
                             <field name="block_on_expiration" class="oe_inline"/>
                             <field name="block_on_storage_exceed" class="oe_inline"/>
                             <field name="on_create"/>
@@ -68,9 +68,8 @@
                     <group col="2" >
                         <group col="2" string="Technical Settings">
                             <field name="branch_id"/>
-                            <field name="active_server_id"/>
-                            <field name="active_domain_name"/>
                             <field name="server_id"/>
+                            <field name="active_domain_name"/>
                             <field name="template_id"
                                    attrs="{'readonly':[('server_id', '=', False)]}"
                                    domain="[('server_id', '=', server_id)]"

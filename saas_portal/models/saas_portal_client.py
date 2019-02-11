@@ -28,10 +28,10 @@ class SaasPortalClient(models.Model):
     subdomain = fields.Char('Sub Domain', default=_get_default_subdomain)
     plan_image = fields.Binary(related='plan_id.logo', string="Plan logo", readonly=True)
     plan_max_users = fields.Integer(related='plan_id.max_users', string="Plan max allowed users", readonly=True)
-    plan_max_storage = fields.Integer(related='plan_id.plan_max_storage', string="Plan max allowed Storage", readonly=True)
+    plan_max_storage = fields.Integer(related='plan_id.max_storage', string="Plan max allowed Storage", readonly=True)
     topup_storage = fields.Integer('Additional storage (MB)', help='from Topups', default=0, readonly=True)
-    total_storage_limit = fields.Integer('Total storage limit (MB)', store=True,
-                                         compute='_compute_total_storage_limit', help='Overall storage limit')
+    total_storage_limit = fields.Integer('Total storage limit (MB)', store=True, compute='_compute_total_storage_limit',
+                                         inverse='_write_total_storage_limit', help='Overall storage limit')
     plan_lang = fields.Selection(related='plan_id.lang', readonly=True)
     user_id = fields.Many2one(
         'res.users', default=lambda self: self.env.user, string='Salesperson')
@@ -61,11 +61,17 @@ class SaasPortalClient(models.Model):
     }
 
     @api.multi
+    @api.depends('plan_id', 'plan_id.max_storage', 'topup_storage')
     def _compute_total_storage_limit(self):
         for client in self:
-            plan_storage = client.plan_max_storage
-            topup_storage = client.topup_storage
-            client.total_storage_limit = plan_storage + topup_storage
+            client.total_storage_limit = client.plan_max_storage + client.topup_storage
+            client.upgrade(payload={'params': [
+                {'key': 'saas_client.total_storage_limit', 'value': client.total_storage_limit, 'hidden': True}]})
+
+    def _write_total_storage_limit(self):
+        for client in self:
+            client.upgrade(payload={'params': [
+                {'key': 'saas_client.total_storage_limit', 'value': client.total_storage_limit, 'hidden': True}]})
 
     @api.multi
     def _get_compose_summary(self):

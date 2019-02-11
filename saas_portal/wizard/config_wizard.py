@@ -242,7 +242,7 @@ class SaasPortalRenameDatabase(models.TransientModel):
     def _default_client_id(self):
         return self._context.get('active_id')
     # Todo domain field
-    domain = fields.Char(related='_default_client_id.domain', string='Domain', readonly=True)
+    domain = fields.Char(related='client_id.domain', string='Domain', readonly=True)
     subdomain = fields.Char('New Subdomain', required=True)
     client_id = fields.Many2one('saas_portal.client', string='Base Client',
                                 readonly=True, default=_default_client_id)
