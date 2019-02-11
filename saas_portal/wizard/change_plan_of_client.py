@@ -59,7 +59,7 @@ class SaasPortalChangePlanWizard(models.TransientModel):
             raise ValidationError(_("Please choose a new plan!"))
 
         new_max_users = int(self.new_plan_id.max_users) + int(self.cur_client_id.topup_users)
-        new_total_storage_limit = self.new_plan_id.total_storage_limit + self.cur_client_id.topup_storage
+        new_total_storage_limit = self.new_plan_id.max_storage + self.cur_client_id.topup_storage
 
         payload = [{'key': 'saas_client.max_users',
                         'value': new_max_users, 'hidden': True},

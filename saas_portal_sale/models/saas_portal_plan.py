@@ -50,7 +50,7 @@ class SaasPortalPlan(models.Model):
     def get_topup_info(self, order, client):
         additional_invoice_lines = []
         users = int(self.max_users)
-        storage = int(self.total_storage_limit)
+        storage = int(self.max_storage)
         if client:
             users += int(client.topup_users)
             storage += int(client.topup_storage)
@@ -92,7 +92,7 @@ class SaasPortalPlan(models.Model):
 
         client_obj = self.env['saas_portal.client'].browse(res.get('id'))
         max_users = int(self.max_users)
-        total_storage_limit = int(self.total_storage_limit)
+        max_storage = int(self.max_storage)
 
         if order_id and client_obj and self.product_tmpl_topup_ids:
             order = self.env['sale.order'].sudo().browse(int(order_id))
@@ -102,7 +102,7 @@ class SaasPortalPlan(models.Model):
             if users != max_users:
                 params_list.append({'key': 'saas_client.max_users', 'value': users})
                 client_vals.update(max_users=str(users))
-            if storage != total_storage_limit:
+            if storage != max_storage:
                 params_list.append({'key': 'saas_client.total_storage_limit', 'value': storage})
                 client_vals.update(total_storage_limit=storage)
             if params_list:
