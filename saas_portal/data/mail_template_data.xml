@@ -27,8 +27,32 @@
             <field name="lang">${object.partner_id and object.partner_id.lang or ''}</field>
             <field name="model_id" ref="saas_portal.model_saas_portal_client"/>
             <field name="body_html"><![CDATA[
+            <!--  <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; "> -->
+            <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <table cellspacing="0" cellpadding="0" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="padding:2px;width:30%;">
+                            <img src="web/static/src/img/logo.png"/>
+                        </td>
+                        <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
+                            <a href="web/my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
+                             #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">My Account</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <p>Your expiration date is now: ${object.expiration_datetime}</p>
+           <p>Hello ${object.partner_id.name},</p><br/>
+           <p>
+            You have the following software instance running on our platform:<br/>
+                <b>Product Type:</b> ${object.product_type}<br/>
+                <b>Summary:</b> ${object.summary}<br/>
+                <b>Instance ID:</b> ${object.identifier}<br/>
+                <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
+                <b>Instance Type:</b> ${object.odoo_version}<br/>
+            </p>
+            <p>Your new expiration date is now: ${object.expiration_datetime}</p>
             <p>${format_tz(object.expiration_datetime, tz=object.partner_id.tz, context={'lang':object.partner_id.lang})}</p>
             ]]></field>
         </record>
@@ -71,7 +95,7 @@
                     Please notice, that less than ${ctx["days"]} day(s) are left before the expiration of Instance.
                 </p>
 
-                <p>You can reply to this email if you have any questions.</p>
+                <p>You can reply to this email if you have any questions.</p><br/>
                 <p>Thank you,</p>
 
                 <p style="color:#888888;">
@@ -121,17 +145,26 @@
                     <b>Instance Type:</b> ${object.odoo_version}<br/>
                 </p>
                 <p>
-                    Please notice, that your software instance is now expired and can't longer get used.
-                    % if object.block_on_expiration:
-                    and blocked!
+                    % if object.trial:
+                    Your trial service ${object.name} has expired
                     % else:
-                    you have to pay now in order to continue using the service!
+                    Please notice, that your software instance is now expired
+                    % if object.block_on_expiration:
+                    and can't longer get used
+                    % endif
+                    !
+                    % if object.block_on_expiration:
+                    You have to pay now in order to continue using the service!
+                    % endif
                     % endif
                 </p>
                 <p>
-                    % if object.trial:
-                    Your trial service ${object.name} has expired
-                    % endif
+                <div style="padding:0px;width:600px;margin:auto; margin-top: 10px; background: #fff repeat top /100%;color:#777777">
+                    ${user.signature | safe}
+                    <p style="font-size: 11px; margin-top: 10px;">
+                        <strong>Sent by ${user.company_id.name} using <a href="www.odoo.com" style=" color: #875A7B;">Odoo</a></strong>
+                    </p>
+                </div>
                 </p>
 
         ]]></field>

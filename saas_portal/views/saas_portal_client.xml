@@ -135,14 +135,14 @@
                                 <field name="note" nolabel="0"/>
                             </group>
                         </page>
-                        <page string="Notifications" name="notifications">
-                            <group name="notifications">
+                        <page  string="Notifications" name="notifications">
+                            <group col="3" name="notifications">
                                 <group string="Expiration">
                                     <field name="notification_sent"/>
                                     <field name="expired"/>
                                     <field name="block_on_expiration"/>
                                 </group>
-                                <group string="Storage Limit">
+                                <group string="Storage Limit" name="storage">
                                     <field name="notification_storage"/>
                                     <field name="storage_exceed"/>
                                     <field name="block_on_storage_exceed"/>

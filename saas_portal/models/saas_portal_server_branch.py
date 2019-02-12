@@ -1,9 +1,4 @@
-import simplejson
-import werkzeug
-import requests
-import random
 from odoo import api, exceptions, fields, models
-from odoo.exceptions import ValidationError
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -91,4 +86,5 @@ class SaasPortalServerBranch(models.Model):
     local_host = fields.Char('Local host', help='local host or ip address of server for server-side requests')
     local_port = fields.Char('Local port', help='local tcp port of server for server-side requests')
     local_request_scheme = fields.Selection([('http', 'http'), ('https', 'https')], 'Scheme', default='https', required=True)
-
+    # Todo use of password is not yet clear?
+    password = fields.Char('Default Superadmin password')
