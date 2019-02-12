@@ -103,14 +103,14 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
         if order_id and client:
             if not plan: plan = client.plan_id
             max_users = int(client.max_users)
-            total_storage_limit = int(client.total_storage_limit)
+            max_storage = int(client.max_storage)
             order = request.env['sale.order'].sudo().browse(int(order_id))
             client_vals = {}
             users, storage, additional_invoice_lines = plan.get_topup_info(order, client)
             if users != max_users:
                 client_vals.update(max_users=str(users))
-            if storage != total_storage_limit:
-                client_vals.update(total_storage_limit=storage)
+            # if storage != max_storage:
+            #     client_vals.update(max_storage=storage)
             if client_vals:
                 client.write(client_vals)
 
