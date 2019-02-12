@@ -47,6 +47,7 @@ class SaasPortalPlan(models.Model):
             vals['contract_id'] = contract.id
         return vals
 
+    # used in website_sale_saas
     def get_topup_info(self, order, client):
         additional_invoice_lines = []
         users = int(self.max_users)
