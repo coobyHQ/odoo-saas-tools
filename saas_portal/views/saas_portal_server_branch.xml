@@ -54,7 +54,8 @@
                         <separator string="Portal requests"/>
                         <field name="request_scheme"/>
                         <field name="request_port"/>
-                       <!-- <field name="oauth_application_id"/> -->
+                        <separator  string="Client Settings" name="client"/>
+                        <field name="password" password="True"/>
                     </group>
                 </group>
                 <group name="settings">

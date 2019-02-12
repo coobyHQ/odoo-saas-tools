@@ -131,13 +131,13 @@ class SaasPortalPlan(models.Model):
         p_server = self.env['saas_portal.server']
 
         server = False
-        # selecting the server to use
+        # 1 selecting the server to use
         if self.branch_id and self.branch_id.active_server:
             server = self.branch_id.active_server
         if not server:
             server = p_server.get_saas_server()
 
-        # server.action_sync_server()
+        # 2 checking of maximum_allowed_dbs_per_partner
         if not partner_id and user_id:
             user = self.env['res.users'].browse(user_id)
             partner_id = user.partner_id.id
@@ -162,7 +162,7 @@ class SaasPortalPlan(models.Model):
             if trial_db_count >= self.maximum_allowed_trial_dbs_per_partner:
                 raise MaximumTrialDBException("Limit of trial databases for this plan is %(maximum)s reached" % {
                                               'maximum': self.maximum_allowed_trial_dbs_per_partner})
-
+        # 3 Setting of client_expiration
         client_expiration = self._get_expiration(trial)
         vals = {'subdomain': dbname or self.generate_dbname(),
                 'server_id': server.id,
@@ -172,6 +172,7 @@ class SaasPortalPlan(models.Model):
                 'support_team_id': support_team_id,
                 'expiration_datetime': client_expiration,
                 }
+        # 4 Choosing of Template DB
         if template_db:
             tmpl = self.env['saas_portal.database'].search([('name', '=', template_db), ('state', '=', 'template')], limit=1)
             if tmpl and tmpl.db_primary_lang:
@@ -182,8 +183,8 @@ class SaasPortalPlan(models.Model):
             client = p_client.search(
                 [('client_id', '=', client_id)])
 
+        # 5 Writing to client the database_vals (limits)
         vals = self._new_database_vals(vals)
-
         if client:
             client.write(vals)
         else:
@@ -192,6 +193,7 @@ class SaasPortalPlan(models.Model):
 
         owner_user_data = self._prepare_owner_user_data(user_id)
 
+        # 6 Syncing of client values
         state = {
             'd': client.name,
             'public_url': client.public_url,
@@ -224,14 +226,15 @@ class SaasPortalPlan(models.Model):
             'url'), params=werkzeug.url_encode(params))
         auth_url = url
 
-        # send email if there is mail template record
+        # 7 send email if there is mail template record
         template = self.on_create_email_template
         if template and notify_user:
-            # we have to have a user in this place (how to user without a user?)
+            # we have to have a user in this place (how to use without a user?)
             user = self.env['res.users'].browse(user_id)
             client.with_context(user=user).message_post_with_template(
                 template.id, composition_mode='comment')
 
+        # 8 send_params_to_client_db
         client.send_params_to_client_db()
         # TODO make async call of action_sync_server here
         # client.server_id.action_sync_server()

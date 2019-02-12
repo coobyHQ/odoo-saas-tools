@@ -11,6 +11,7 @@
                 <field name="name_txt"/>
                 <field name="name"/>
                 <field name="server_type"/>
+                <field name="server_function"/>
                 <field name="branch_product_type"/>
                 <field name="branch_id"/>
                 <field name="state"/>
@@ -48,19 +49,24 @@
                                                                                                class="oe_inline"/></h2>
                             <label class="oe_edit_only" for="summary" string="Summary"/>
                             <field name="summary"/>
-                            <div attrs="{'invisible': [('server_type','!=','application')]}">
-                                <br></br><label for="branch_id"/>
-                                <field name="branch_id"/>
-                            </div>
                         </div>
                     </div>
-                    <group name="base">
+                    <group name="base" attrs="{'invisible': [('server_type','!=','application')]}">
+                        <group>
+                             <field name="branch_id" style="font-weight:bold"/>
+                         </group>
+                        <group>
+                            <field name="client_id"/>
+                         </group>
+                    </group>
+                    <group name="definitions">
                         <group string="Definition">
                             <field name="branch_prefix" class="oe_inline"/>
                             <field name="server_type"/>
+                            <field name="server_function" attrs="{'required': [('server_type','=','application')], 'invisible': [('server_type','!=','application')]}"/>
                             <field name="branch_product_type"/>
-                            <field name="odoo_version" attrs="{'required': [('branch_product_type','=','odoo')], 'invisible': [('branch_product_type','!=','odoo')]}"/>
-                            <field name="client_id"/>
+                            <field name="odoo_version" class="oe_inline" nolabel="1"
+                                   attrs="{'required': [('branch_product_type','=','odoo')], 'invisible': [('branch_product_type','!=','odoo')]}"/>
                             <field name="active"/>
                             <field name="max_client"/>
                             <field name="number_of_clients" readonly="1"/>
@@ -87,7 +93,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Client Instances" name="clients">
+                        <page string="Client Instances" name="clients" attrs="{'invisible': [('server_type','!=','application')]}">
                             <field name="client_ids" readonly="0">
                                 <tree>
                                     <field name="name"/>
@@ -98,7 +104,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Template Instances" name="templates">
+                        <page string="Template Instances" name="templates" attrs="{'invisible': [('server_type','!=','application')]}">
                             <field name="database_ids" readonly="0">
                                 <tree>
                                     <field name="name"/>

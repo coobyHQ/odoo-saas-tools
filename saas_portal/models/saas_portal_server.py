@@ -80,6 +80,13 @@ class SaasPortalServer(models.Model):
         ('identity-server', 'Identity Server/Container'),
         ('other', 'Other Product')],
         string='Server type', help='Which service this server is providing', default='application', required=True)
+    server_function = fields.Selection([('client', 'Clients'),
+                                        ('quarantine', 'Quarantine'),
+                                        ('template', 'Templates'),
+                                        ('mixed', 'Clients & Templates'),
+                                        ('other', 'Other'),
+                                        ],
+                                       'Server Function', default='client', track_visibility='onchange')
     odoo_version = fields.Selection(related='branch_id.odoo_version', string='Odoo version', readonly=True,
                                     help='Which Odoo version is hosted')
     container_url = fields.Char('Container URL', help="URL to the used container")
@@ -99,9 +106,8 @@ class SaasPortalServer(models.Model):
     verify_ssl = fields.Boolean(related='branch_id.verify_ssl', string='Verify SSL', readonly=True,
                                 help="verify SSL certificates for server-side HTTPS requests, just like a web browser")
     request_port = fields.Integer(related='branch_id.request_port', string='Request Port', readonly=True)
-
     # Todo use of password is not yet clear?
-    password = fields.Char('Default Superadmin password')
+    password = fields.Char(related='branch_id.password', string='Default Superadmin password', readonly=True)
 
     @api.multi
     def name_get(self):
