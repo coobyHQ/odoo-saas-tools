@@ -39,6 +39,26 @@ class SaasPortalServer(models.Model):
             record.name = "%s.%s" % (subdomain, domain)
 
     @api.multi
+    @api.depends('branch_id')
+    def _get_default_may_nr_of_client(self):
+        for record in self:
+            default_max_nr = record.branch_id.default_max_client
+            record.max_client = default_max_nr
+
+    # Todo does not work yet
+    @api.multi
+    def _check_state_server_full(self):
+        print(self.max_client, self.number_of_clients)
+        if self.state == 'synced':
+            max_client = self.max_client
+            number_of_clients = self.number_of_clients
+            if number_of_clients >= max_client:
+                self.state = 'synced_full'
+            elif number_of_clients < max_client:
+                self.state = 'synced'
+            return
+
+    @api.multi
     @api.depends('client_ids')
     def _get_number_of_clients(self):
         for server in self:
@@ -60,10 +80,11 @@ class SaasPortalServer(models.Model):
     # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
     state = fields.Selection([('draft', 'Draft'),
-                              ('running', 'Running'),
-                              ('running_full', 'Running Full'),
-                              ('running_err', 'Running with Error'),
-                              ('running_failed', 'Running Failed'),
+                              ('synced', 'Synced'),
+                              ('running', 'Running'),  # Todo not needed but without a OAuth error gets raised
+                              ('synced_full', 'Synced/Full'),
+                              ('sync_error', 'Sync Error'),
+                              ('client_error', 'Client Error'),
                               ('stopped', 'Stopped'),
                               ('cancelled', 'Cancelled'),
                               ],
@@ -93,7 +114,7 @@ class SaasPortalServer(models.Model):
     container_name = fields.Char('Container Name')
     container_image = fields.Char('Container Image')
 
-    max_client = fields.Integer('Max #of Client DB`s', default=100)
+    max_client = fields.Integer('Max #of Client DB`s', default=_get_default_may_nr_of_client)
     number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
     client_ids = fields.One2many('saas_portal.client', 'server_id', string='Client instances')
     database_ids = fields.One2many('saas_portal.database', 'server_id', string='Template Databases')
@@ -179,6 +200,7 @@ class SaasPortalServer(models.Model):
                                headers={'host': self.name})
         req_kwargs = {'verify': self.verify_ssl}
         return req.prepare(), req_kwargs
+        # server.state = 'sync_error'
 
     @api.multi
     def action_redirect_to_server(self):
@@ -202,37 +224,44 @@ class SaasPortalServer(models.Model):
     @api.multi
     def action_sync_server(self, updating_client_ID=None):
         for server in self:
-            state = {
-                'd': server.name,
-                'client_id': server.client_id,
-                'updating_client_ID': updating_client_ID,
-            }
-            req, req_kwargs = server._request_server(
-                path='/saas_server/sync_server', state=state, client_id=server.client_id)
-            res = requests.Session().send(req, **req_kwargs)
+            if self.server_type == 'application':
+                state = {
+                    'd': server.name,
+                    'client_id': server.client_id,
+                    'updating_client_ID': updating_client_ID,
+                }
+                req, req_kwargs = server._request_server(
+                    path='/saas_server/sync_server', state=state, client_id=server.client_id)
+                res = requests.Session().send(req, **req_kwargs)
 
-            if not res.ok:
-                raise Warning(_('Reason: %s \n Message: %s') %
-                              (res.reason, res.content))
-            try:
-                data = simplejson.loads(res.text)
-            except Exception as e:
-                _logger.error('Error on parsing response: %s\n%s' %
-                              ([req.url, req.headers, req.body], res.text))
-                raise
-            for r in data:
-                r['server_id'] = server.id
-                client = server.env['saas_portal.client'].with_context(
-                    active_test=False).search([('client_id', '=', r.get('client_id'))])
-                if not client:
-                    database = server.env['saas_portal.database'].search([('client_id', '=', r.get('client_id'))])
-                    if database:
-                        database.write(r)
-                        continue
-                    client = server.env['saas_portal.client'].create(r)
-                else:
-                    client.write(r)
-        return None
+                if not res.ok:
+                    server.state = 'sync_error'
+                    raise Warning(_('Reason: %s \n Message: %s') %
+                                  (res.reason, res.content))
+                try:
+                    data = simplejson.loads(res.text)
+                except Exception as e:
+                    _logger.error('Error on parsing response: %s\n%s' %
+                                  ([req.url, req.headers, req.body], res.text))
+                    server.state = 'sync_error'
+                    raise
+                for r in data:
+                    r['server_id'] = server.id
+                    client = server.env['saas_portal.client'].with_context(
+                        active_test=False).search([('client_id', '=', r.get('client_id'))])
+                    if not client:
+                        database = server.env['saas_portal.database'].search([('client_id', '=', r.get('client_id'))])
+                        if database:
+                            database.write(r)
+                            continue
+                        client = server.env['saas_portal.client'].create(r)
+                    else:
+                        client.write(r)
+                server.state = 'synced'
+                self._check_state_server_full
+            return None
+        else:
+            return None
 
     @api.model
     def get_saas_server(self):

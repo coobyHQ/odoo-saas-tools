@@ -16,6 +16,31 @@ class SaasPortalServerBranch(models.Model):
         return self.env['ir.config_parameter'].sudo().get_param('saas_portal.base_saas_domain') or ''
 
     @api.multi
+    @api.depends('app_server_ids')
+    def _get_number_of_clients(self):
+        for branch in self:
+            sum_total = 0
+            for line in branch.app_server_ids:
+                sum_total += line.number_of_clients
+            branch.update({
+                'number_of_clients': sum_total
+            })
+
+    @api.multi
+    @api.depends('app_server_ids')
+    def _get_state_of_servers(self):
+        for branch in self:
+            for line in branch.app_server_ids:
+                if line.state == 'synced':
+                    self.state = 'synced'
+                elif line.state == 'sync_error':
+                    self.state = 'sync_error'
+                elif line.state == 'client_error':
+                    self.state = 'client_error'
+                else:
+                    return
+
+    @api.multi
     @api.depends('app_server_ids', 'app_server_ids.max_client', 'app_server_ids.number_of_clients', 'app_server_ids.active')
     def _get_active_server(self):
         for branch in self:
@@ -37,24 +62,24 @@ class SaasPortalServerBranch(models.Model):
     active_domain_name = fields.Char(related='active_server.domain', string='Active Domain Name', required=False,
                                      help="Active Domain for new instances")
     summary = fields.Char('Summary')
-   # oauth_application_id = fields.Many2one(
-   #     'oauth.application', 'OAuth Application', required=True, ondelete='cascade')
     app_server_ids = fields.One2many('saas_portal.server', 'branch_id', string='App Servers')
     aux_server_ids = fields.Many2many('saas_portal.server', 'branch_aux_ids', string='Auxiliary Servers', ondelete='restrict')
     parameter_ids = fields.Many2many('saas_portal.server_parameter_set', 'server_branch_ids', string='SaaS Server Parameter',
                                       ondelete='restrict')
     plan_ids = fields.One2many('saas_portal.plan', 'branch_id', string='Related SaaS Plans')
+    # Todo only clients from one server are shown
     client_ids = fields.One2many(related='app_server_ids.client_ids', string='Clients')
     sequence = fields.Integer('Sequence')
     # What is active for, better to have state (LUH)?
     active = fields.Boolean('Active', default=True)
     state = fields.Selection([('draft', 'Draft'),
-                              ('running', 'Running'),
+                              ('synced', 'Synced'),
+                              ('sync_error', 'Sync Error'),
+                              ('client_error', 'Client Error'),
                               ('stopped', 'Stopped'),
                               ('cancelled', 'Cancelled'),
                               ],
-                             'State', default='draft',
-                             track_visibility='onchange')
+                             'State', default='draft', track_visibility='onchange')
     branch_type = fields.Selection([
         ('server', 'Server based'),
         ('container', 'Container Application'),
@@ -76,9 +101,8 @@ class SaasPortalServerBranch(models.Model):
     server_name = fields.Char('Container Name')
     rancher_project = fields.Char('Rancher Project')
     rancher_namespace = fields.Char('Rancher Namespace')
-
-    # Todo compute number
-    number_of_clients = fields.Integer('# of Client DB`s', readonly=True)
+    default_max_client = fields.Integer('Default Max #of Client DB`s', default=100)
+    number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
     request_scheme = fields.Selection([('http', 'http'), ('https', 'https')], 'Scheme', default='https', required=True)
     verify_ssl = fields.Boolean(
         'Verify SSL', default=True, help="verify SSL certificates for server-side HTTPS requests, just like a web browser")

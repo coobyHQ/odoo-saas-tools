@@ -25,16 +25,10 @@
         <field name="arch" type="xml">
             <form string="Server" delete="false">
                 <header>
-                    <!-- TODO
-                         action_create_server will ask for master password only.
-                         * https://erppeek.readthedocs.org/en/latest/api.html#erppeek.Client.create_database
-                    <button string="Create Server" name="%(action_create_server
-)d" type="action" class="oe_highlight" states="draft"/>
-                    -->
                     <button string="Open Server" name="action_redirect_to_server" type="object" icon="fa-sign-in" class="oe_highlight" attrs="{'invisible': [('id', '=', False)]}"/>
-                    <button name="action_sync_server" type="object" string="Sync server" icon="fa-refresh" attrs="{'invisible': [('id', '=', False)]}"/>
+                    <button name="action_sync_server" type="object" string="Sync server" icon="fa-refresh" attrs="{'invisible': [('server_type', '!=', 'application')]}"/>
                     <field name="id" invisible="1" />
-                <field name="state" widget="statusbar" statusbar_visible="draft,running,running_full" clickable=""/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,synced,synced_full" clickable=""/>
                 </header>
                 <sheet>
                      <div class="oe_button_box" name="button_box">
