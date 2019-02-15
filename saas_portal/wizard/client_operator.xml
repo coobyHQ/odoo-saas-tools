@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <!-- Client Config -->
+    <record id="action_database_form" model="ir.ui.view">
+        <field name="name">action.database.form</field>
+        <field name="model">saas.config</field>
+        <field name="arch" type="xml">
+            <form string="Configure Database" create="false" edit="false" delete="false">
+                 <group>
+                    <field name="id" invisible="1" />
+                    <field name="action" readonly="1"/>
+
+                 </group>
+                 <notebook>
+                 <page string="Result"  attrs="{'invisible': [('id', '=', False)]}">
+                    <field name="description" />
+                 </page>
+
+                 <page string="Addons"  attrs="{'invisible': [('action', '!=', 'upgrade')]}">
+                     <p>Comma-separated list of addons to Update, Install or Uninstall, e.g. <em>point_of_sale,website_sale</em></p>
+                     <group>
+                        <field name="update_addons_list"/>
+                         <field name="update_addons"/>
+                         <field name="install_addons"/>
+                         <field name="uninstall_addons"/>
+                     </group>
+                 </page>
+                 <page string="Parameters" attrs="{'invisible': [('action', '!=', 'upgrade')]}">
+                     <field name="param_ids" colspan="4" >
+                         <tree editable="bottom">
+                             <field name="key" />
+                             <field name="value" />
+                         </tree>
+                     </field>
+                 </page>
+                 <page string="Access rights">
+                     <p>Comma-separated list of references to res.groups, e.g. <em>base.group_sale_manager,stock.group_stock_manager</em>.</p>
+                     <group>
+                         <field name="access_owner_add"/>
+                         <field name="access_remove"/>
+                     </group>
+                 </page>
+                 <page string="Commands" attrs="{'invisible': [('action', '!=', 'upgrade')]}">
+                     <p>This sections allows execute special commands on client. Ask developers for instructions.</p>
+                     <field name="fix_ids" colspan="4" >
+                         <tree editable="bottom">
+                             <field name="model" />
+                             <field name="method" />
+                         </tree>
+                     </field>
+                 </page>
+                 <page string="Limit Number Of Records" attrs="{'invisible': [('action', '!=', 'upgrade')]}">
+                   <p>This sections allows to limit number of records in arbitrary model on client. Ask developers for instructions.</p>
+                   <field name="limit_line_ids" colspan="4" >
+                     <tree editable="bottom">
+                       <field name="model" />
+                       <field name="max_records" />
+                       <field name="domain" />
+                     </tree>
+                   </field>
+                 </page>
+                 <page string='Affected Database(s)'>
+                    <field name="database_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="server_id"/>
+                            <field name="plan_id"/>
+                        </tree>
+                    </field>
+                 </page>
+                 </notebook>
+                 <footer>
+                    <button name="execute_action" string="Execute" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Close" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_upgrade_clients" model="ir.actions.act_window">
+        <field name="name">Upgrade Clients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas.config</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_action': 'upgrade'}</field>
+    </record>
+
+    <!-- Configure Client Databases -->
+    <act_window id="act_configure_clients"
+    name="Configure Clients"
+    res_model="saas.config"
+    key2="client_action_multi"
+    src_model="saas_portal.client"
+    context="{'default_action': 'upgrade'}"
+    view_mode="form" target="new" view_type="form" />
+
+    <!--<menuitem action="action_upgrade_clients" id="menu_upgrade_clients" parent="saas_portal.menu_saas" sequence="100"/>-->
+
+    <!-- Upgrade Databases -->
+    <record id="action_updb" model="ir.actions.act_window">
+        <field name="name">Configure Databases</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas.config</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Delete Client Databases -->
+    <act_window id="act_delete_batch_clients"
+    name="Delete Clients"
+    res_model="saas_portal.batch_delete_wizard"
+    key2="client_action_multi"
+    src_model="saas_portal.client"
+    view_mode="form" target="new" view_type="form"/>
+
+</odoo>
