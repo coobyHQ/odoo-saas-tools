@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Change Client plan -->
+    <record id="saas_portal_manipulate_client_wizard_form" model="ir.ui.view">
+        <field name="name">Change Plan/Server</field>
+        <field name="model">saas_portal.manipulate_client.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+            <div>
+                Select which action to change the client instance you want to perform.
+                If necessary, you can change the predefined text directly in the list.
+                There might be conditions which lead to an automatic change of a client instance too!!
+                <p></p>
+                The mail will get composed according the following order:
+                <p>
+                Dear ...<br></br>
+                - Predefined Text<br></br>
+                - Individual comment or explanations<br></br>
+                - Terms of service<br></br>
+                </p>
+            </div>
+                <group>
+                    <field name="cur_client_id" readonly="1"/>
+                    <field name="current_server_id" invisible="1"/>
+                    <field name="action" style="font-weight:bold"/>
+                    <field name="message" placeholder="Your Client has been changed due to ..."/>
+                </group>
+                <notebook>
+                    <!--  attrs="{'required': [('action','in','change_server'])]}" -->
+                    <page string="Change Server">
+                        <br></br><p>Switch client to a new server if required, for instance to a quarantine server!
+                            <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
+                        <group>
+                            <field name="new_server_id"
+                                   domain="[('id', '!=', current_server_id)]" placeholder="Choose the new server"
+                                   attrs="{'required': [('action','=','server_change')], 'invisible': [('action','!=','server_change')]}"/>
+                        </group>
+                    </page>
+                    <page string="Change Plan">
+                        <br></br><p>Upgrade or Downgrade the plan if required! Normally that is triggered via the webshop/product.
+                            <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
+                        <group>
+                            <field name="saas_plan_change_type"/>
+                            <field name="new_plan_id" placeholder="Choose the new plan"
+                                   attrs="{'required': [('action','=','plan_change')], 'invisible': [('action','!=','plan_change')]}"/>
+                            <field name="plan_id_desc"/>
+                        </group>
+                    </page>
+                    <page string="Rename Database">
+                        <br></br><p>Rename Database if required! You only can rename the subdomain name. Normally that is triggered via the Customer Portal.
+                            <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
+                        <group>
+                            <field name="subdomain"  attrs="{'required': [('action','=','rename')], 'invisible': [('action','!=','rename')]}"/>
+                            <field name="domain" readonly="True"/>
+                        </group>
+                    </page>
+                </notebook>
+                <footer>
+                    <button string="Execute Client Plan Change" name="change_saas_plan" type="object" class="btn-primary"
+                            attrs="{'invisible':[('action', 'in', ['rename', 'server_change', 'delete'])]}"/>
+                    <button string="Change The Server" name="change_saas_server" type="object" class="btn-primary"
+                            attrs="{'invisible':[('action', 'in', ['rename', 'plan_change', 'delete'])]}"/>
+                    <button string="Delete" name="saas_portal.database.delete_database_server" type="object"
+                            attrs="{'invisible':[('action', 'in', ['rename', 'server_change', 'plan_change'])]}" class="btn-primary"
+                            groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
+                    <button string="Rename" name="rename_subdomain" type="object" class="btn-primary"
+                            attrs="{'invisible':[('action', 'in', ['plan_change', 'server_change', 'delete'])]}"/>
+                    or
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="saas_portal_manipulate_client_wizard_action" model="ir.actions.act_window">
+        <field name="name">Manipulate Client Database</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.manipulate_client.wizard</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="saas_portal_manipulate_client_wizard_form"/>
+    </record>
+
+    <act_window id="ir_saas_manipulate_client_wizard"
+            multi="True"
+            key2="client_action_multi" name="Change The Plan for The Client"
+            res_model="saas_portal.manipulate_client.wizard" src_model="saas_portal.client"
+            view_mode="form" target="new" view_type="form"/>
+
+
+    <!-- change Server
+    <record id="saas_plan_change_server_wizard_action" model="ir.actions.act_window">
+        <field name="name">Change the Server</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">saas_portal.manipulate_client.wizard</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+        <field name="context">{'change_server_only': True}</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="saas_portal_manipulate_client_wizard_form"/>
+    </record>
+    <act_window id="ir_saas_plan_change_server_wizard"
+            multi="True"
+            key2="client_action_multi" name="Change The Server for The Client"
+            res_model="saas_portal.manipulate_client.wizard" src_model="saas_portal.client"
+            view_mode="form" target="new" view_type="form"
+            context="{'change_server_only': True}"/> -->
+</odoo>
