@@ -27,8 +27,8 @@
                 <button name="%(action_edit_database)d" type="action"
                         icon="fa-sign-in" attrs="{'invisible':[('login_allowed', '!=', True)]}"
                         help="Log in to client database."/>
-                <button type="action" name="%(saas_portal.saas_plan_change_plan_wizard_action)d"
-                        icon="fa-arrow-circle-up" help="Change Plan" groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
+                <button type="action" name="%(saas_portal.saas_portal_manipulate_client_wizard_action)d"
+                        icon="fa-arrow-circle-up" help="Manipulate Database" groups="saas_portal.saas_group_agent" states="draft,open,pending"/>
                 <!-- todo seems confirm wizard does not work here !!
                 <button name="delete_database_server" type="object" attrs="{'invisible':[('state', 'in', ['draft', 'deleted'])]}"
                         icon="fa-eraser" help="Delete client database" groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
@@ -56,15 +56,8 @@
                             icon="fa-sign-in" class="oe_highlight" groups="saas_portal.saas_group_agent"
                             help="Log in to client database."
                             />
-                    <button string="Change Server" type="action" name="%(saas_portal.saas_plan_change_server_wizard_action)d"
+                    <button string="Manipulate DB" type="action" name="%(saas_portal.saas_portal_manipulate_client_wizard_action)d"
                             groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
-                    <button string="Change Plan" type="action" name="%(saas_portal.saas_plan_change_plan_wizard_action)d"
-                            groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
-                    <button name="%(saas_portal.action_rename_database)d" string="Rename Database" type="action"
-                            groups="saas_portal.saas_group_admin"/>
-                    <button string="Delete" name="delete_database_server" type="object"
-                            attrs="{'invisible':['|',('state', 'in', ['draft', 'deleted'])]}" icon="fa-eraser"
-                            groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
                     <button string="Sync server" type="object" name="action_sync_server" icon="fa-refresh"/>
                     <button string="Sync client" type="object" name="sync_client" icon="fa-refresh"/>
                     <button string="Configure" name="show_upgrade_wizard" type="object"
@@ -167,10 +160,15 @@
             <search string="Search Client">
                 <field name="name" string="Database Name"/>
                 <filter string="Running" name="current" domain="[('state', '=','open')]"/>
+                <filter string="Expired" name="expired" domain="[('expired','=',True)]"/>
+                <filter string="Near Storage Limit" name="storage_near" domain="[('notification_storage','=',True)]"/>
+                <filter string="Storage Limit Exceeded" name="storage_exceeded" domain="[('storage_exceed','=',True)]"/>
                 <separator/>
                 <field name="partner_id" string="Contact" filter_domain="[('partner_id', 'child_of', self)]"/>
                 <group expand="0" string="Group By">
                     <filter string="Plan" domain="[]" context="{'group_by':'plan_id'}"/>
+                    <filter string="Branch" domain="[]" context="{'group_by':'plan_branch_id'}"/>
+                    <filter string="Server" domain="[]" context="{'group_by':'server_id'}"/>
                 </group>
             </search>
         </field>
@@ -187,122 +185,4 @@
     </record>
 
     <menuitem name="Client Instances" action="action_clients" id="menu_clients" parent="menu_base_saas" sequence="1"/>
-
-    <!-- Client Config -->
-
-    <record id="action_database_form" model="ir.ui.view">
-        <field name="name">action.database.form</field>
-        <field name="model">saas.config</field>
-        <field name="arch" type="xml">
-            <form string="Configure Database" create="false" edit="false" delete="false">
-                 <group>
-                    <field name="id" invisible="1" />
-                    <field name="action" readonly="1"/>
-
-                 </group>
-                 <notebook>
-                 <page string="Result"  attrs="{'invisible': [('id', '=', False)]}">
-                    <field name="description" />
-                 </page>
-
-                 <page string="Addons"  attrs="{'invisible': [('action', '!=', 'upgrade')]}">
-                     <p>Comma-separated list of addons to Update, Install or Uninstall, e.g. <em>point_of_sale,website_sale</em></p>
-                     <group>
-                        <field name="update_addons_list"/>
-                         <field name="update_addons"/>
-                         <field name="install_addons"/>
-                         <field name="uninstall_addons"/>
-                     </group>
-                 </page>
-                 <page string="Parameters" attrs="{'invisible': [('action', '!=', 'upgrade')]}">
-                     <field name="param_ids" colspan="4" >
-                         <tree editable="bottom">
-                             <field name="key" />
-                             <field name="value" />
-                         </tree>
-                     </field>
-                 </page>
-                 <page string="Access rights">
-                     <p>Comma-separated list of references to res.groups, e.g. <em>base.group_sale_manager,stock.group_stock_manager</em>.</p>
-                     <group>
-                         <field name="access_owner_add"/>
-                         <field name="access_remove"/>
-                     </group>
-                 </page>
-                 <page string="Commands" attrs="{'invisible': [('action', '!=', 'upgrade')]}">
-                     <p>This sections allows execute special commands on client. Ask developers for instructions.</p>
-                     <field name="fix_ids" colspan="4" >
-                         <tree editable="bottom">
-                             <field name="model" />
-                             <field name="method" />
-                         </tree>
-                     </field>
-                 </page>
-                 <page string="Limit Number Of Records" attrs="{'invisible': [('action', '!=', 'upgrade')]}">
-                   <p>This sections allows to limit number of records in arbitrary model on client. Ask developers for instructions.</p>
-                   <field name="limit_line_ids" colspan="4" >
-                     <tree editable="bottom">
-                       <field name="model" />
-                       <field name="max_records" />
-                       <field name="domain" />
-                     </tree>
-                   </field>
-                 </page>
-                 <page string='Affected Database(s)'>
-                    <field name="database_ids">
-                        <tree>
-                            <field name="name"/>
-                            <field name="server_id"/>
-                            <field name="plan_id"/>
-                        </tree>
-                    </field>
-                 </page>
-                 </notebook>
-                 <footer>
-                    <button name="execute_action" string="Execute" type="object" class="oe_highlight"/>
-                    or
-                    <button string="Close" class="oe_link" special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record>
-
-    <record id="action_upgrade_clients" model="ir.actions.act_window">
-        <field name="name">Upgrade Clients</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">saas.config</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-        <field name="context">{'default_action': 'upgrade'}</field>
-    </record>
-
-    <!-- Configure Client Databases -->
-    <act_window id="act_configure_clients"
-    name="Configure Clients"
-    res_model="saas.config"
-    key2="client_action_multi"
-    src_model="saas_portal.client"
-    context="{'default_action': 'upgrade'}"
-    view_mode="form" target="new" view_type="form" />
-
-    <!--<menuitem action="action_upgrade_clients" id="menu_upgrade_clients" parent="saas_portal.menu_saas" sequence="100"/>-->
-
-    <!-- Upgrade Databases -->
-    <record id="action_updb" model="ir.actions.act_window">
-        <field name="name">Configure Databases</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">saas.config</field>
-        <field name="view_type">form</field>
-        <field name="target">new</field>
-    </record>
-
-    <!-- Delete Client Databases -->
-    <act_window id="act_delete_batch_clients"
-    name="Delete Clients"
-    res_model="saas_portal.batch_delete_wizard"
-    key2="client_action_multi"
-    src_model="saas_portal.client"
-    view_mode="form" target="new" view_type="form"/>
-
 </odoo>

@@ -23,7 +23,7 @@
         <field name="arch" type="xml">
             <form string="Server" delete="false">
                 <header>
-                <field name="state" widget="statusbar" statusbar_visible="draft,running,stopped" clickable=""/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,synced,sync_error" clickable=""/>
                 </header>
                 <sheet>
                      <div class="oe_button_box" name="button_box">
@@ -46,6 +46,7 @@
                         <field name="odoo_version" attrs="{'required': [('product_type','=','odoo')], 'invisible': [('product_type','!=','odoo')]}"/>
                         <field name="active_server"/>
                         <field name="active"/>
+                        <field name="default_max_client"/>
                         <field name="number_of_clients"/>
                     </group>
                     <group string="Server-side requests">
