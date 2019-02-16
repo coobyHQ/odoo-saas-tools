@@ -19,9 +19,10 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         return self._context.get('active_id', False)
 
     action = fields.Selection([
-        ('rename', 'Rename Database'),
         ('server_change', 'Change the Server (move)'),
         ('plan_change', 'Change the plan'),
+        ('rename', 'Rename Database'),
+        ('duplicate', 'Duplicate the instance'),
         ('delete', 'Delete the Database')],
         string='Type of Manipulation', default='server_change')
     active_id2 = fields.Char()
@@ -42,7 +43,9 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
 
     # Change of the server
     current_server_id = fields.Many2one(string="Current Server", readonly=True, comodel_name='saas_portal.server',
-                                  related='cur_client_id.server_id')
+                                        related='cur_client_id.server_id')
+    plan_branch_id = fields.Many2one(string="Current Branch of Plan", readonly=True, comodel_name='saas_portal.server_branch',
+                                     related='cur_client_id.plan_branch_id')
     new_server_id = fields.Many2one('saas_portal.server', string='Server')
 
     # Rename Subdomain name
@@ -52,6 +55,41 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     mail_template = fields.Many2one('mail.template', string="Client Change Comment",
                                     help="Mail template text for change of client")  # Todo domain=
     message = fields.Text(string="Client Change Comment", help="Individual comment at change of client from Staff")
+
+    # Saas Portal Duplicate Client DB
+    def _default_partner(self):
+        cur_client_id = self._get_client_id()
+        if cur_client_id:
+            client = self.env['saas_portal.client'].browse(cur_client_id)
+            return client.partner_id
+        return ''
+
+    def _default_expiration(self):
+        cur_client_id = self._get_client_id()
+        if cur_client_id:
+            client = self.env['saas_portal.client'].browse(cur_client_id)
+            return client.plan_id.expiration
+        return ''
+
+    name = fields.Char('Database Name', required=True)
+    expiration = fields.Integer('Expiration', default=_default_expiration)
+    partner_id = fields.Many2one('res.partner', string='Partner', default=_default_partner)
+
+    @api.multi
+    def apply_duplicate(self):
+        self.ensure_one()
+        res = self.cur_client_id.duplicate_database(
+            dbname=self.name, partner_id=self.partner_id.id, expiration=None)
+        client = self.env['saas_portal.client'].browse(res.get('id'))
+        client.server_id.action_sync_server()
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'saas_portal.client',
+            'res_id': client.id,
+            'target': 'current',
+        }
 
     # Change of the plan
     @api.onchange('client_manipulation_type')

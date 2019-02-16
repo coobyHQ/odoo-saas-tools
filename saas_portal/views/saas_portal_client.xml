@@ -56,13 +56,14 @@
                             icon="fa-sign-in" class="oe_highlight" groups="saas_portal.saas_group_agent"
                             help="Log in to client database."
                             />
-                    <button string="Manipulate DB" type="action" name="%(saas_portal.saas_portal_manipulate_client_wizard_action)d"
-                            groups="saas_portal.saas_group_admin" states="draft,open,pending"/>
-                    <button string="Sync server" type="object" name="action_sync_server" icon="fa-refresh"/>
-                    <button string="Sync client" type="object" name="sync_client" icon="fa-refresh"/>
-                    <button string="Configure" name="show_upgrade_wizard" type="object"
+                    <button string="Manipulator" type="action" name="%(saas_portal.saas_portal_manipulate_client_wizard_action)d"
+                            groups="saas_portal.saas_group_agent" states="draft,open,pending"/>
+                    <button string="Operator" name="show_upgrade_wizard" type="object"
                             attrs="{'invisible':[('state', 'in', ['deleted','draft'])]}" icon="fa-cogs"
                             groups="saas_portal.saas_group_admin"/>
+                    <button string="Sync server" type="object" name="action_sync_server" icon="fa-refresh"/>
+                    <button string="Sync client" type="object" name="sync_client" icon="fa-refresh"/>
+
                     <field name="state" widget="statusbar" statusbar_visible="open,pending,deleted" clickable=""/>
                 </header>
                 <sheet>
