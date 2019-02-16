@@ -49,7 +49,7 @@ class SaasPortalCreateClient(models.TransientModel):
             partner_id=self.partner_id.id,
             user_id=self.user_id.id,
             notify_user=self.notify_user,
-  # moved   support_team_id=self.support_team_id.id,
+            # moved   support_team_id=self.support_team_id.id,
             async=self.async_creation,
             trial=self.trial)
         if self.async_creation:
@@ -65,7 +65,7 @@ class SaasPortalCreateClient(models.TransientModel):
             'target': 'current',
         }
 
-
+"""
 class SaasPortalDuplicateClient(models.TransientModel):
     _name = 'saas_portal.duplicate_client'
 
@@ -110,7 +110,6 @@ class SaasPortalDuplicateClient(models.TransientModel):
             'target': 'current',
         }
 
-
 class SaasPortalRenameDatabase(models.TransientModel):
     _name = 'saas_portal.rename_database'
 
@@ -129,9 +128,13 @@ class SaasPortalRenameDatabase(models.TransientModel):
         return {
             'type': 'ir.actions.act_window_close',
         }
+"""
 
 
 class SaasPortalEditDatabase(models.TransientModel):
+    """
+    Model to get access to a client instance via a permission link
+    """
     _name = 'saas_portal.edit_database'
 
     name = fields.Char(readonly=True)
