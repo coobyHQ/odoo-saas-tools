@@ -46,11 +46,10 @@
            <p>Hello ${object.partner_id.name},</p><br/>
            <p>
             You have the following software instance running on our platform:<br/>
-                <b>Product Type:</b> ${object.product_type}<br/>
+                <b>Product Type:</b> ${object.product_type}, ${object.odoo_version}<br/>
                 <b>Summary:</b> ${object.summary}<br/>
                 <b>Instance ID:</b> ${object.identifier}<br/>
                 <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                <b>Instance Type:</b> ${object.odoo_version}<br/>
             </p>
             <p>Your {object.product_type} software instance has changed.</p>
             <p></p>
@@ -85,11 +84,10 @@
            <p>Hello ${object.partner_id.name},</p><br/>
            <p>
             You have the following software instance running on our platform:<br/>
-                <b>Product Type:</b> ${object.product_type}<br/>
+                <b>Product Type:</b> ${object.product_type}, ${object.odoo_version}<br/>
                 <b>Summary:</b> ${object.summary}<br/>
                 <b>Instance ID:</b> ${object.identifier}<br/>
                 <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                <b>Instance Type:</b> ${object.odoo_version}<br/>
             </p>
             <p>Your new expiration date is now: ${object.expiration_datetime}</p>
             <p>${format_tz(object.expiration_datetime, tz=object.partner_id.tz, context={'lang':object.partner_id.lang})}</p>
@@ -124,11 +122,10 @@
                <p>Hello ${object.partner_id.name},</p><br/>
                <p>
                 You have the following software instance running on our platform:<br/>
-                    <b>Product Type:</b> ${object.product_type}<br/>
+                    <b>Product Type:</b> ${object.product_type}, ${object.odoo_version}<br/>
                     <b>Summary:</b> ${object.summary}<br/>
                     <b>Instance ID:</b> ${object.identifier}<br/>
                     <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                    <b>Instance Type:</b> ${object.odoo_version}<br/>
                 </p>
                 <p>
                     Please notice, that less than ${ctx["days"]} day(s) are left before the expiration of the {object.product_type} instance.
@@ -177,11 +174,10 @@
 
                <p>
                 You had the following software instance running on our platform:<br/>
-                    <b>Product Type:</b> ${object.product_type}<br/>
+                    <b>Product Type:</b> ${object.product_type}, ${object.odoo_version}<br/>
                     <b>Summary:</b> ${object.summary}<br/>
                     <b>Instance ID:</b> ${object.identifier}<br/>
                     <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                    <b>Instance Type:</b> ${object.odoo_version}<br/>
                 </p>
                 <p>
                     % if object.trial:
@@ -237,11 +233,10 @@
                 <p>Hello ${object.partner_id.name},</p><br/>
                 <p>
                 You have the following software instance running on our platform:<br/>
-                    <b>Product Type:</b> ${object.product_type}<br/>
+                    <b>Product Type:</b> ${object.product_type}, ${object.odoo_version}<br/>
                     <b>Summary:</b> ${object.summary}<br/>
                     <b>Instance ID:</b> ${object.identifier}<br/>
                     <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
-                    <b>Instance Type:</b> ${object.odoo_version}<br/>
                     <b>Current Storage limit:</b> ${object.total_storage_limit}<br/>
                     <b>Current Storage use:</b> ${object.total_storage}<br/>
                 </p>

@@ -24,59 +24,63 @@
                     <field name="current_server_id" invisible="1"/>
                     <field name="plan_branch_id" invisible="0"/>
                     <field name="action" style="font-weight:bold"/>
+                    <field name="client_email" readonly="True"/>
+                    <field name="mail_template" domain="[('name', '=', 'Send information instance changes')]"/>
                     <field name="message" placeholder="Your Client has been changed due to ..."/>
                 </group>
-                <notebook>
 
-                    <page string="Change Server">
-                        <br></br><p>Switch client to a new server if required, for instance to a quarantine server!
-                            <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
-                        <group>
-                            <field name="new_server_id" options="{'no_create' : True, 'no_open': True}"
-                                   domain="[('id', '!=', current_server_id),('server_type', '=','application'),('branch_id', '=','plan_branch_id')]"
-                                   placeholder="Choose the new server"
-                                   attrs="{'required': [('action','=','server_change')], 'invisible': [('action','!=','server_change')]}"/>
-                              <!-- Todo  domain  ="{'id': .... does not work! -->
-                        </group>
-                    </page>
-                    <page string="Change Plan">
-                        <br></br><p>Upgrade or Downgrade the plan if required! Normally that is triggered via the webshop/product.
-                            <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
-                        <group>
-                            <field name="saas_plan_change_type"/>
-                            <field name="new_plan_id" placeholder="Choose the new plan"
-                                   attrs="{'required': [('action','=','plan_change')], 'invisible': [('action','!=','plan_change')]}"/>
-                            <field name="plan_id_desc"/>
-                        </group>
-                    </page>
-                    <page string="Rename Database" attrs="{'invisible': [('action','!=','rename')]}">
-                        <br></br><p>Rename Database if required! You only can rename the subdomain name. Normally that is triggered via the Customer Portal.
-                            <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
-                        <group>
-                            <field name="subdomain"  attrs="{'required': [('action','=','rename')], 'invisible': [('action','!=','rename')]}"/>
-                            <field name="domain" readonly="True"/>
-                        </group>
-                    </page>
-                     <page string="Duplicate the instance" attrs="{'invisible': [('action','!=','duplicate')]}">
-                        <br></br><p>Duplicates the instance if required!
-                            <br></br><strong><em>Attention!! Respect privacy of client data!</em></strong> </p>
-                        <group>
-                            <field name="name"  attrs="{'required': [('action','=','duplicate')], 'invisible': [('action','!=','duplicate')]}"/>
-                            <field name="expiration" readonly="False"/>
-                            <field name="partner_id" readonly="False"/>
-                        </group>
-                    </page>
-                </notebook>
+                <div string="Change Server" attrs="{'invisible': [('action','!=','server_change')]}">
+                    <br></br><p>Switch client to a new server if required, for instance to a quarantine server!
+                        <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
+                    <group>
+                        <field name="new_server_id" options="{'no_create' : True, 'no_open': True}"
+                               domain="[('id', '!=', current_server_id),('server_type', '=','application'),('branch_id', '=', plan_branch_id)]"
+                               placeholder="Choose the new server"
+                               attrs="{'required': [('action','=','server_change')], 'invisible': [('action','!=','server_change')]}"/>
+                    </group>
+                </div>
+                <div string="Change Plan" attrs="{'invisible': [('action','!=','plan_change')]}">
+                    <br></br><p>Upgrade or Downgrade the plan if required! Normally that is triggered via the webshop/product.
+                        <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
+                    <group>
+                        <field name="saas_plan_change_type"/>
+                        <field name="new_plan_id" placeholder="Choose the new plan"
+                               attrs="{'required': [('action','=','plan_change')], 'invisible': [('action','!=','plan_change')]}"/>
+                        <field name="plan_id_desc"/>
+                    </group>
+                </div>
+                <div string="Rename Database" attrs="{'invisible': [('action','!=','rename')]}">
+                    <br></br><p>Rename Database if required! You only can rename the subdomain name. Normally that is triggered via the Customer Portal.
+                        <br></br><strong><em>Attention!! access URL will change to.</em></strong> </p>
+                    <group>
+                        <field name="subdomain"  attrs="{'required': [('action','=','rename')], 'invisible': [('action','!=','rename')]}"/>
+                        <field name="domain" readonly="True"/>
+                    </group>
+                </div>
+                <div string="Duplicate the instance" attrs="{'invisible': [('action','!=','duplicate')]}">
+                    <br></br><p>Duplicates the instance if required!
+                        <br></br><strong><em>Attention!! Respect privacy of client data!</em></strong> </p>
+                    <group>
+                        <field name="name"  attrs="{'required': [('action','=','duplicate')], 'invisible': [('action','!=','duplicate')]}"/>
+                        <field name="expiration" readonly="False"/>
+                        <field name="partner_id" readonly="False"/>
+                    </group>
+                </div>
+
                 <footer>
-                    <button string="Execute Client Plan Change" name="change_saas_plan" type="object" class="btn-primary"
-                            attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'delete'])]}"/>
                     <button string="Change The Server" name="change_saas_server" type="object" class="btn-primary"
                             attrs="{'invisible':[('action', 'in', ['rename', 'plan_change','duplicate', 'delete'])]}"/>
+                    <button string="Execute Client Plan Change" name="change_saas_plan" type="object" class="btn-primary"
+                            attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'delete'])]}"/>
+                    <button string="Rename" name="rename_subdomain" type="object" class="btn-primary"
+                            attrs="{'invisible':[('action', 'in', ['plan_change', 'server_change','duplicate', 'delete'])]}"/>
+                    <button string="Duplicate Instance" name="apply_duplicate" type="object" class="btn-primary"
+                            attrs="{'invisible':[('action', 'in', ['server_change', 'plan_change', 'rename', 'delete'])]}"/>
                     <button string="Delete" name="saas_portal.database.delete_database_server" type="object"
                             attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'plan_change'])]}" class="btn-primary"
                             groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
-                    <button string="Rename" name="rename_subdomain" type="object" class="btn-primary"
-                            attrs="{'invisible':[('action', 'in', ['plan_change', 'server_change','duplicate', 'delete'])]}"/>
+                    <button string="TEST email" name="instance_change_to_chatter" type="object"
+                            class="btn-primary" groups="saas_portal.saas_group_admin"/>
                     or <button string="Cancel" class="btn-default" special="cancel"/>
                 </footer>
             </form>

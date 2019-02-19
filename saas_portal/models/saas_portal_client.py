@@ -162,6 +162,7 @@ class SaasPortalClient(models.Model):
 
         return result
 
+    # Todo needs to be fixed
     @api.multi
     def rename_subdomain(self, new_subdomain):
         self.ensure_one()
@@ -179,7 +180,7 @@ class SaasPortalClient(models.Model):
         _logger.info('delete database: %s', res.text)
         if res.status_code != 500:
             self.subdomain = new_subdomain
-
+    """
     @api.multi
     def rename_database(self, new_dbname):
         self.ensure_one()
@@ -195,6 +196,7 @@ class SaasPortalClient(models.Model):
         _logger.info('delete database: %s', res.text)
         if res.status_code != 500:
             self.name = new_dbname
+    """
 
     @api.multi
     def sync_client(self):

@@ -26,6 +26,7 @@ class SaasPortalServerBranch(models.Model):
                 'number_of_clients': sum_total
             })
 
+    # Todo fix  Expected singleton: saas_portal.server_branch(5, 6)
     @api.multi
     @api.depends('app_server_ids')
     def _get_state_of_servers(self):
