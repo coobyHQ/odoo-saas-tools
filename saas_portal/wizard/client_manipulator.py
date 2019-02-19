@@ -2,6 +2,8 @@ from odoo import models, fields, api, SUPERUSER_ID
 import odoo
 from odoo.tools.translate import _
 from odoo.exceptions import ValidationError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class SaasPortalManipulateClientWizard(models.TransientModel):
@@ -27,7 +29,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         string='Type of Manipulation', default='server_change')
     active_id2 = fields.Char()
     active_model = fields.Char()
-    client_email = fields.Char(default=True, readonly=True)  # Todo get valid email
+    client_email = fields.Char(related='cur_client_id.partner_id.email', readonly=True)  # Todo get valid email
     cur_client_id = fields.Many2one(comodel_name="saas_portal.client", string="Client Database name",
                                     required=True, ondelete="cascade", default=_get_client_id, auto_join=True)
 
@@ -52,8 +54,8 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     domain = fields.Char(related='cur_client_id.domain', string='Domain', readonly=True)
     subdomain = fields.Char('New Subdomain', required=False)
 
-    mail_template = fields.Many2one('mail.template', string="Client Change Comment",
-                                    help="Mail template text for change of client")  # Todo domain=
+    mail_template = fields.Many2one('mail.template', string="Mail template",
+                                    help="Mail template for change of client")
     message = fields.Text(string="Client Change Comment", help="Individual comment at change of client from Staff")
 
     # Saas Portal Duplicate Client DB
@@ -170,7 +172,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         self.cur_client_id.plan_id = self.new_plan_id.id
         self.cur_client_id.sync_client()
 
-        return self.send_email
+        return self.instance_change_to_chatter
 
     # Change of the server
     @api.multi
@@ -212,16 +214,69 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         self.cur_client_id.server_id = self.new_server_id and self.new_server_id.id or False
         self.cur_client_id.sync_client()
 
-        return self.send_email
+        return self.instance_change_to_chatter
 
     # Rename Subdomain name
     @api.multi
     def rename_subdomain(self):
         self.ensure_one()
         self.cur_client_id.rename_subdomain(new_subdomain=self.subdomain)
-        return self.send_email
+        return self.instance_change_to_chatter
 
-    # Send Email and Exit
+    # Send Chatter & Email and Exit
+    @api.multi
+    def instance_change_to_chatter(self):
+        self.ensure_one()
+        if not self.client_email:
+            raise ValidationError(_("A client does not have an e-mail address, please add it!"))
+        return
+        """
+        if self.cur_client_id:
+            str_message = str(self.message)
+            subdomain = self.subdomain
+            domain = self.domain
+            old_db_name = str(self.cur_client_id.name)
+            new_db_name = str("%s.%s" % (subdomain, domain))
+            print(domain, old_db_name, new_db_name)
+
+            if self.action != 'plan_change':
+                change_comment_1 = ('<b>Client instance changed by Staff</b>' +
+                                    '<ul class=\"o_mail_thread_message_tracking\">\n'
+                                    '<li>Client Change: ' + old_db_name + '</span><b>-></b>' + new_db_name + '</span></li>'
+                                                                                                           '</ul>') + 'Change Reason: <br></br>' + (
+                                             str_message or '')
+                change_comment = change_comment_1
+
+            if self.action == 'plan_change':
+                old_plan_name = str(self.old_plan_id)
+                new_plan_name = str(self.new_plan_id)
+                change_comment_2 = ('<b>Client instance changed by Staff</b>' +
+                                    '<ul class=\"o_mail_thread_message_tracking\">\n'
+                                    '<li>Client Plan Change: ' + old_plan_name + '</span><b>-></b>' + new_plan_name + '</span></li>'
+                                    '<li>DB Name Change: ' + old_db_name + '</span><b>-></b>' + new_db_name + '</span></li>'
+                                    '</ul>') + 'Change Reason: <br></br>' + (str_message or '')
+                change_comment = change_comment_2
+
+            self.cur_client_id.agent_id.message_post(body=change_comment, subject="Client instance changed by Staff",
+                                                     subtype='mail.mt_comment', message_type='comment')
+            self._send_email(new_db_name, change_comment)
+        """
+    @api.multi
+    def _send_email(self, new_db_name, change_comment):
+        """
+        Description
+        """
+        email_template_instance_has_changed = self.env.ref('saas_portal.email_template_instance_has_changed',
+                                                           raise_if_not_found=False)
+        if email_template_instance_has_changed:
+            email_template_instance_has_changed.send_mail(new_db_name=new_db_name, change_comment=change_comment).send_mail(self.id, force_send=True)
+        else:
+            _logger.warning("No email template found for sending email to the client")
+
+        action = {'type': 'ir.actions.act_window_close'}
+        return action
+
+    """            
     @api.multi
     def send_email(self):
         if not self.client_email:
@@ -236,3 +291,5 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
 
         action = {'type': 'ir.actions.act_window_close'}
         return action
+
+    """

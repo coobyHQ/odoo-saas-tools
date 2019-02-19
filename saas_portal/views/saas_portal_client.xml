@@ -61,6 +61,8 @@
                     <button string="Operator" name="show_upgrade_wizard" type="object"
                             attrs="{'invisible':[('state', 'in', ['deleted','draft'])]}" icon="fa-cogs"
                             groups="saas_portal.saas_group_admin"/>
+                    <button string="Create Instance" type="action" name="%(saas_portal.action_create_client_client_view)d"
+                            groups="saas_portal.saas_group_agent"/>
                     <button string="Sync server" type="object" name="action_sync_server" icon="fa-refresh"/>
                     <button string="Sync client" type="object" name="sync_client" icon="fa-refresh"/>
 
