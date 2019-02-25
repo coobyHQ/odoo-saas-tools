@@ -59,6 +59,25 @@ class SaasPortalEditDatabase(models.TransientModel):
             'url': self.edit_database_url
         }
 
+    # Send Chatter & Email and Exit
+    @api.multi
+    def instance_change_to_chatter(self):
+        self.ensure_one()
+        if not self.client_email:
+            raise ValidationError(_("A client does not have an e-mail address, please add it!"))
+
+        client_email = self.client_email
+        instance = self.env[self.active_model].browse(int(self.active_id))
+        print("active_model " + self.active_model, instance)
+        change_comment = ('<b>Login request sent by Staff </b>' +
+                          '<ul class=\"o_mail_thread_message_tracking\">\n'
+                          '<li>Login request sent by Staff to ' + client_email + '.</li>'
+                          '</ul>')
+
+        instance.id.message_post(body=change_comment, subject="Client instance changed by Staff",
+                          subtype='mail.mt_comment', message_type='comment')
+        #  self._send_email(change_comment)
+
     @api.multi
     def request_permission(self):
         if not self.client_email:

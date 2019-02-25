@@ -11,12 +11,15 @@
                 </h1>
                 <field name="login_allowed" invisible="1"/>
                 <field name="active_model" invisible="1"/>
+                <field name="active_id" invisible="1"/>
                 <div attrs="{'invisible': ['|',('login_allowed', '=', True), ('active_model', '=', 'saas_portal.plan')]}">
                     Email of the client to send the login permission request to: <br/><field class="oe_inline" name="client_email" widget="email"/>
                 </div>
                 <footer>
                     <button string="Request login permission" class="oe_highlight" type="object" name="request_permission" attrs="{'invisible': ['|',('login_allowed', '=', True), ('active_model', '=', 'saas_portal.plan')]}"/>
                     <button string="Log in" class="oe_highlight" type="object" name="login_to_instance" attrs="{'invisible': [('login_allowed', '!=', True)]}"/>
+                    <button string="TEST email" name="instance_change_to_chatter" type="object"
+                    class="btn-primary"/>
                     <button string="Close" class="oe_link" special="cancel"/>
                 </footer>
             </form>
