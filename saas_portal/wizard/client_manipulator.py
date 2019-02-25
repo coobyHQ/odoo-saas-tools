@@ -229,8 +229,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         self.ensure_one()
         if not self.client_email:
             raise ValidationError(_("A client does not have an e-mail address, please add it!"))
-        return
-        """
+
         if self.cur_client_id:
             str_message = str(self.message)
             subdomain = self.subdomain
@@ -257,10 +256,10 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
                                     '</ul>') + 'Change Reason: <br></br>' + (str_message or '')
                 change_comment = change_comment_2
 
-            self.cur_client_id.agent_id.message_post(body=change_comment, subject="Client instance changed by Staff",
-                                                     subtype='mail.mt_comment', message_type='comment')
+            self.cur_client_id.partner_id.message_post(body=change_comment, subject="Client instance changed by Staff",
+                                                       subtype='mail.mt_comment', message_type='comment')
             self._send_email(new_db_name, change_comment)
-        """
+
     @api.multi
     def _send_email(self, new_db_name, change_comment):
         """
