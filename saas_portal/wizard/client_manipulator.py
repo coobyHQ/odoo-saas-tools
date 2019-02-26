@@ -20,6 +20,21 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     def _get_client_id(self):
         return self._context.get('active_id', False)
 
+    # Saas Portal Duplicate Client DB
+    def _default_partner(self):
+        cur_client_id = self._get_client_id()
+        if cur_client_id:
+            client = self.env['saas_portal.client'].browse(cur_client_id)
+            return client.partner_id
+        return ''
+
+    def _default_expiration(self):
+        cur_client_id = self._get_client_id()
+        if cur_client_id:
+            client = self.env['saas_portal.client'].browse(cur_client_id)
+            return client.plan_id.expiration
+        return ''
+
     action = fields.Selection([
         ('server_change', 'Change the Server (move)'),
         ('plan_change', 'Change the plan'),
@@ -57,29 +72,15 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     mail_template = fields.Many2one('mail.template', string="Mail template",
                                     help="Mail template for change of client")
     message = fields.Text(string="Client Change Comment", help="Individual comment at change of client from Staff")
-
-    # Saas Portal Duplicate Client DB
-    def _default_partner(self):
-        cur_client_id = self._get_client_id()
-        if cur_client_id:
-            client = self.env['saas_portal.client'].browse(cur_client_id)
-            return client.partner_id
-        return ''
-
-    def _default_expiration(self):
-        cur_client_id = self._get_client_id()
-        if cur_client_id:
-            client = self.env['saas_portal.client'].browse(cur_client_id)
-            return client.plan_id.expiration
-        return ''
-
-    name = fields.Char('Database Name', required=True)
+    name = fields.Char('Database Name', required=False)
     expiration = fields.Integer('Expiration', default=_default_expiration)
     partner_id = fields.Many2one('res.partner', string='Partner', default=_default_partner)
 
     @api.multi
     def apply_duplicate(self):
         self.ensure_one()
+        if not self.name:
+            raise ValidationError(_("Please set a database name!"))
         res = self.cur_client_id.duplicate_database(
             dbname=self.name, partner_id=self.partner_id.id, expiration=None)
         client = self.env['saas_portal.client'].browse(res.get('id'))
@@ -172,7 +173,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         self.cur_client_id.plan_id = self.new_plan_id.id
         self.cur_client_id.sync_client()
 
-        return self.instance_change_to_chatter
+        return self.instance_change_to_chatter()
 
     # Change of the server
     @api.multi
@@ -214,14 +215,14 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         self.cur_client_id.server_id = self.new_server_id and self.new_server_id.id or False
         self.cur_client_id.sync_client()
 
-        return self.instance_change_to_chatter
+        return self.instance_change_to_chatter()
 
     # Rename Subdomain name
     @api.multi
     def rename_subdomain(self):
         self.ensure_one()
         self.cur_client_id.rename_subdomain(new_subdomain=self.subdomain)
-        return self.instance_change_to_chatter
+        return self.instance_change_to_chatter()
 
     # Send Chatter & Email and Exit
     @api.multi
