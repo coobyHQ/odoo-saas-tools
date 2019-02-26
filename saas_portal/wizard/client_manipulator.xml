@@ -79,8 +79,6 @@
                     <button string="Delete" name="saas_portal.database.delete_database_server" type="object"
                             attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'plan_change'])]}" class="btn-primary"
                             groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
-                    <button string="TEST email" name="instance_change_to_chatter" type="object"
-                            class="btn-primary" groups="saas_portal.saas_group_admin"/>
                     or <button string="Cancel" class="btn-default" special="cancel"/>
                 </footer>
             </form>
