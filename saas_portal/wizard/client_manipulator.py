@@ -259,17 +259,17 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
 
             self.cur_client_id.partner_id.message_post(body=change_comment, subject="Client instance changed by Staff",
                                                        subtype='mail.mt_comment', message_type='comment')
-            self._send_email(new_db_name, change_comment)
+            self._send_email(self.cur_client_id.id)
 
     @api.multi
-    def _send_email(self, new_db_name, change_comment):
+    def _send_email(self, client_id):
         """
         Description
         """
         email_template_instance_has_changed = self.env.ref('saas_portal.email_template_instance_has_changed',
                                                            raise_if_not_found=False)
         if email_template_instance_has_changed:
-            email_template_instance_has_changed.send_mail(new_db_name=new_db_name, change_comment=change_comment).send_mail(self.id, force_send=True)
+            email_template_instance_has_changed.send_mail(client_id, force_send=True)
         else:
             _logger.warning("No email template found for sending email to the client")
 
