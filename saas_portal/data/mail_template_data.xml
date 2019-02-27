@@ -51,7 +51,7 @@
                 <b>Instance ID:</b> ${object.identifier}<br/>
                 <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
             </p>
-            <p>Your {object.product_type} software instance has changed.</p>
+            <p>Your ${object.product_type} software instance has changed.</p>
             <p></p>
             ]]></field>
         </record>
