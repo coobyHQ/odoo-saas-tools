@@ -51,7 +51,7 @@ class SaasPortalClient(models.Model):
     note = fields.Html('Note')
     login_allowed = fields.Boolean('Login Request Allowed', default=False)
     login_permission_token = fields.Char('Login Permission Token')
-    login_permission_url = fields.Char('Login Permission Token', compute='_get_login_permission_url')
+    login_permission_url = fields.Char('Login Permission URL', compute='_get_login_permission_url')
 
     # TODO: use new api for tracking
     _track = {

@@ -71,7 +71,8 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
 
     mail_template = fields.Many2one('mail.template', string="Mail template",
                                     help="Mail template for change of client")
-    message = fields.Text(string="Client Change Comment", help="Individual comment at change of client from Staff")
+    message = fields.Text(string="Client Change Comment", help="Individual comment at change of client from staff")
+    change_text = fields.Text(string="Client Change Text", help="Automated text at change of client")
     name = fields.Char('Database Name', required=False)
     expiration = fields.Integer('Expiration', default=_default_expiration)
     partner_id = fields.Many2one('res.partner', string='Partner', default=_default_partner)
@@ -237,27 +238,34 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
             domain = self.domain
             old_db_name = str(self.cur_client_id.name)
             new_db_name = str("%s.%s" % (subdomain, domain))
-            print(domain, old_db_name, new_db_name)
 
-            if self.action != 'plan_change':
-                change_comment_1 = ('<b>Client instance changed by Staff</b>' +
+            if self.action == 'server_change':
+                change_text_1 = ('<b>Client instance server changed by staff</b>' +
                                     '<ul class=\"o_mail_thread_message_tracking\">\n'
-                                    '<li>Client Change: ' + old_db_name + '</span><b>-></b>' + new_db_name + '</span></li>'
+                                    '<li>Server Change: ' + old_db_name + '</span><b>-></b>' + new_db_name + '</span></li>'
                                                                                                            '</ul>') + 'Change Reason: <br></br>' + (
                                              str_message or '')
-                change_comment = change_comment_1
+                self.change_text = change_text_1
 
             if self.action == 'plan_change':
                 old_plan_name = str(self.old_plan_id)
                 new_plan_name = str(self.new_plan_id)
-                change_comment_2 = ('<b>Client instance changed by Staff</b>' +
+                change_text_2 = ('<b>Client instance plan changed by staff</b>' +
                                     '<ul class=\"o_mail_thread_message_tracking\">\n'
                                     '<li>Client Plan Change: ' + old_plan_name + '</span><b>-></b>' + new_plan_name + '</span></li>'
                                     '<li>DB Name Change: ' + old_db_name + '</span><b>-></b>' + new_db_name + '</span></li>'
                                     '</ul>') + 'Change Reason: <br></br>' + (str_message or '')
-                change_comment = change_comment_2
+                self.change_text = change_text_2
 
-            self.cur_client_id.partner_id.message_post(body=change_comment, subject="Client instance changed by Staff",
+            if self.action == 'rename':
+                change_text_3 = ('<b>Client instance name changed by staff</b>' +
+                                    '<ul class=\"o_mail_thread_message_tracking\">\n'
+                                    '<li>Server Change: ' + old_db_name + '</span><b>-></b>' + new_db_name + '</span></li>'
+                                                                                                           '</ul>') + 'Change Reason: <br></br>' + (
+                                             str_message or '')
+                self.change_text = change_text_3
+
+            self.cur_client_id.partner_id.message_post(body=self.change_text, subject="Client instance changed by Staff",
                                                        subtype='mail.mt_comment', message_type='comment')
             self._send_email(self.cur_client_id.id)
 
