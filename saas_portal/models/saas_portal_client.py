@@ -173,6 +173,7 @@ class SaasPortalClient(models.Model):
             'd': self.name,
             'client_id': self.client_id,
             'new_name': new_name,
+            'new_dbname': new_name,
         }
         req, req_kwargs = self.server_id._request_server(
             path='/saas_server/rename_database', state=state, client_id=self.client_id)
