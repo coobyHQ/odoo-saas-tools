@@ -51,8 +51,48 @@
                 <b>Instance ID:</b> ${object.identifier}<br/>
                 <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
             </p>
-            <p>Your ${object.product_type} software instance has changed.</p>
-            <p></p>
+            <p>A change in your ${object.product_type} software instance has occurred.</p>
+            <p>
+                % if object.action=="server_change":
+                <p>Your ${object.product_type} software instance has been switched to the a new server.<br/>
+                Please notice the following change of the URL where you can reach your instance:</p>
+                <p>${object.change_text}</p>
+                <p>${object.message}</p>
+                %endif
+
+                % if object.action=="plan_change":
+                    % if object.saas_plan_change_type=="upgrade":
+                        <p>Your ${object.product_type} software instance has been upgraded to a new plan.<br/>
+                    % else:
+                        <p>Your ${object.product_type} software instance has been downgraded to a new plan.<br/>
+
+                    Please notice the following change of the URL where you can reach your instance:</p>
+                    <p>${object.change_text}</p>
+                    <p>${object.message}</p>
+                %endif
+
+                % if object.action=="rename":
+                <p>Your ${object.product_type} software instance has been renamed.<br/>
+                Please notice the following change of the URL where you can reach your instance:</p>
+                <p>${object.change_text}</p>
+                <p>${object.message}</p>
+                %endif
+
+                % if object.action=="duplicate":
+                <p>Your ${object.product_type} software instance has been duplicated.<br/>
+                Please notice the following new URL where you can reach your instance copy:</p>
+                <p>${object.change_text}</p>
+                <p>${object.message}</p>
+                %endif
+
+                % if object.action=="delete":
+                <p>Your ${object.product_type} software instance has been deleted.<br/>
+                Please note that it is still possible to re-activate your instance within a month.:</p>
+                <p>${object.change_text}</p>
+                <p>${object.message}</p>
+                %endif
+            </p>
+
             ]]></field>
         </record>
 
