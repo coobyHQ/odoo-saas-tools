@@ -75,11 +75,11 @@ class SaasPortalEditDatabase(models.TransientModel):
             login_permission_email_template.with_context(tracking_disable=True, mail_create_nolog=True, mail_auto_delete=True).send_mail(instance.id, force_send=True)
 
             # add a message to chatter
-            change_comment = ('<b>Login request sent by Staff </b>' +
+            change_comment = ('<b>Login request sent by staff </b>' +
                               '<ul class=\"o_mail_thread_message_tracking\">\n'
-                              '<li>Login request sent by Staff to ' + self.client_email + '.</li>'
+                              '<li>Login request sent by staff to ' + self.client_email + '.</li>'
                                                                                           '</ul>')
-            instance.message_post(body=change_comment, subject="Client instance changed by Staff",
+            instance.message_post(body=change_comment, subject="Client instance changed by staff",
                                   subtype='mail.mt_comment', message_type='comment')
         else:
             raise ValidationError(("No email template found for requesting login permission from the client!"))

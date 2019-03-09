@@ -77,6 +77,13 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     expiration = fields.Integer('Expiration', default=_default_expiration)
     partner_id = fields.Many2one('res.partner', string='Partner', default=_default_partner)
 
+    # Todo Duplicate Database
+    @api.onchange('action')
+    def duplicate_warning(self):
+        if self.action == 'duplicate':
+            _logger.warning("This functionality is not yet implemented!")
+        return
+
     @api.multi
     def apply_duplicate(self):
         self.ensure_one()
