@@ -34,11 +34,10 @@ class SaasPortalClient(models.Model):
         tickets = self.ticket_ids.filtered(lambda c: c.state not in closed_states)
         action = self.env.ref('website_support.website_support_ticket_action_partner').read()[0]
         if tickets and action:
-            action['views'] = [(self.env.ref('website_support.website_support_ticket_view_tree').id, 'tree'),
-                               (self.env.ref('website_support.website_support_ticket_view_form').id, 'form')]
-            action['domain'] = [('id', 'in', tickets.ids)]
+            action['views'] = [(self.env.ref('website_support.website_support_ticket_view_form').id, 'form')]
+            action['res_id'] = tickets.sorted(lambda c: c.create_date)[-1].id
         else:
-            action = {'type': 'ir.actions.act_window_close'}
+            action['views'] = [(self.env.ref('website_support.website_support_ticket_view_form').id, 'form')]
         return action
 
     @api.multi
