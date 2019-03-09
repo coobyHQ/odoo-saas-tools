@@ -214,17 +214,15 @@ class SaasPortalServer(models.Model):
             'url': url
         }
 
-    @api.model
+    @api.multi
     def action_sync_server_all(self):
-        p_client = self.env['saas_portal.client']
-
         self.search([]).action_sync_server()
-        p_client.search([]).storage_usage_monitoring()
+        self.env['saas_portal.client'].search([]).storage_usage_monitoring()
 
     @api.multi
     def action_sync_server(self, updating_client_ID=None):
         for server in self:
-            if self.server_type == 'application':
+            if server.server_type == 'application':
                 state = {
                     'd': server.name,
                     'client_id': server.client_id,

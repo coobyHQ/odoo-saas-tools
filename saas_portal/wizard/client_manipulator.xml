@@ -7,16 +7,16 @@
         <field name="arch" type="xml">
             <form>
             <div>
-                Select which action to change the client instance you want to perform.
-                If necessary, you can change the predefined text directly in the list.
-                There might be conditions which lead to an automatic change of a client instance too!!
+                Select which action you want to perform on the client instance. <br/>
+                If necessary, you can change the predefined text directly in the list. <br/>
+                There might be conditions which lead to an automatic change of a client instance too!
                 <p></p>
-                The mail will get composed according the following order:
+                The mail will get composed according to the following order:
                 <p>
-                Dear ...<br></br>
-                - Predefined Text<br></br>
-                - Individual comment or explanations<br></br>
-                - Terms of service<br></br>
+                Dear ...<br/>
+                - Predefined Text<br/>
+                - Individual comment or explanations<br/>
+                - Terms of service<br/>
                 </p>
             </div>
                 <group>

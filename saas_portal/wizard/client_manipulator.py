@@ -1,6 +1,7 @@
 from odoo import models, fields, api, SUPERUSER_ID
 import odoo
 from odoo.tools.translate import _
+from odoo.service import db
 from odoo.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
@@ -45,7 +46,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     active_id2 = fields.Char()
     active_model = fields.Char()
     client_email = fields.Char(related='cur_client_id.partner_id.email', readonly=True)  # Todo get valid email
-    cur_client_id = fields.Many2one(comodel_name="saas_portal.client", string="Client Database name",
+    cur_client_id = fields.Many2one(comodel_name="saas_portal.client", string="Client Database",
                                     required=True, ondelete="cascade", default=_get_client_id, auto_join=True)
 
     # Change of the plan
@@ -77,21 +78,31 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     expiration = fields.Integer('Expiration', default=_default_expiration)
     partner_id = fields.Many2one('res.partner', string='Partner', default=_default_partner)
 
-    # Todo Duplicate Database
-    @api.onchange('action')
-    def duplicate_warning(self):
-        if self.action == 'duplicate':
-            _logger.warning("This functionality is not yet implemented!")
-        return
+    @api.multi
+    def registry(self, new=False, **kwargs):
+        self.ensure_one()
+        m = odoo.modules.registry.Registry
+        return m.new(self.name + '.' + self.template_id.domain, **kwargs)
 
     @api.multi
     def apply_duplicate(self):
-        self.ensure_one()
-        if not self.name:
-            raise ValidationError(_("Please set a database name!"))
-        res = self.cur_client_id.duplicate_database(
-            dbname=self.name, partner_id=self.partner_id.id, expiration=None)
-        client = self.env['saas_portal.client'].browse(res.get('id'))
+        new_db = self.name + '.' + self.domain
+        saas_portal_database = self.env['saas_portal.database']
+        if saas_portal_database.search([('name', '=', new_db)]):
+            raise ValidationError(
+                _("This database already exists: "
+                  "'%s'") % new_db
+            )
+        db._drop_conn(self.env.cr, self.cur_client_id.name)
+        db.exp_duplicate_database(self.cur_client_id.name, new_db)
+
+        vals = {
+            'subdomain': self.name,
+            'server_id': self.current_server_id.id,
+            'plan_id': self.old_plan_id.id,
+            'partner_id': self.partner_id and self.partner_id.id or None,
+        }
+        client = self.env['saas_portal.client'].create(vals)
         client.server_id.action_sync_server()
         return {
             'type': 'ir.actions.act_window',
