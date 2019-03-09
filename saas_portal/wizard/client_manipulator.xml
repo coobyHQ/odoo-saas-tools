@@ -57,6 +57,7 @@
                         <field name="domain" readonly="True"/>
                     </group>
                 </div>
+
                 <div string="Duplicate the instance" attrs="{'invisible': [('action','!=','duplicate')]}">
                     <br></br><p>Duplicates the instance if required!
                         <br></br><strong><em>Attention!! Respect privacy of client data!</em></strong> </p>
@@ -74,8 +75,10 @@
                             attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'delete'])]}"/>
                     <button string="Rename" name="rename_subdomain" type="object" class="btn-primary"
                             attrs="{'invisible':[('action', 'in', ['plan_change', 'server_change','duplicate', 'delete'])]}"/>
+                    <!--
                     <button string="Duplicate Instance" name="apply_duplicate" type="object" class="btn-primary"
                             attrs="{'invisible':[('action', 'in', ['server_change', 'plan_change', 'rename', 'delete'])]}"/>
+                    -->
                     <button string="Delete" name="saas_portal.database.delete_database_server" type="object"
                             attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'plan_change'])]}" class="btn-primary"
                             groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
