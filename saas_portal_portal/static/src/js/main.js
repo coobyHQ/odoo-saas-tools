@@ -48,10 +48,10 @@ $(document).ready(function() {
           $input.attr('data-content', "Spaces are not allowed in domain names");
           error = true;
       } else if (db_name.length < 4) {
-          $input.attr('data-content', "Your domain must be at least 4 characters long");
+          $input.attr('data-content', "Your subdomain must be at least 4 characters long");
           error = true;
-        } else if(!(/^[a-z0-9]+([-.][a-z0-9]+)*\.[a-z]{2,}$/i).test(db_name)) {
-          $input.attr('data-content', "Domain name isn't valid");
+        } else if(!(/^[a-zA-Z0-9]*$/i).test(db_name)) {
+          $input.attr('data-content', "Subdomain name isn't valid");
           error = true;
       }
 

@@ -163,7 +163,10 @@ class SaasServer(http.Controller):
             raise Exception(user_data['error'])
 
         client = request.env['saas_server.client'].sudo().search([('client_id', '=', client_id)])
-        client.rename_database(new_dbname)
+        if client:
+            client.rename_database(new_dbname)
+        else:
+            raise Exception('Client not found!')
 
     @http.route(['/saas_server/delete_database'], type='http', website=True, auth='public')
     @fragment_to_query_string

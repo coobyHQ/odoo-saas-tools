@@ -162,29 +162,23 @@ class SaasPortalClient(models.Model):
 
         return result
 
-    # Todo needs to be fixed
     @api.multi
     def rename_subdomain(self, new_subdomain):
         self.ensure_one()
-        subdomain = new_subdomain
-        domain = self.domain
-        new_name = "%s.%s" % (subdomain, domain)
-        state = {
-            'd': self.name,
-            'client_id': self.client_id,
-            'new_name': new_name,
-            'new_dbname': new_name,
-        }
-        req, req_kwargs = self.server_id._request_server(
-            path='/saas_server/rename_database', state=state, client_id=self.client_id)
-        res = requests.Session().send(req, **req_kwargs)
-        _logger.info('delete database: %s', res.text)
-        if res.status_code != 500:
-            self.subdomain = new_subdomain
-    """
+        new_name = "%s.%s" % (new_subdomain, self.domain)
+        self.rename_database(new_dbname=new_name)
+
     @api.multi
     def rename_database(self, new_dbname):
         self.ensure_one()
+
+        saas_portal_database = self.env['saas_portal.database'].sudo()
+        if saas_portal_database.search([('name', '=', new_dbname)]):
+            raise ValidationError(
+                _("This database name already exists: "
+                  "'%s'") % new_db
+            )
+
         # TODO async
         state = {
             'd': self.name,
@@ -197,7 +191,6 @@ class SaasPortalClient(models.Model):
         _logger.info('delete database: %s', res.text)
         if res.status_code != 500:
             self.name = new_dbname
-    """
 
     @api.multi
     def sync_client(self):
