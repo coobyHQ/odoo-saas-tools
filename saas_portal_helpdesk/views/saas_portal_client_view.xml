@@ -10,12 +10,13 @@
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button class="oe_inline oe_stat_button" type="object" name="action_show_open_tickets"
                         icon="fa-ticket">
-                    <field name="ticket_nr_open" string="Open Tickets" widget="statinfo"/>
+                        <field name="ticket_nr_string" string="Supp. Tickets" widget="statinfo"/>
                 </button>
-                <button class="oe_inline oe_stat_button" type="object" name="action_show_closed_tickets"
-                        icon="fa-check">
-                    <field name="ticket_nr_closed" string="Closed Tickets" widget="statinfo"/>
+                <button class="oe_inline oe_stat_button" type="object" name="action_show_sla"
+                        icon="fa-anchor">
+                    <field name="ticket_sla_id" string="SLA" widget="statinfo"/>
                 </button>
+                <field name="ticket_latest_id" invisible="True"/>
             </xpath>
             <xpath expr="//page[@name='notifications']" position="after">
                 <page string="Assigned Support Tickets" name="assigned_support_ticket_page">
