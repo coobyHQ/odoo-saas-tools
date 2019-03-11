@@ -26,13 +26,12 @@
             <field name="saas_plan_id" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
             <field name="saas_default" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
             <field name="trial_allowed" attrs="{'invisible': [('saas_product_type','=','topup')]}"/>
-              <!-- to fix
-            <field name="product_tmpl_topup_ids attrs="{'invisible': [('saas_product_type','=','topup')]}"">
+            <field name="product_tmpl_topup_ids" attrs="{'invisible': [('saas_product_type','=','topup')]}">
               <tree>
                  <field name="name"/>
                  <field name="uom_id"/>
               </tree>
-            </field>  -->
+            </field>
           </group>
         </page>
       </xpath>
