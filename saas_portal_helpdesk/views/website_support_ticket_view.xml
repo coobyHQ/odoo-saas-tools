@@ -15,5 +15,23 @@
                 <field name="saas_client_id"/>
             </xpath>
          </field>
-   </record>
+    </record>
+
+    <record id="website_support_sla_view_saas_form" model="ir.ui.view">
+        <field name="name">website.support.sla.saas form view</field>
+        <field name="model">website.support.sla</field>
+        <field name="inherit_id" ref="website_support.website_support_sla_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='alert_ids']" position="after">
+                <field name="saas_client_ids">
+                    <tree>
+                      <field name="identifier"/>
+                      <field name="name"/>
+                      <field name="plan_id"/>
+                      <field name="partner_id"/>
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
 </odoo>

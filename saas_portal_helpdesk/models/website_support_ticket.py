@@ -22,3 +22,8 @@ class WebsiteSupportTicket(models.Model):
         return action
 
 
+class WebsiteSupportSLA(models.Model):
+    _inherit = "website.support.sla"
+
+    saas_client_ids = fields.One2many('saas_portal.client', 'ticket_sla_id', string='SaaS Client Instances',
+                                      readme='Connected SaaS instances')
