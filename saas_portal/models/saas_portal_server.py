@@ -81,7 +81,6 @@ class SaasPortalServer(models.Model):
     active = fields.Boolean('Active', default=True)
     state = fields.Selection([('draft', 'Draft'),
                               ('synced', 'Synced'),
-                              ('running', 'Running'),  # Todo not needed but without a OAuth error gets raised
                               ('synced_full', 'Synced/Full'),
                               ('sync_error', 'Sync Error'),
                               ('client_error', 'Client Error'),
@@ -90,6 +89,7 @@ class SaasPortalServer(models.Model):
                               ],
                              'State', default='draft',
                              track_visibility='onchange')
+    sync_error_message = fields.Char('Sync Error Message')
     branch_type = fields.Selection(related='branch_id.branch_type', string='SaaS Server Type', readonly=True)
     branch_product_type = fields.Selection(related='branch_id.product_type', string='Branch Product Type', readonly=True)
     server_type = fields.Selection([
@@ -234,14 +234,16 @@ class SaasPortalServer(models.Model):
 
                 if not res.ok:
                     server.state = 'sync_error'
-                    raise Warning(_('Reason: %s \n Message: %s') %
-                                  (res.reason, res.content))
+                    msg = _('Reason: %s \n Message: %s') % (res.reason, res.content)
+                    server.sync_error_message = msg
+                    raise Warning(msg)
                 try:
                     data = simplejson.loads(res.text)
                 except Exception as e:
-                    _logger.error('Error on parsing response: %s\n%s' %
-                                  ([req.url, req.headers, req.body], res.text))
+                    msg = 'Error on parsing response: %s\n%s' % ([req.url, req.headers, req.body], res.text)
+                    _logger.error(msg)
                     server.state = 'sync_error'
+                    server.sync_error_message = msg
                     raise
                 for r in data:
                     r['server_id'] = server.id
