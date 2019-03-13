@@ -26,20 +26,23 @@ class SaasPortalServerBranch(models.Model):
                 'number_of_clients': sum_total
             })
 
-    # Todo fix  Expected singleton: saas_portal.server_branch(5, 6)
     @api.multi
-    @api.depends('app_server_ids')
+    @api.depends('app_server_ids', 'app_server_ids.state')
     def _get_state_of_servers(self):
         for branch in self:
-            for line in branch.app_server_ids:
-                if line.state == 'synced':
-                    self.state = 'synced'
-                elif line.state == 'sync_error':
-                    self.state = 'sync_error'
-                elif line.state == 'client_error':
-                    self.state = 'client_error'
-                else:
-                    return
+            servers = branch.app_server_ids
+            if len(servers) and len(servers) == len(servers.filtered(lambda sv: sv.state == 'synced')):
+                branch.state = 'synced'
+            elif servers.filtered(lambda sv: sv.state == 'sync_error'):
+                branch.state = 'sync_error'
+            elif len(servers) and len(servers) == len(servers.filtered(lambda sv: sv.state == 'client_error')):
+                branch.state = 'client_error'
+            elif len(servers) and len(servers) == len(servers.filtered(lambda sv: sv.state == 'stopped')):
+                branch.state = 'stopped'
+            elif len(servers) and len(servers) == len(servers.filtered(lambda sv: sv.state == 'cancelled')):
+                branch.state = 'cancelled'
+            else:
+                branch.state = 'synced'
 
     @api.multi
     @api.depends('app_server_ids', 'app_server_ids.max_client', 'app_server_ids.number_of_clients', 'app_server_ids.active')
@@ -80,7 +83,7 @@ class SaasPortalServerBranch(models.Model):
                               ('stopped', 'Stopped'),
                               ('cancelled', 'Cancelled'),
                               ],
-                             'State', default='draft', track_visibility='onchange')
+                             'State', compute='_get_state_of_servers', track_visibility='onchange')
     branch_type = fields.Selection([
         ('server', 'Server based'),
         ('container', 'Container Application'),
