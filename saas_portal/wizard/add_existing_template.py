@@ -16,6 +16,7 @@ class SaasPortalAddExistingDatabase(models.TransientModel):
 
     name = fields.Char(string='Subdomain', required=True)
     server_id = fields.Many2one('saas_portal.server', string='Server', required=True)
+    domain = fields.Char(related='server_id.name', string='Server Domain', readonly=True)
     plan_id = fields.Many2one('saas_portal.plan', string='Add To Plan')
     password = fields.Char(required=True)
 
@@ -28,12 +29,18 @@ class SaasPortalAddExistingDatabase(models.TransientModel):
                 _("This database already exists: "
                   "'%s'") % new_db
             )
-        new_template = saas_portal_database.create({
+        vals = {
             'subdomain': self.name,
             'server_id': self.server_id.id,
             'state': 'template',
             'db_type': 'template',
-            'password': self.password
-        })
+            'password': self.password,
+        }
+        if self.plan_id:
+            vals.update(plan_ids = [(4, self.plan_id.id)])
+
+        new_template = saas_portal_database.create(vals)
+        if self.plan_id and not self.plan_id.template_id:
+            self.plan_id.template_id = new_template.id
 
         return {'type': 'ir.actions.act_window_close'}
