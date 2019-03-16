@@ -72,7 +72,7 @@
                             <field name="active_domain_name"/>
                             <field name="template_id"
                                    attrs="{'readonly':[('server_id', '=', False)]}"
-                                   domain="[('server_id', '=', server_id)]"
+                                   domain="[('server_id', '=', server_id), ('state', '=', 'template')]"
                                    context="{'default_server_id': server_id}"/>
                         </group>
                         <group col="2" string="Odoo DB Settings">

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Existing Template Database -->
+    <record id="saas_portal_add_existing_template_form" model="ir.ui.view">
+        <field name="name">saas_portal.add_existing_template.form</field>
+        <field name="model">saas_portal.add_existing_template</field>
+        <field name="arch" type="xml">
+            <form string="Add Existing Template Database">
+                <label for="name"/>
+                <h1>
+                    <field name="name"/>
+                </h1>
+                <group colspan="4">
+                    <field name="server_id"/>
+                    <field name="plan_id"/>
+                    <field name="password"/>
+                </group>
+                <footer>
+                    <button string="Add" class="oe_highlight" type="object" name="add"/>
+                    <button string="Close" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_add_existing_template"
+        name="Add Existing Template Database"
+        res_model="saas_portal.add_existing_template"
+        view_type="form" view_mode="form"
+        target="new"
+        />
+    <menuitem id="menu_add_existing_template" action="action_add_existing_template" parent="menu_saas_templates" name="Add An Existing Template" sequence="6" />
+</odoo>
