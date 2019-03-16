@@ -21,7 +21,7 @@ class SaasPortalConfigWizard(models.TransientModel):
     def set_values(self):
         super(SaasPortalConfigWizard, self).set_values()
         ICPSudo = self.env['ir.config_parameter'].sudo()
-        ICPSudo.set_param("saas_portal.base_saas_domain", self.base_sso_domain)
+        ICPSudo.set_param("saas_portal.base_saas_domain", self.base_saas_domain)
         ICPSudo.set_param("saas_portal.use_ext_oauth", self.use_ext_oauth)
         ICPSudo.set_param("saas_portal.base_sso_domain", self.base_sso_domain)
         ICPSudo.set_param("saas_portal.page_for_maximumdb", self.page_for_maximumdb)
