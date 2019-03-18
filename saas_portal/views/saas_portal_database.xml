@@ -5,7 +5,7 @@
         <field name="name">saas_portal.databases.tree</field>
         <field name="model">saas_portal.database</field>
         <field name="arch" type="xml">
-            <tree string="Databases" create="false" edit="true" delete="false">
+            <tree string="Databases" create="false" edit="true" delete="true">
                 <field name="identifier"/>
                 <field name="name"/>
                 <!--field name="db_name"/-->
@@ -44,12 +44,11 @@
                 </div>
                 <group>
                     <label for="identifier"/><field name="identifier" nolabel="1" style="font-weight:bold"/>
-                    <field name="db_primary_lang" readonly="1" colspan="4"/>
-                    <!--field name="client_id" readonly="1"/-->
+                    <field name="db_primary_lang" readonly="0" colspan="4"/>
                 </group>
                 <group name="base">
                     <group string="Definition">
-                        <field name="client_id" readonly="1"/>
+                        <field name="client_id" readonly="0"/>
                         <field name="password" readonly="1"/>
                         <field name="db_type" readonly="1"/>
                         <field name="public_url" widget="url"/>
