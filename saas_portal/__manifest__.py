@@ -26,6 +26,7 @@
         'wizard/plan_client_creation.xml',
         'wizard/batch_delete.xml',
         'wizard/saas_duplicate_template_view.xml',
+        'wizard/add_existing_template_view.xml',
         'views/saas_portal_menu.xml',
         'views/saas_portal_client.xml',
         'views/saas_portal_plan.xml',
