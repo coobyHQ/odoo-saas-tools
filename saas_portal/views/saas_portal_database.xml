@@ -24,12 +24,15 @@
         <field name="arch" type="xml">
         <form string="Template database" create="false" edit="true" delete="true">
             <header>
-                <button string="Duplicate a Template" name="duplicate_template_button" type="object"
-                        icon="fa-play" class="oe_highlight"/>
-                <button string="Delete a Template" name="delete_template" type="object"
-                        icon="fa-play" class="oe_highlight" confirm="Are you sure?"/>
                 <button string="Log in to the DB" name="%(action_edit_database)d"
                         type="action" icon="fa-play" class="oe_highlight"/>
+                <button string="Attach Template DB" name="%(action_add_existing_template)d" type="action"
+                        groups="saas_portal.saas_group_admin"/>
+                <button string="Duplicate a Template" name="duplicate_template_button" type="object"
+                        groups="saas_portal.saas_group_admin"/>
+                <button string="Delete a Template" name="delete_template" type="object"
+                        confirm="Are you sure?" groups="saas_portal.saas_group_admin"/>
+
                 <field name="state" widget="statusbar"/>
             </header>
             <sheet>
