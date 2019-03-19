@@ -6,12 +6,21 @@
         <field name="model">saas_portal.add_existing_template</field>
         <field name="arch" type="xml">
             <form string="Add Existing Template Database">
+                <p>Add an existing database as template to your SaaS stack.</p>
+                <br/>
+                <p>
+                Make sure that on the template DB the following modules are installed:<br/>
+                - saas_client<br/>
+                - auth_oauth<br/>
+                - and other dependencies<br/>
+                Make sure that that the UID on the template DB is not yet registered in OAuth list in Portal DB.
+                </p>
                 <group colspan="4">
                     <field name="server_id"/>
                 </group>
                 <div class="oe_title" style="width: 410px;">
                     <label  for="subdomain" string="Subdomain.Domain > Database Name"/>
-                    <h2><field name="subdomain" class="oe_inline" nolabel="1"/>.<field name="domain" class="oe_inline"/></h2>
+                    <h3><field name="subdomain" class="oe_inline" nolabel="1"/>.<field name="domain" class="oe_inline"/></h3>
                 </div>
                 <group colspan="4">
                     <field name="name_txt"/>
