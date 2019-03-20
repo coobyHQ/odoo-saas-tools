@@ -38,13 +38,6 @@ class SaasPortalServer(models.Model):
             domain = record.domain
             record.name = "%s.%s" % (subdomain, domain)
 
-    @api.multi
-    @api.depends('branch_id')
-    def _get_default_max_nr_of_client(self):
-        for record in self:
-            default_max_nr = record.branch_id.default_max_client or 100
-            record.max_client = default_max_nr
-
     # Todo does not work yet
     @api.multi
     def _check_state_server_full(self):
@@ -114,7 +107,7 @@ class SaasPortalServer(models.Model):
     container_name = fields.Char('Container Name')
     container_image = fields.Char('Container Image')
 
-    max_client = fields.Integer('Max #of Client DB`s', default=_get_default_max_nr_of_client)
+    max_client = fields.Integer('Max #of Client DB`s', default=lambda self: self.branch_id and self.branch_id.default_max_client or 100)
     number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
     client_ids = fields.One2many('saas_portal.client', 'server_id', string='Client instances')
     database_ids = fields.One2many('saas_portal.database', 'server_id', string='Template Databases')
@@ -152,6 +145,11 @@ class SaasPortalServer(models.Model):
         record = super(SaasPortalServer, self).create(vals)
         record.oauth_application_id._get_access_token(create=True)
         return record
+
+    @api.onchange('branch_id')
+    def name_get(self):
+        if self.branch_id and self.branch_id.default_max_client:
+            self.max_client = self.branch_id.default_max_client
 
     @api.multi
     def _request_params(self, path='/web', scheme=None,
