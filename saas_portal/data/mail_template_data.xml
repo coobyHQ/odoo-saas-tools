@@ -27,7 +27,6 @@
             <field name="lang">${object.partner_id and object.partner_id.lang or ''}</field>
             <field name="model_id" ref="saas_portal.model_saas_portal_client"/>
             <field name="body_html"><![CDATA[
-            <!--  <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; "> -->
             <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
             <table cellspacing="0" cellpadding="0" style="width:100%;">
                 <tbody>
@@ -65,6 +64,7 @@
                         <p>Your ${object.product_type} software instance has been upgraded to a new plan.<br/>
                     % else:
                         <p>Your ${object.product_type} software instance has been downgraded to a new plan.<br/>
+                    %endif
 
                     Please notice the following change of the URL where you can reach your instance:</p>
                     <p>${object.change_text}</p>
