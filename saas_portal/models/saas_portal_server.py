@@ -42,7 +42,7 @@ class SaasPortalServer(models.Model):
     @api.depends('branch_id')
     def _get_default_may_nr_of_client(self):
         for record in self:
-            default_max_nr = record.branch_id.default_max_client
+            default_max_nr = record.branch_id.default_max_client or 100
             record.max_client = default_max_nr
 
     # Todo does not work yet
