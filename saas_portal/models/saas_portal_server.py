@@ -40,7 +40,7 @@ class SaasPortalServer(models.Model):
 
     @api.multi
     @api.depends('branch_id')
-    def _get_default_may_nr_of_client(self):
+    def _get_default_max_nr_of_client(self):
         for record in self:
             default_max_nr = record.branch_id.default_max_client or 100
             record.max_client = default_max_nr
@@ -114,7 +114,7 @@ class SaasPortalServer(models.Model):
     container_name = fields.Char('Container Name')
     container_image = fields.Char('Container Image')
 
-    max_client = fields.Integer('Max #of Client DB`s', default=_get_default_may_nr_of_client)
+    max_client = fields.Integer('Max #of Client DB`s', default=_get_default_max_nr_of_client)
     number_of_clients = fields.Integer('# of Client DB`s', readonly=True, compute='_get_number_of_clients', store=True)
     client_ids = fields.One2many('saas_portal.client', 'server_id', string='Client instances')
     database_ids = fields.One2many('saas_portal.database', 'server_id', string='Template Databases')

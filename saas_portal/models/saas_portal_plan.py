@@ -23,7 +23,8 @@ class SaasPortalPlan(models.Model):
 
     name = fields.Char('Plan', required=True)
     summary = fields.Char('Summary')
-    template_id = fields.Many2one('saas_portal.database', 'Template', ondelete='restrict')
+    template_id = fields.Many2one('saas_portal.database', 'DB Template',
+                                  required=True, ondelete='restrict')
     demo = fields.Boolean('Install Demo Data')
     maximum_allowed_dbs_per_partner = fields.Integer(
         help='maximum allowed non-trial databases per customer', require=True, default=10)

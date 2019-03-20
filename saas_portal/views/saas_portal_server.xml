@@ -6,7 +6,7 @@
         <field name="model">saas_portal.server</field>
         <field name="priority">4</field>
         <field name="arch" type="xml">
-            <tree string="Servers/Containers" delete="false">
+            <tree string="Servers/Containers" delete="true">
                 <field name="sequence" widget="handle"/>
                 <field name="name_txt"/>
                 <field name="name"/>
@@ -48,6 +48,7 @@
                     <group name="base" attrs="{'invisible': [('server_type','!=','application')]}">
                         <group>
                              <field name="branch_id" style="font-weight:bold"/>
+                             <field name="name"/>
                          </group>
                         <group>
                             <field name="client_id"/>
