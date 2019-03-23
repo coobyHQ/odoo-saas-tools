@@ -147,7 +147,7 @@ class SaasPortalServer(models.Model):
         return record
 
     @api.onchange('branch_id')
-    def name_get(self):
+    def onchange_branch_id(self):
         if self.branch_id and self.branch_id.default_max_client:
             self.max_client = self.branch_id.default_max_client
 
