@@ -1,100 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="extra_step_dbname" inherit_id="website_sale.extra_info">
-        <xpath expr="//div[hasclass('o_website_sale_rightfit')]" position="replace">
-            <div class="row">
-                <div class='col-md-12 o_website_sale_rightfit'>
-                <form action="/website_form/" method="post" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data" data-force_action="shop.sale.order.dbname" data-model_name="sale.order" data-success_page="/shop/payment">
-                    <div class="form-group form-field o_website_form_custom">
-                        <div class="form-group field-name">
-                           <!--label for="dbname" class="control-label">Domain:</label-->
-                                <t t-if="not instances">
-                                   <h2 class="mb8 mt8">Desired web address for your system</h2>
-                                   <div class="input-group">
-                                       <input type="text" name="dbname" t-att-value="dbname" id="dbname"
-                                              class="form-control" placeholder="your-company-name" required="required"/>
-                                       <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
-                                   </div>
-                                   <br/>
-                                   <h3 class="mb8 mt8" style="text-align: center; color: orange;">Your Odoo Instance Size</h3>
-                                   <div class="col-xs-6 o_kanban_primary_left" id="plan_users">
-                                        <span class="col-xs-6 text-right text-muted">Max. users in plan:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['plan_users'] or ''" style="white-space: nowrap;"/>
-                                        </span>
-                                   </div>
-                                   <div class="col-xs-6 o_kanban_primary_right" id="plan_storage">
-                                        <span class="col-xs-6 text-right text-muted">Max. storage in plan:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['plan_storage'] or ''" style="white-space: nowrap;"/> MB
-                                        </span>
-                                   </div>
-                                   <div class="col-xs-6 o_kanban_primary_left" id="add_users">
-                                        <span class="col-xs-6 text-right text-muted">Additional users:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['additional_users'] or '0'" style="white-space: nowrap;"/>
-                                        </span>
-                                   </div>
-                                   <div class="col-xs-6 o_kanban_primary_right" id="add_storage">
-                                        <span class="col-xs-6 text-right text-muted">Additional storage:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['additional_storage'] or '0'" style="white-space: nowrap;"/> MB
-                                        </span>
-                                   </div>
-                                   <div class="col-xs-6 o_kanban_primary_left" id="max_users">
-                                        <span class="col-xs-6 text-right text-muted">Total max. users:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['max_allowed_users'] or ''" style="white-space: nowrap;"/>
-                                        </span>
-                                    </div>
-                                    <div class="col-xs-6 o_kanban_primary_right" id="max_storage">
-                                        <span class="col-xs-6 text-right text-muted">Total max. storage:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['max_allowed_storage'] or ''" style="white-space: nowrap;"/> MB
-                                        </span>
-                                    </div>
+        <xpath expr="//div[hasclass('oe_cart')]" position="replace">
+            <div class="col-md-10 col-md-offset-2 oe_cart">
+                <div class='row'>
+                    <t t-call="website_sale.wizard_checkout">
+                        <t t-set="step" t-value="30"/>
+                    </t>
+                </div>
+                <div class="row">
+                    <div class='col-md-12 o_website_sale_rightfit'>
+                    <form action="/website_form/" method="post" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data" data-force_action="shop.sale.order.dbname" data-model_name="sale.order" data-success_page="/shop/payment">
+                        <div class="form-group form-field o_website_form_custom">
+                            <div class="form-group field-name">
+                               <!--label for="dbname" class="control-label">Domain:</label-->
+                                    <t t-if="not instances">
+                                       <h2 class="mb8 mt8">Desired web address for your system</h2>
+                                       <div class="input-group">
+                                           <input type="text" name="dbname" t-att-value="dbname" id="dbname"
+                                                  class="form-control" placeholder="your-company-name" required="required"/>
+                                           <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
+                                       </div>
+                                       <br/>
+                                       <h3 class="mb8 mt8" style="text-align: center; color: orange;">Your Odoo Instance Size</h3>
+                                       <div class="col-xs-6 o_kanban_primary_left" id="plan_users">
+                                            <span class="col-xs-6 text-right text-muted">Max. users in plan:</span>
+                                            <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                <span t-raw="plan and plan['plan_users'] or ''" style="white-space: nowrap;"/>
+                                            </span>
+                                       </div>
+                                       <div class="col-xs-6 o_kanban_primary_right" id="plan_storage">
+                                            <span class="col-xs-6 text-right text-muted">Max. storage in plan:</span>
+                                            <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                <span t-raw="plan and plan['plan_storage'] or ''" style="white-space: nowrap;"/> MB
+                                            </span>
+                                       </div>
+                                       <div class="col-xs-6 o_kanban_primary_left" id="add_users">
+                                            <span class="col-xs-6 text-right text-muted">Additional users:</span>
+                                            <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                <span t-raw="plan and plan['additional_users'] or '0'" style="white-space: nowrap;"/>
+                                            </span>
+                                       </div>
+                                       <div class="col-xs-6 o_kanban_primary_right" id="add_storage">
+                                            <span class="col-xs-6 text-right text-muted">Additional storage:</span>
+                                            <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                <span t-raw="plan and plan['additional_storage'] or '0'" style="white-space: nowrap;"/> MB
+                                            </span>
+                                       </div>
+                                       <div class="col-xs-6 o_kanban_primary_left" id="max_users">
+                                            <span class="col-xs-6 text-right text-muted">Total max. users:</span>
+                                            <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                <span t-raw="plan and plan['max_allowed_users'] or ''" style="white-space: nowrap;"/>
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-6 o_kanban_primary_right" id="max_storage">
+                                            <span class="col-xs-6 text-right text-muted">Total max. storage:</span>
+                                            <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                <span t-raw="plan and plan['max_allowed_storage'] or ''" style="white-space: nowrap;"/> MB
+                                            </span>
+                                        </div>
 
-                                </t>
-                                <t t-if="instances">
-                                    <h2 class="mb8 mt8">Select Your Instance To Upgrade</h2>
-                                    <div class="form-group">
-                                        <select name="instance_id" class="form-control instance_id" required="required">
-                                            <t t-foreach="instances or []" t-as="instance">
-                                                <option t-att-value="instance.id">
-                                                    <t t-esc="instance.name" />
-                                                </option>
-                                            </t>
-                                        </select>
-                                    </div>
-                                </t>
-                       </div>
-                    </div>
-                    <div class="form-group form-field o_website_form_custom hidden">
-                        <div class="col-md-3 col-sm-4 text-right-not-xs">
-                            <label class="control-label" for="Give us your feedback...">Give us your feedback...</label>
+                                    </t>
+                                    <t t-if="instances">
+                                        <h2 class="mb8 mt8">Select Your Instance To Upgrade</h2>
+                                        <div class="form-group">
+                                            <select name="instance_id" class="form-control instance_id" required="required">
+                                                <t t-foreach="instances or []" t-as="instance">
+                                                    <option t-att-value="instance.id">
+                                                        <t t-esc="instance.name" />
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </t>
+                           </div>
                         </div>
-                        <div class="col-md-7 col-sm-8">
-                            <textarea class="form-control o_website_form_input" name="Give us your feedback..." />
+                        <div class="form-group form-field o_website_form_custom hidden">
+                            <div class="col-md-3 col-sm-4 text-right-not-xs">
+                                <label class="control-label" for="Give us your feedback...">Give us your feedback...</label>
+                            </div>
+                            <div class="col-md-7 col-sm-8">
+                                <textarea class="form-control o_website_form_input" name="Give us your feedback..." />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group form-field o_website_form_custom hidden">
-                        <div class="col-md-3 col-sm-4 text-right-not-xs">
-                            <label class="control-label" for="a_document">A document to provide</label>
+                        <div class="form-group form-field o_website_form_custom hidden">
+                            <div class="col-md-3 col-sm-4 text-right-not-xs">
+                                <label class="control-label" for="a_document">A document to provide</label>
+                            </div>
+                            <div class="col-md-7 col-sm-8">
+                                <input type="file" class="form-control o_website_form_input" name="a_document" />
+                            </div>
                         </div>
-                        <div class="col-md-7 col-sm-8">
-                            <input type="file" class="form-control o_website_form_input" name="a_document" />
+                        <div class="form-group">
+                            <div class="col-md-3 col-sm-4">
+                            </div>
+                            <div class="col-md-7 col-sm-8">
+                                <a href="/shop/checkout" class="btn btn-default mb32 pull-left"><span class="fa fa-long-arrow-left" /> Previous</a>
+                                <a class="btn btn-primary pull-right mb32 o_website_form_send" href="/shop/confirm_order">Next <span class="fa fa-long-arrow-right" /></a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-sm-4">
-                        </div>
-                        <div class="col-md-7 col-sm-8">
-                            <a href="/shop/checkout" class="btn btn-default mb32 pull-left"><span class="fa fa-long-arrow-left" /> Previous</a>
-                            <a class="btn btn-primary pull-right mb32 o_website_form_send" href="/shop/confirm_order">Next <span class="fa fa-long-arrow-right" /></a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+                </div>
             </div>
         </xpath>
     </template>
