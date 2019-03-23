@@ -88,14 +88,23 @@ class SaasPortalOrder(SaasPortal):
 
 class SaasCreateInstanceAfterValidating(WebsiteSale):
 
-    def get_saas_domain(self, order):
+    def get_saas_domain(self, order, base_plan_product):
         config = request.env['ir.config_parameter']
         full_param = 'saas_portal.base_saas_domain'
         base_saas_domain = config.sudo().get_param(full_param)
         if order:
-            base_plan_product = order.order_line.mapped('product_id').filtered(lambda product: product.saas_plan_id != False and product.saas_product_type == 'base')
             if base_plan_product and base_plan_product.saas_plan_id and base_plan_product.saas_plan_id.domain:
                 base_saas_domain = base_plan_product.saas_plan_id.domain
+            if base_plan_product.attribute_value_ids:
+                for attr in base_plan_product.attribute_value_ids:
+                    if attr.attribute_id and attr.attribute_id.saas_code == 'lang':
+                        if attr.saas_lang:
+                            lang = attr.saas_lang
+                            if attr.template_ids:
+                                for templ in attr.template_ids:
+                                    if base_plan_product.saas_plan_id.id in templ.plan_ids.ids:
+                                        base_saas_domain = templ.domain
+                                        break
         return base_saas_domain
 
     def upgrade_client_with_topup(self, client, plan_id, order_id):
@@ -146,10 +155,6 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             return request.redirect("/shop/payment")
 
         base_saas_domain = None
-        if not post.get('base_saas_domain', False):
-            base_saas_domain = self.get_saas_domain(order)
-            post['base_saas_domain'] = base_saas_domain
-
         dbname = None
         if not post.get('dbname', False):
             if order and order.saas_dbname:
@@ -165,6 +170,10 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
                 SaasPortalClient = request.env['saas_portal.client']
                 instances = SaasPortalClient.sudo().search([('partner_id.id', '=', partner.id)])
             elif base_plan_product.saas_plan_id:
+                if not post.get('base_saas_domain', False):
+                    base_saas_domain = self.get_saas_domain(order, base_plan_product)
+                    post['base_saas_domain'] = base_saas_domain
+
                 users, storage, additional_invoice_lines = base_plan_product.saas_plan_id.get_topup_info(order, None)
                 additional_users = users - base_plan_product.saas_plan_id.max_users
                 additional_storage = storage - base_plan_product.saas_plan_id.max_storage
