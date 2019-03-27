@@ -1,0 +1,273 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* saas_portal_portal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-20 08:55+0000\n"
+"PO-Revision-Date: 2019-03-25 15:38+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2.1\n"
+"Last-Translator: Lucas Huber <lh@cooby.io>\n"
+"Language: de\n"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+msgid "$ ping"
+msgstr "$ ping"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid ""
+"<br/>\n"
+"                                    Plan:"
+msgstr ""
+"<br/>\n"
+"Plan:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid ""
+"<br/>\n"
+"                                    Server name:"
+msgstr ""
+"<br/>\n"
+"Name des Servers:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid ""
+"<br/>\n"
+"                                    Storage (MB):"
+msgstr "<br/>Speicher (MB):"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid ""
+"<br/>\n"
+"                                    Users:"
+msgstr ""
+"<br/>\n"
+"Benutzer:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid ""
+"<span class=\"label label-default\"><i class=\"fa fa-fw fa-clock-o\"/> "
+"Expired</span>"
+msgstr ""
+"<span class=\"label label-default\"><i class=\"fa fa-fw fa-clock-o\"/"
+">Ausgelaufen</i></span>"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+#: model:ir.ui.view,arch_db:saas_portal_portal.rename_database
+msgid ""
+"<strong>Apply</strong>\n"
+"                                <span class=\"hidden-xs\"/>"
+msgstr ""
+"<strong>Anwenden</strong>\n"
+"                             <span class=\"hidden-xs\"/>"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.delete_database
+msgid ""
+"<strong>Delete</strong>\n"
+"                                <span class=\"hidden-xs\"/>"
+msgstr ""
+"<strong>Löschen</strong>\n"
+"                             <span class=\"hidden-xs\"/>"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+msgid ""
+"Be sure that the new domain name is point to our server before you apply"
+msgstr ""
+"Vergewissern Sie sich, dass der neue Domain-Name auf unseren Server zeigt, "
+"bevor Sie weitermachen"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.delete_database
+msgid "Delete an instance:"
+msgstr "Eine Instanz löschen:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.delete_database
+msgid "Delete database"
+msgstr "Datenbank löschen"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "Description"
+msgstr "Beschreibung"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+msgid "Domain name"
+msgstr "Domain-Name"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "Domain:"
+msgstr "Domain:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid ""
+"Go to the webshop to the category Topups and order additional storage or "
+"users,\n"
+"                                    or you can upgrade the plan of your "
+"instance too."
+msgstr ""
+"Gehen Sie zum Webshop in die Kategorie Topups und bestellen Sie zusätzlichen "
+"Speicher oder Benutzer, oder Sie können den Plan Ihrer Instanz auch "
+"aktualisieren."
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_instances
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_home_menu_instances
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid "Instances"
+msgstr "Instanzen"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+msgid "Look up for IP address of our server as such:"
+msgstr "Suchen Sie nach einer IP-Adresse unseres Servers als solcher:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+msgid ""
+"Map your new name to the IP address on your DNS server. Use the A record for "
+"that."
+msgstr ""
+"Karte Ihren neuen Namen auf die IP-Adresse auf Ihrem DNS-Server. Verwenden "
+"Sie dafür den A-Datensatz."
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_home_saas
+msgid "My Software instances"
+msgstr "Meine Software-Instanzen"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid "Name"
+msgstr "Name"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid "Plan"
+msgstr "Tarif"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "Price"
+msgstr "Preis"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "Product"
+msgstr "Produkt"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.rename_database
+msgid "Rename database"
+msgstr "Datenbank umbenennen"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.rename_database
+msgid "Rename your database (type in just the desired subdomain):"
+msgstr ""
+"Benennen Sie Ihre Datenbank um (geben Sie nur die gewünschte Subdomain ein):"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "SaaS Instance detail"
+msgstr "SaaS Instanz Detail"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid "Storage (MB)"
+msgstr "Speicher (MB)"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "Subtotal"
+msgstr "Zwischensumme"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid "There are currently no instances for your account."
+msgstr "Es gibt derzeit keine Instanzen für Ihr Konto."
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.delete_database
+msgid "This is an irreversible action!"
+msgstr "Das ist eine unumkehrbare Aktion!"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "To change your instance:"
+msgstr "Um Ihre Instanz zu ändern:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+msgid "To work with the new domain you should do the following:"
+msgstr "Um mit der neuen Domain zu arbeiten, sollten Sie folgendes tun:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "Unit"
+msgstr "Einheit"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid "Users"
+msgstr "Benutzer"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.portal_my_instances
+msgid "Valid Until"
+msgstr "Gültig bis"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+#: model:ir.ui.view,arch_db:saas_portal_portal.delete_database
+msgid "Warning:"
+msgstr "Warnung:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "Your contract items:"
+msgstr "Ihre Vertragsgegenstände:"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "[ Change ]"
+msgstr "[Änderung]"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "[ Delete database ]"
+msgstr "[Datenbank löschen]"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.instance_detail
+msgid "[ Rename database ]"
+msgstr "[Datenbank umbenennen]"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.rename_database
+msgid "new-subdomain-name"
+msgstr "neuer-subdomain-name"
+
+#. module: saas_portal_portal
+#: model:ir.ui.view,arch_db:saas_portal_portal.change_domain
+msgid "your-new-domain-name"
+msgstr "dein-neuer-domain-name"

@@ -1,5 +1,5 @@
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <record id="email_template_create_saas" model="mail.template">
             <field name="name">Send SaaS creation page to partner</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
@@ -9,16 +9,33 @@
             <field name="auto_delete" eval="True"/>
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
-        Your payment for service is accepted!
+            <div style="background-color:#F3F5F6;color:#515166;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+            <table cellspacing="0" cellpadding="0" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="padding:2px;width:30%;">
+                            <img src="web/static/src/img/logo.png"/>
+                        </td>
+                        <td style="vertical-align: top; padding: 8px 10px;text-align: left;font-size: 14px;">
+                            <a href="web/my/home" style="float:right ;margin:15px auto;background: #875A7B;border-radius: 5px;color:
+                             #ffffff;font-size: 16px;padding: 10px 20px 10px 20px;text-decoration: none;">My Account</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <p>Now you can choose domain name for your service and create database </p>
-        <p>open following link</p>
-        <p>
-        % for plan in ctx['plans']:
-        <br/>
-        http://${ctx['saas_domain']}/page/start?plan_id=${plan}
-        % endfor
-        </p>
+           <p>Hello ${object.partner_id.name},</p><br/>
+           <p>
+            You have the following news software instance running on our platform:<br/>
+                <b>Product Type:</b> ${object.product_type}, ${object.odoo_version}<br/>
+                <b>Summary:</b> ${object.summary}<br/>
+                <b>Instance ID:</b> ${object.identifier}<br/>
+                <b>Instance URL:</b> <a href="${object.public_url}">${object.public_url}</a><br/>
+            </p>
+
+            <p>Your payment for the hosting service is accepted!
+
+            Now you can choose domain name for your service and create database </p>
             ]]></field>
         </record>
 
