@@ -360,8 +360,8 @@ class WebsiteSaleForm(WebsiteSaleForm):
         if 'dbname' in kwargs:
             order.write({'saas_dbname': kwargs['dbname']})
             if request.website:
-                msg = _('Your Instance will be created upon confirming the order!')
-                msg_title = 'Please wait a few seconds for it to complete.'
+                msg = _('Please wait a few seconds for it to complete.')
+                msg_title = 'Your Instance will be created upon confirming the order!'
                 http.request.website.add_status_message(msg, type_='info', title=msg_title)
                 # return http.request.render('website_sale_saas.add_saas_instance_notification')
         if 'instance_id' in kwargs:
