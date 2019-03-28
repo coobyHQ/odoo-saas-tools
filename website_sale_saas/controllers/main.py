@@ -1,5 +1,5 @@
 from odoo.http import request
-from odoo import http, SUPERUSER_ID
+from odoo import http, SUPERUSER_ID, _
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.addons.website_sale.controllers.main import WebsiteSaleForm
 from odoo.addons.saas_portal.controllers.main import SaasPortal
@@ -359,6 +359,11 @@ class WebsiteSaleForm(WebsiteSaleForm):
 
         if 'dbname' in kwargs:
             order.write({'saas_dbname': kwargs['dbname']})
+            if request.website:
+                msg = _('Your Instance will be created upon confirming the order!')
+                msg_title = 'Please wait a few seconds for it to complete.'
+                http.request.website.add_status_message(msg, type_='info', title=msg_title)
+                # return http.request.render('website_sale_saas.add_saas_instance_notification')
         if 'instance_id' in kwargs:
             order.write({'saas_instance_id': kwargs['instance_id']})
 

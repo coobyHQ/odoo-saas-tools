@@ -7,7 +7,13 @@
     'category': 'SaaS',
     'summary': 'Sell views of SaaS products in the Webshop',
     'version': '11.0.1.0.0',
-    'depends': ['website_sale', 'saas_portal', 'saas_portal_sale', 'website_sale_require_login'],
+    'depends': [
+        'website_sale',
+        'saas_portal',
+        'saas_portal_sale',
+        'website_sale_require_login',
+        'cms_status_message',
+    ],
     'data': [
         'views/templates.xml',
         'views/saas_portal_shop_extra_step.xml',
