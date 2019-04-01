@@ -312,7 +312,7 @@ class SaasPortalClient(models.Model):
                 r.write({'notification_storage': True})
                 template = self.env.ref('saas_portal.email_template_upcoming_storage_exceed')
                 r.message_post_with_template(
-                    template.id, composition_mode='email')
+                    template.id, composition_mode='mass_mail')
             if (r.total_storage > r.total_storage_limit - 25) and r.notification_storage is True: # if it falls back to 25MB less?
                 r.write({'notification_storage': False})
 
