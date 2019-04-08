@@ -166,10 +166,10 @@ class SaasPortalClient(models.Model):
     def rename_subdomain(self, new_subdomain):
         self.ensure_one()
         new_name = "%s.%s" % (new_subdomain, self.domain)
-        self.rename_database(new_dbname=new_name)
+        self.rename_database(new_dbname=new_name, new_subdomain=new_subdomain)
 
     @api.multi
-    def rename_database(self, new_dbname):
+    def rename_database(self, new_dbname, new_subdomain):
         self.ensure_one()
 
         saas_portal_database = self.env['saas_portal.database'].sudo()
@@ -191,6 +191,7 @@ class SaasPortalClient(models.Model):
         _logger.info('delete database: %s', res.text)
         if res.status_code != 500:
             self.name = new_dbname
+            self.subdomain = new_subdomain
 
     @api.multi
     def sync_client(self):
