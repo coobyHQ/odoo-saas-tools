@@ -165,7 +165,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
                 # rename the DB if a server's domain is another one
                 if (self.old_plan_id.domain or base_domain) in self.cur_client_id.name:
                     db_name = self.cur_client_id.name.replace((self.old_plan_id.domain or base_domain), (self.new_plan_id.domain or base_domain))
-                    self.cur_client_id.rename_database(new_dbname=db_name)
+                    self.cur_client_id.rename_database(new_dbname=db_name, new_subdomain=self.cur_client_id.subdomain)
             old_server_db_name = self.cur_client_id.server_id.name
             with self.registry(old_server_db_name).cursor() as cr:
                 env = api.Environment(cr, SUPERUSER_ID, self._context)
@@ -209,7 +209,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
             if (self.cur_client_id.server_id.domain or base_domain) in self.cur_client_id.name:
                 db_name = self.cur_client_id.name.replace((self.cur_client_id.server_id.domain or base_domain),
                                                           (self.new_server_id.domain or base_domain))
-                self.cur_client_id.rename_database(new_dbname=db_name)
+                self.cur_client_id.rename_database(new_dbname=db_name, new_subdomain=self.cur_client_id.subdomain)
         old_server_db_name = self.cur_client_id.server_id.name
         with self.registry(old_server_db_name).cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, self._context)
