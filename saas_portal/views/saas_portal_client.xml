@@ -112,17 +112,20 @@
                             <field name="total_storage_limit" style="font-weight:bold"/>
                         </group>
                     </group>
-                    <group>
-                        <group name="settings">
+                    <group col="5">
+                        <group name="settings" col="2" colspan="2">
                             <field name="client_id" readonly="1"/>
                             <field name="server_id" readonly="1"/>
                             <field name="client_primary_lang" readonly="0"/>
                         </group>
-                        <group name="subscription">
+                        <group name="subscription" col="2" colspan="2">
                             <field name="trial"/>
                             <field name="trial_hours" class="oe_inline" attrs="{'invisible': [('trial', '=', False)]}"/>
-                            <field name="expiration_datetime"/>
-                            <field name="expired"/>
+                            <group name="expiration" col="6" colspan="2">
+                                <label for="expiration_datetime" colspan="2" class="o_address_city"/>
+                                <field name="expiration_datetime" colspan="2" class="o_address_state" nolabel="1"/>
+                                <field name="expired" nolabel="1" colspan="2" class="o_address_zip"/>
+                            </group>
                         </group>
                     </group>
 

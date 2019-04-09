@@ -312,12 +312,14 @@ class SaasPortalClient(models.Model):
             if r.expired is True:
                 return
 
-            if (r.total_storage > r.total_storage_limit - 20) and r.notification_storage is False: # if the db grows to within 20MB of limit?
+            if (r.total_storage > r.total_storage_limit - 20) and (r.total_storage > r.total_storage_limit - 20) \
+                    and r.notification_storage is False:  # if the db grows to within 20MB of limit?
                 r.write({'notification_storage': True})
                 template = self.env.ref('saas_portal.email_template_upcoming_storage_exceed')
                 r.message_post_with_template(
                     template.id, composition_mode='mass_mail')
-            if (r.total_storage > r.total_storage_limit - 25) and r.notification_storage is True: # if it falls back to 25MB less?
+            if (r.total_storage < r.total_storage_limit - 25) and r.notification_storage is True:
+                # if it falls back to 25MB less?
                 r.write({'notification_storage': False})
 
     # Subscription storage exceeded
@@ -332,7 +334,7 @@ class SaasPortalClient(models.Model):
             if r.expired is True:
                 return
 
-            if r.total_storage_limit < r.file_storage + r.db_storage and r.storage_exceed is False:
+            if r.total_storage > r.total_storage_limit and r.storage_exceed is False:
                 r.write({'storage_exceed': True})
                 template = self.env.ref(
                     'saas_portal.email_template_storage_exceed')
@@ -341,5 +343,5 @@ class SaasPortalClient(models.Model):
 
                 if r.block_on_storage_exceed:
                     self.env['saas.config'].do_upgrade_database(payload, r)
-            if not r.total_storage_limit >= r.file_storage + r.db_storage and r.storage_exceed is True:
+            if not r.total_storage <= r.total_storage_limit and r.storage_exceed is True:
                 r.write({'storage_exceed': False})
