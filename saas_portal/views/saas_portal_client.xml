@@ -122,6 +122,7 @@
                             <field name="trial"/>
                             <field name="trial_hours" class="oe_inline" attrs="{'invisible': [('trial', '=', False)]}"/>
                             <field name="expiration_datetime"/>
+                            <field name="expired"/>
                         </group>
                     </group>
 

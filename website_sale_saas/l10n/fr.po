@@ -7,36 +7,37 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-29 17:08+0000\n"
-"PO-Revision-Date: 2019-03-29 18:10+0100\n"
-"Last-Translator: Lucas Huber <lh@cooby.io>\n"
+"PO-Revision-Date: 2019-03-29 18:14+0100\n"
 "Language-Team: \n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.2.1\n"
+"Last-Translator: Lucas Huber <lh@cooby.io>\n"
+"Language: fr\n"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid ""
 "<span class=\"col-xs-6 text-right text-muted\">Additional storage:</span>"
 msgstr ""
-"<span class = \"col-xs-6 text-right text-muted\" >Zusätzliche Speicherplatz: "
-"</span>"
+"<span class=\"col-xs-6 text-right text-muted\">Stockage supplémentaire:</"
+"span>"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "<span class=\"col-xs-6 text-right text-muted\">Additional users:</span>"
 msgstr ""
-"<span class = \"col-xs-6 text-right text-muted\" >Weitere Benutzer: </span>"
+"<span class=\"col-xs-6 text-right text-muted\">Utilisateurs supplémentaires:"
+"</span>"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid ""
 "<span class=\"col-xs-6 text-right text-muted\">Max. storage in plan:</span>"
 msgstr ""
-"<span class = \"col-xs-6 text-right text-muted\" >Speicherplatz im Plan: </"
+"<span class=\"col-xs-6 text-right text-muted\">Max. stockage dans le plan:</"
 "span>"
 
 #. module: website_sale_saas
@@ -44,28 +45,27 @@ msgstr ""
 msgid ""
 "<span class=\"col-xs-6 text-right text-muted\">Max. users in plan:</span>"
 msgstr ""
-"<span class = \"col-xs-6 text-right text-muted\" >Max. Anzahl Benutzer im "
-"Plan: </span>"
+"<span class=\"col-xs-6 text-right text-muted\">Max. utilisateurs dans le "
+"plan:</span>"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid ""
 "<span class=\"col-xs-6 text-right text-muted\">Total max. storage:</span>"
 msgstr ""
-"<span class = \"col-xs-6 text-right text-muted\" >Total max. Speicherplatz: "
-"</span>"
+"<span class=\"col-xs-6 text-right text-muted\">Total max. Stockage:</span>"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "<span class=\"col-xs-6 text-right text-muted\">Total max. users:</span>"
 msgstr ""
-"<span class = \"col-xs-6 text-right text-muted\" >Total max. Anzahl "
-"Benutzer: </span>"
+"<span class=\"col-xs-6 text-right text-muted\">Total max. Utilisateurs:</"
+"span>"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "<span class=\"fa fa-long-arrow-left\"/> Previous"
-msgstr "<span class = \"fa fa-long-pfeil-left\"/> Vorherige"
+msgstr "<span class=\"fa fa-long-arrow-left\"/> Précédente"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.cart_saas_warning
@@ -74,24 +74,24 @@ msgid ""
 "                        You can't buy more then one base SaaS product at the "
 "same time! Please select only one."
 msgstr ""
-"<strong> Warnung! </strong>\n"
-"                        Sie können nicht mehr als ein Basis-SaaS-Produkt "
-"gleichzeitig kaufen! Bitte wählen Sie nur eines aus."
+"<strong>Attention!</strong>\n"
+"                        Vous ne pouvez pas acheter plus d'un produit SaaS de "
+"base en même temps! Veuillez sélectionner un seul."
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "A document to provide"
-msgstr "Ein Dokument zur Verfügung stellen"
+msgstr "Un document à fournir"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "Desired web address for your system"
-msgstr "Gewünschte Webadresse für Ihr System"
+msgstr "Adresse Web souhaitée pour votre système"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "Give us your feedback..."
-msgstr "Geben Sie uns Ihr Feedback ..."
+msgstr "Donnez-nous vos commentaires..."
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
@@ -101,35 +101,35 @@ msgstr "MB"
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "Next <span class=\"fa fa-long-arrow-right\"/>"
-msgstr "Nächste <span class = \"fa fa-long-arrow-right\"/>"
+msgstr "Prochain<span class=\"fa fa-long-arrow-right\"/>"
 
 #. module: website_sale_saas
 #: code:addons/website_sale_saas/controllers/main.py:363
 #, python-format
 msgid "Please wait a few seconds for it to complete."
-msgstr "Bitte warten Sie einige Sekunden, bis der Prozess abgeschlossen ist."
+msgstr "S'il vous plaît attendre quelques secondes pour qu'il se termine."
 
 #. module: website_sale_saas
 #: model:ir.model,name:website_sale_saas.model_saas_portal_plan
 msgid "SaaS Plan (templates)"
-msgstr "SaaS Plan (Vorlagen)"
+msgstr "Plan SaaS (modèles)"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "Select Your Instance To Upgrade"
-msgstr "Wählen Sie Ihre Instanz zum Upgrade"
+msgstr "Sélectionnez votre instance à mettre à niveau"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.product
 msgid "Try trial"
-msgstr "Probe Instanz"
+msgstr "Essayez d'essai"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "Your Odoo Instance Size"
-msgstr "Ihre Odoo-Instanzgröße"
+msgstr "Taille de votre instance Odoo"
 
 #. module: website_sale_saas
 #: model:ir.ui.view,arch_db:website_sale_saas.extra_step_dbname
 msgid "your-company-name"
-msgstr "Name Ihres Unternehmens"
+msgstr "votre-societe-nom"
