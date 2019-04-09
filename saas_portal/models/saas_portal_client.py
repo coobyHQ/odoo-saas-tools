@@ -176,7 +176,7 @@ class SaasPortalClient(models.Model):
         if saas_portal_database.search([('name', '=', new_dbname)]):
             raise ValidationError(
                 _("This database name already exists: "
-                  "'%s'") % new_db
+                  "'%s'") % new_dbname
             )
 
         # TODO async
@@ -309,6 +309,9 @@ class SaasPortalClient(models.Model):
     @api.multi
     def storage_usage_near_limit(self):
         for r in self:
+            if r.expired is True:
+                return
+
             if (r.total_storage > r.total_storage_limit - 20) and r.notification_storage is False: # if the db grows to within 20MB of limit?
                 r.write({'notification_storage': True})
                 template = self.env.ref('saas_portal.email_template_upcoming_storage_exceed')
@@ -326,6 +329,9 @@ class SaasPortalClient(models.Model):
                         'hidden': True}],
         }
         for r in self:
+            if r.expired is True:
+                return
+
             if r.total_storage_limit < r.file_storage + r.db_storage and r.storage_exceed is False:
                 r.write({'storage_exceed': True})
                 template = self.env.ref(

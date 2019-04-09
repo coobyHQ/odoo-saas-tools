@@ -6,7 +6,7 @@
         <field name="model">saas_portal.client</field>
         <field name="inherit_id" ref="saas_portal.view_clients_form"/>
         <field name="arch" type="xml">
-          <xpath expr="//field[@name='expiration_datetime']" position="after">
+          <xpath expr="//field[@name='expired']" position="after">
                 <field name="support_team_id"/>
           </xpath>
         </field>
