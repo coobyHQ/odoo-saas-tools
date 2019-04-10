@@ -79,7 +79,7 @@
                     <button string="Duplicate Instance" name="apply_duplicate" type="object" class="btn-primary"
                             attrs="{'invisible':[('action', 'in', ['server_change', 'plan_change', 'rename', 'delete'])]}"/>
                     -->
-                    <button string="Delete" name="saas_portal.database.delete_database_server" type="object"
+                    <button string="Delete" name="delete_database_server" type="object"
                             attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'plan_change'])]}" class="btn-primary"
                             groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
                     or <button string="Cancel" class="btn-default" special="cancel"/>
