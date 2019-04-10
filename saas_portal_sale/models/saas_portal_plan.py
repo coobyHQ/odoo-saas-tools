@@ -112,6 +112,9 @@ class SaasPortalPlan(models.Model):
             if client_obj.contract_id and additional_invoice_lines:
                 for invoice_line in additional_invoice_lines:
                     self.env['account.analytic.invoice.line'].sudo().create(invoice_line)
+            client_obj.total_storage_limit = storage
+        else:
+            client_obj.total_storage_limit = max_storage
 
         return res
 
