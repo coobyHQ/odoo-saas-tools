@@ -62,7 +62,7 @@ class SaasPortalClient(models.Model):
     }
 
     @api.multi
-    @api.depends('plan_id', 'plan_id.max_storage', 'topup_storage')
+    @api.depends('plan_id', 'plan_id.max_storage', 'plan_max_storage', 'topup_storage')
     def _compute_total_storage_limit(self):
         for client in self:
             client.total_storage_limit = client.plan_max_storage + client.topup_storage
