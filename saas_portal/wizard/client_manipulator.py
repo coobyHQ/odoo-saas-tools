@@ -84,6 +84,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         m = odoo.modules.registry.Registry
         return m.new(self.name + '.' + self.template_id.domain, **kwargs)
 
+    # Duplication of the DB
     @api.multi
     def apply_duplicate(self):
         new_db = self.name + '.' + self.domain
@@ -237,6 +238,13 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
         return self.instance_change_to_chatter()
 
     # Rename Subdomain name
+    @api.multi
+    def delete_database_server(self):
+        self.ensure_one()
+        self.cur_client_id.delete_database_server()
+        return self.instance_change_to_chatter()
+
+    # Delete Database
     @api.multi
     def rename_subdomain(self):
         self.ensure_one()

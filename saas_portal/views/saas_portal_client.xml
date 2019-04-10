@@ -170,6 +170,7 @@
                 <field name="name" string="Database Name"/>
                 <filter string="Running" name="current" domain="[('state', '=','open')]"/>
                 <filter string="Expired" name="expired" domain="[('expired','=',True)]"/>
+                <filter string="Deleted" name="deleted" domain="[('state','=','deleted')]"/>
                 <filter string="Near Storage Limit" name="storage_near" domain="[('notification_storage','=',True)]"/>
                 <filter string="Storage Limit Exceeded" name="storage_exceeded" domain="[('storage_exceed','=',True)]"/>
                 <separator/>
