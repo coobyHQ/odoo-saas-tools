@@ -130,8 +130,7 @@ class SaasPortalClient(models.Model):
                                    ('notification_sent', '=', False)])
             records.write({'notification_sent': True})
             for record in records:
-                template = self.env.ref(
-                    'saas_portal.email_template_expiration_notify')
+                template = self.env.ref('saas_portal.email_template_expiration_notify')
                 record.with_context(days=notification_delta).message_post_with_template(
                     template.id, composition_mode='comment')
 
