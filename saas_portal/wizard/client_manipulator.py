@@ -237,14 +237,14 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
 
         return self.instance_change_to_chatter()
 
-    # Rename Subdomain name
+    # Delete Database
     @api.multi
     def delete_database_server(self):
         self.ensure_one()
         self.cur_client_id.delete_database_server()
         return self.instance_change_to_chatter()
 
-    # Delete Database
+    # Rename
     @api.multi
     def rename_subdomain(self):
         self.ensure_one()

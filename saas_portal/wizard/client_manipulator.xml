@@ -70,17 +70,15 @@
 
                 <footer>
                     <button string="Change The Server" name="change_saas_server" type="object" class="btn-primary"
-                            attrs="{'invisible':[('action', 'in', ['rename', 'plan_change','duplicate', 'delete'])]}"/>
+                            attrs="{'invisible':[('action', '!=', 'change_server')]}"/>
                     <button string="Execute Client Plan Change" name="change_saas_plan" type="object" class="btn-primary"
-                            attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'delete'])]}"/>
+                            attrs="{'invisible':[('action', '!=', 'plan_change')]}"/>
                     <button string="Rename" name="rename_subdomain" type="object" class="btn-primary"
-                            attrs="{'invisible':[('action', 'in', ['plan_change', 'server_change','duplicate', 'delete'])]}"/>
-                    <!--
+                            attrs="{'invisible':[('action', '!=', 'rename')]}"/>
                     <button string="Duplicate Instance" name="apply_duplicate" type="object" class="btn-primary"
-                            attrs="{'invisible':[('action', 'in', ['server_change', 'plan_change', 'rename', 'delete'])]}"/>
-                    -->
+                            attrs="{'invisible':[('action', '!=', 'duplicate')]}"/>
                     <button string="Delete" name="delete_database_server" type="object"
-                            attrs="{'invisible':[('action', 'in', ['rename', 'server_change','duplicate', 'plan_change'])]}" class="btn-primary"
+                            attrs="{'invisible':[('action', '!=', 'delete')]}" class="btn-primary"
                             groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
                     or <button string="Cancel" class="btn-default" special="cancel"/>
                 </footer>
