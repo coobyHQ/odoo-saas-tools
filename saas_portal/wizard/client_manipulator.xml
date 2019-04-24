@@ -70,7 +70,7 @@
 
                 <footer>
                     <button string="Change The Server" name="change_saas_server" type="object" class="btn-primary"
-                            attrs="{'invisible':[('action', '!=', 'change_server')]}"/>
+                            attrs="{'invisible':[('action', '!=', 'server_change')]}"/>
                     <button string="Execute Client Plan Change" name="change_saas_plan" type="object" class="btn-primary"
                             attrs="{'invisible':[('action', '!=', 'plan_change')]}"/>
                     <button string="Rename" name="rename_subdomain" type="object" class="btn-primary"
