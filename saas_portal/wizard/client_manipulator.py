@@ -36,6 +36,11 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
             return client.plan_id.expiration
         return ''
 
+    def _default_email_template(self):
+        tmpl = self.env['mail.template'].search([('name', '=', 'Send information instance changes')], limit=1)
+        if tmpl:
+            return tmpl.id
+
     action = fields.Selection([
         ('server_change', 'Change the Server (move)'),
         ('plan_change', 'Change the plan'),
@@ -71,7 +76,7 @@ class SaasPortalManipulateClientWizard(models.TransientModel):
     subdomain = fields.Char('New Subdomain', required=False)
 
     mail_template = fields.Many2one('mail.template', string="Mail template",
-                                    help="Mail template for change of client")
+                                    help="Mail template for change of client", default=_default_email_template)
     message = fields.Text(string="Client Change Comment", help="Individual comment at change of client from staff")
     change_text = fields.Text(string="Client Change Text", help="Automated text at change of client")
     name = fields.Char('Database Name', required=False)
