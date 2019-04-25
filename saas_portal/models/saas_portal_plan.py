@@ -178,6 +178,8 @@ class SaasPortalPlan(models.Model):
             tmpl = self.env['saas_portal.database'].search([('name', '=', template_db), ('state', '=', 'template')], limit=1)
             if tmpl and tmpl.db_primary_lang:
                 vals.update(client_primary_lang=tmpl.db_primary_lang)
+        if 'client_primary_lang' not in vals and self.lang:
+            vals.update(client_primary_lang=self.lang)
         client = None
         if client_id:
             vals['client_id'] = client_id
