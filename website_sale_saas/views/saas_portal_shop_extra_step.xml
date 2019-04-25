@@ -19,6 +19,8 @@
                                        <div class="input-group">
                                            <input type="text" name="dbname" t-att-value="dbname" id="dbname"
                                                   class="form-control" placeholder="your-company-name" required="required"/>
+                                           <input type="text" name="dbname_base_saas_domain" t-att-value="dbname_base_saas_domain" id="dbname_base_saas_domain"
+                                                  class="form-control hidden"/>
                                            <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
                                        </div>
                                        <br/>
