@@ -191,6 +191,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
             'post': post,
             'base_saas_domain': base_saas_domain,
             'dbname': dbname,
+            'dbname_base_saas_domain': base_saas_domain,
             'escape': lambda x: x.replace("'", r"\'"),
             'partner': order.partner_id.id,
             'order': order,
@@ -342,6 +343,22 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
 
         return request.redirect('/shop/confirmation')
 
+    @http.route(['/shop/payment'], type='http', auth="public", website=True)
+    def payment(self, **post):
+        order = request.website.sale_get_order()
+        if order:
+            dbname = order.saas_dbname
+            if dbname and dbname == 'ERROR_DB_EXISTS!': #TODO improve
+                if request.website:
+                    msg = _('Please choose another web address name.')
+                    msg_title = 'This Odoo instance name already exists!'
+                    http.request.website.add_status_message(msg, type_='info', title=msg_title)
+                extra_step = request.env.ref('website_sale.extra_info_option')
+                if extra_step.active:
+                    return request.redirect("/shop/extra_info")
+
+        return super(SaasCreateInstanceAfterValidating, self).payment(**post)
+
 
 class WebsiteSaleForm(WebsiteSaleForm):
 
@@ -357,13 +374,17 @@ class WebsiteSaleForm(WebsiteSaleForm):
         if data['record']:
             order.write(data['record'])
 
-        if 'dbname' in kwargs:
-            order.write({'saas_dbname': kwargs['dbname']})
-            if request.website:
-                msg = _('Please wait a few seconds for it to complete.')
-                msg_title = 'Your Instance will be created upon confirming the order!'
-                http.request.website.add_status_message(msg, type_='info', title=msg_title)
-                # return http.request.render('website_sale_saas.add_saas_instance_notification')
+        if 'dbname' in kwargs and 'dbname_base_saas_domain' in kwargs:
+            dbname = (kwargs['dbname'] or '') + '.' + (kwargs['dbname_base_saas_domain'] or '')
+            if request.env['saas_portal.database'].sudo().search([('name', '=', dbname)]):
+                order.write({'saas_dbname': 'ERROR_DB_EXISTS!'}) #TODO improve
+            else:
+                order.write({'saas_dbname': kwargs['dbname']})
+                if request.website:
+                    msg = _('Please wait a few seconds for it to complete.')
+                    msg_title = 'Your Instance will be created upon confirming the order!'
+                    http.request.website.add_status_message(msg, type_='info', title=msg_title)
+                    # return http.request.render('website_sale_saas.add_saas_instance_notification')
         if 'instance_id' in kwargs:
             order.write({'saas_instance_id': kwargs['instance_id']})
 
