@@ -23,18 +23,18 @@
                 <field name="login_allowed" invisible="1"/>
                 <button name="%(action_edit_database)d" type="action"
                         icon="fa-sign-in" attrs="{'invisible':[('login_allowed', '=', True)]}"
-                        help="Request permission from the client to log in to the database."/>
+                        string="Request permission from the client to log in to the database."/>
                 <button name="%(action_edit_database)d" type="action"
                         icon="fa-sign-in" attrs="{'invisible':[('login_allowed', '!=', True)]}"
-                        help="Log in to client database."/>
+                        string="Log in to client database."/>
                 <button type="action" name="%(saas_portal.saas_portal_manipulate_client_wizard_action)d"
-                        icon="fa-arrow-circle-up" help="Manipulate Database" groups="saas_portal.saas_group_agent" states="draft,open,pending"/>
+                        icon="fa-arrow-circle-up" string="Manipulate Database" groups="saas_portal.saas_group_agent" states="draft,open,pending"/>
                 <!-- todo seems confirm wizard does not work here !!
                 <button name="delete_database_server" type="object" attrs="{'invisible':[('state', 'in', ['draft', 'deleted'])]}"
                         icon="fa-eraser" help="Delete client database" groups="saas_portal.saas_group_admin" confirm="Are you sure to delete this database?"/>
                   -->
                 <button name="show_upgrade_wizard" attrs="{'invisible':[('state', 'in', ['deleted'])]}"
-                        type="object" icon="fa-cogs" help="Configure client database" groups="saas_portal.saas_group_admin"/>
+                        type="object" icon="fa-cogs" string="Configure client database" groups="saas_portal.saas_group_admin"/>
             </tree>
         </field>
     </record>
@@ -168,18 +168,7 @@
         <field name="arch" type="xml">
             <search string="Search Client">
                 <field name="name" string="Database Name"/>
-                <filter string="Running" name="current" domain="[('state', '=','open')]"/>
-                <filter string="Expired" name="expired" domain="[('expired','=',True)]"/>
-                <filter string="Deleted" name="deleted" domain="[('state','=','deleted')]"/>
-                <filter string="Near Storage Limit" name="storage_near" domain="[('notification_storage','=',True)]"/>
-                <filter string="Storage Limit Exceeded" name="storage_exceeded" domain="[('storage_exceed','=',True)]"/>
-                <separator/>
-                <field name="partner_id" string="Contact" filter_domain="[('partner_id', 'child_of', self)]"/>
-                <group expand="0" string="Group By">
-                    <filter string="Plan" domain="[]" context="{'group_by':'plan_id'}"/>
-                    <filter string="Branch" domain="[]" context="{'group_by':'plan_branch_id'}"/>
-                    <filter string="Server" domain="[]" context="{'group_by':'server_id'}"/>
-                </group>
+
             </search>
         </field>
     </record>

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from odoo import api, exceptions, fields, models
 from odoo.tools import scan_languages
 from odoo.tools.translate import _
-from odoo.addons.base.res.res_partner import _tz_get
+from odoo.addons.base.models.res_partner import _tz_get
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 from odoo.addons.saas_base.exceptions import MaximumTrialDBException
@@ -115,9 +115,8 @@ class SaasPortalPlan(models.Model):
         self.ensure_one()
         trial_hours = trial and self.expiration
         initial_expiration_datetime = datetime.now()
-        trial_expiration_datetime = (initial_expiration_datetime + timedelta(
-            hours=trial_hours)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        return trial and trial_expiration_datetime or initial_expiration_datetime.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        trial_expiration_datetime = initial_expiration_datetime + timedelta(hours=trial_hours)
+        return trial and trial_expiration_datetime or initial_expiration_datetime
 
     @api.multi
     def create_new_database(self, **kwargs):
