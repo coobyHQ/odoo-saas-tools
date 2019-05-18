@@ -5,7 +5,6 @@ import simplejson
 
 from odoo import api, SUPERUSER_ID
 from odoo import http
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.tools.translate import _
 from odoo.http import request
 from odoo.addons.auth_oauth.controllers.main import fragment_to_query_string
@@ -302,7 +301,7 @@ class SaasServer(http.Controller):
         domain = [('client_id', '=', dbuuid)]
         client = request.env['saas_server.client'].sudo().search(domain)
         if client:
-            diff = datetime.datetime.strptime(client.expiration_datetime, DEFAULT_SERVER_DATETIME_FORMAT) - datetime.datetime.now()
+            diff = client.expiration_datetime - datetime.datetime.now()
             hours_remaining = diff.seconds / 3600 + 1
             plural = hours_remaining > 1 and 's' or ''
             message = _("'You use a live preview. The database will be destroyed after %s hour%s.'") % (str(hours_remaining), plural)

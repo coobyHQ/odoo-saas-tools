@@ -38,7 +38,7 @@ class SaaSWebSettingsDashboard(WebSettingsDashboard):
 
         result.update({'saas': {'cur_users': cur_users,
                                 'max_users': max_users,
-                                'expiration_datetime': datetime_obj and datetime_obj.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                                'expiration_datetime': datetime_obj, #and datetime_obj.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                                 'file_storage': file_storage,
                                 'db_storage': db_storage,
                                 'pay_subscription_url': pay_subscription_url}})

@@ -49,7 +49,7 @@ class SaasPortalClient(models.Model):
     def _compute_contract_state(self):
         for client in self:
             state = "paid"
-            today = datetime.today().strftime('%Y-%m-%d')
+            today = datetime.today()
             if client.contract_id:
                 invoices = self.env['account.invoice'].search([('contract_id', '=', client.contract_id.id)])
                 amount_due = 0

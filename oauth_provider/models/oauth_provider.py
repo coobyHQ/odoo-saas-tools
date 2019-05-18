@@ -1,6 +1,5 @@
 from odoo import models, fields, api
 from datetime import datetime, timedelta
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 try:
     from oauthlib import common as oauthlib_common
@@ -42,7 +41,7 @@ class OauthApplication(models.Model):
             vals = {
                 'user_id': user_id,
                 'scope': 'userinfo',
-                'expires': expires.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                'expires': expires,
                 'token': oauthlib_common.generate_token(),
                 'application_id': self.id,
             }
@@ -77,7 +76,7 @@ class OauthAccessToken(models.Model):
     @api.multi
     def is_expired(self):
         self.ensure_one()
-        return datetime.now() > datetime.strptime(self.expires, DEFAULT_SERVER_DATETIME_FORMAT)
+        return datetime.now() > self.expires
 
     @api.multi
     def _allow_scopes(self, scopes):

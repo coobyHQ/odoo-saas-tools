@@ -1,43 +1,43 @@
 <odoo>
     <data noupdate="1">
-        <record id="product_uom_categ_storage" model="product.uom.categ">
+        <record id="product_uom_categ_storage" model="uom.category">
             <field name="name">Storage</field>
         </record>
-        <record id="product_uom_categ_users" model="product.uom.categ">
+        <record id="product_uom_categ_users" model="uom.category">
             <field name="name">Users</field>
         </record>
 
-        <record id="product_uom_megabyte" model="product.uom">
+        <record id="product_uom_megabyte" model="uom.uom">
             <field name="category_id" ref="product_uom_categ_storage"/>
             <field name="name">Megabyte</field>
             <field name="factor" eval="1.0"/>
             <field name="rounding" eval="1.000"/>
         </record>
-        <record id="product_uom_10megabytes" model="product.uom">
+        <record id="product_uom_10megabytes" model="uom.uom">
             <field name="category_id" ref="product_uom_categ_storage"/>
             <field name="name">10 MB</field>
             <field name="factor_inv" eval="10"/>
             <field name="uom_type">bigger</field>
         </record>
-        <record id="product_uom_100megabytes" model="product.uom">
+        <record id="product_uom_100megabytes" model="uom.uom">
             <field name="category_id" ref="product_uom_categ_storage"/>
             <field name="name">100 MB</field>
             <field name="factor_inv" eval="100"/>
             <field name="uom_type">bigger</field>
         </record>
-        <record id="product_uom_1gigabytes" model="product.uom">
+        <record id="product_uom_1gigabytes" model="uom.uom">
             <field name="category_id" ref="product_uom_categ_storage"/>
             <field name="name">1 GB</field>
             <field name="factor_inv" eval="1000"/>
             <field name="uom_type">bigger</field>
         </record>
-        <record id="product_uom_10gigabytes" model="product.uom">
+        <record id="product_uom_10gigabytes" model="uom.uom">
             <field name="category_id" ref="product_uom_categ_storage"/>
             <field name="name">10 GB</field>
             <field name="factor_inv" eval="10000"/>
             <field name="uom_type">bigger</field>
         </record>
-        <record id="product_uom_users" model="product.uom">
+        <record id="product_uom_users" model="uom.uom">
             <field name="category_id" ref="product_uom_categ_users"/>
             <field name="name">User(s)</field>
             <field name="factor" eval="1.0"/>

@@ -9,7 +9,6 @@ from odoo.service import db
 from odoo.tools.translate import _
 from odoo.addons.saas_base.tools import get_size
 from odoo import api, models, fields, SUPERUSER_ID, exceptions
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -406,7 +405,7 @@ class SaasServerClient(models.Model):
 
     @api.model
     def _cron_delete_expired_databases(self):
-        now = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        now = time
 
         res = self.search([('state', 'not in', ['deleted', 'template']),
                            ('expiration_datetime', '<=', now),

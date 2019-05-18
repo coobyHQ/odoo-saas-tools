@@ -15,7 +15,7 @@
 
         <!-- Add warning on website cart page -->
         <template id="cart_saas_warning" inherit_id="website_sale.cart">
-            <xpath expr="//h2" position="after">
+            <xpath expr="//div[hasclass('mt8','mb8','alert','alert-info')]" position="before">
                 <t t-if="not valid">
                     <div class="alert alert-danger">
                         <strong>Warning!</strong>

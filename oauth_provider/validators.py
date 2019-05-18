@@ -10,7 +10,6 @@ except Exception as e:
 from urllib.parse import unquote_plus
 
 from datetime import datetime, timedelta
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 from odoo.http import request
 
@@ -179,7 +178,7 @@ class OAuth2Validator(RequestValidator):
         access_token_obj.create({
             'user_id': req.user.id,
             'scope': token['scope'],
-            'expires': expires.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+            'expires': expires,
             'token': token['access_token'],
             'application_id': req.client.id
         })

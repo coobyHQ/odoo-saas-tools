@@ -3,7 +3,6 @@ import requests
 from datetime import datetime, timedelta
 from odoo import api, exceptions, fields, models
 from odoo.tools.translate import _
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from werkzeug.exceptions import Forbidden
 
 import logging
@@ -126,7 +125,7 @@ class SaasPortalClient(models.Model):
         notification_delta = int(self.env['ir.config_parameter'].sudo(
         ).get_param('saas_portal.expiration_notify_in_advance', '0'))
         if notification_delta > 0:
-            records = self.search([('expiration_datetime', '<=', (datetime.now() + timedelta(days=notification_delta)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
+            records = self.search([('expiration_datetime', '<=', (datetime.now() + timedelta(days=notification_delta))),
                                    ('notification_sent', '=', False)])
             records.write({'notification_sent': True})
             for record in records:
@@ -226,8 +225,7 @@ class SaasPortalClient(models.Model):
         if expiration:
             now = datetime.now()
             delta = timedelta(hours=expiration)
-            vals['expiration_datetime'] = (
-                now + delta).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            vals['expiration_datetime'] = (now + delta)
 
         client = p_client.create(vals)
         client_id = client.client_id

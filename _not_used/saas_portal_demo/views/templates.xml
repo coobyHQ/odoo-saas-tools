@@ -100,11 +100,11 @@
 
     </template>
 
-    <template id="hide_odoo_version_attribute_li" inherit_id="website_sale.variants">
+<!--     <template id="hide_odoo_version_attribute_li" inherit_id="website_sale.variants">
       <xpath expr="//li[@t-if='len(variant_id.value_ids) > 1']" position="attributes">
         <attribute name="t-if">len(variant_id.value_ids) > 1 and variant_id.attribute_id.name != 'Odoo Version'</attribute>
       </xpath>
-    </template>
+    </template> -->
 
     <template id="demo_product" inherit_id="website_sale.product">
       <xpath expr="//a[@id='add_to_cart']" position="after">

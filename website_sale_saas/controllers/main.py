@@ -4,7 +4,7 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.addons.website_sale.controllers.main import WebsiteSaleForm
 from odoo.addons.saas_portal.controllers.main import SaasPortal
 from odoo.exceptions import ValidationError
-from odoo.addons.base.ir.ir_qweb.fields import nl2br
+from odoo.addons.base.models.ir_qweb_fields import nl2br
 from odoo.addons.saas_base.exceptions import MaximumDBException, MaximumTrialDBException
 from urllib.parse import urlencode
 import werkzeug
