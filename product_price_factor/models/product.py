@@ -33,7 +33,7 @@ class ProductProduct(models.Model):
             prices[product.id] = product[price_type] or 0.0
             if price_type == 'list_price':
                 for value in product.product_template_attribute_value_ids.filtered(lambda r: r.attribute_id in [a.attribute_id for a in product.attribute_value_ids]):
-                    prices[product.id] = (prices[product.id] + price.price_extra) * price.price_factor
+                    prices[product.id] = (prices[product.id] + value.price_extra) * value.price_factor
                 # we need to add the price from the attributes that do not generate variants
                 # (see field product.attribute create_variant)
                 if self._context.get('no_variant_attributes_price_extra'):

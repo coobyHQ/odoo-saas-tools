@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<!--         <record id="saas_variants_template_tree_view" model="ir.ui.view">
+        <record id="saas_variants_template_tree_view" model="ir.ui.view">
             <field name="name">saas_variants.template.tree</field>
-            <field name="model">product.attribute.value</field>
-            <field name="inherit_id" ref="product.product_attribute_value_view_tree"/>
+            <field name="model">product.template.attribute.value</field>
+            <field name="inherit_id" ref="product.product_template_attribute_value_view_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='name']" position="after">
+                <xpath expr="//field[@name='price_extra']" position="after">
+                    <field name="price_factor"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="saas_variants_template_form_view" model="ir.ui.view">
+            <field name="name">saas_variants.template.form</field>
+            <field name="model">product.template.attribute.value</field>
+            <field name="inherit_id" ref="product.product_template_attribute_value_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='price_extra']" position="after">
                     <field name="price_factor"/>
                 </xpath>
             </field>
@@ -19,5 +29,5 @@
                     <field name="sequence" widget="handle"/>
                 </xpath>
             </field>
-        </record> -->
+        </record>
 </odoo>
