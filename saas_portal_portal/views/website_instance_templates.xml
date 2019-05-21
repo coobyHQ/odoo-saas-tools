@@ -7,17 +7,94 @@
     </template>
 
     <template id="portal_my_home_saas" name="Portal My Home : Saas instances" inherit_id="portal.portal_my_home" priority="20">
-        <xpath expr="//ul[hasclass('o_portal_docs')]" position="inside">
-            <li t-if="instance_count" class="list-group-item">
-                <span class="badge" t-esc="instance_count"/>
-                <a href="/my/instances">My Software instances</a>
-            </li>
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="instance_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">My Software instances</t>
+                <t t-set="url" t-value="'/my/instances'"/>
+                <t t-set="count" t-value="instance_count"/>
+            </t>
         </xpath>
     </template>
 
     <template id="portal_instances" name="My Software instances">
         <t t-call="portal.portal_layout">
             <h3>Instances<t t-call="portal.portal_searchbar"/></h3>
+        </t>
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Instances</t>
+            </t>
+            <t t-if="not instances">
+                <p>There are currently no software instances for your account.</p>
+            </t>
+            <t t-if="instances" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Name</th>
+                        <th>Plan</th>
+                        <th>Users</th>
+                        <th>Storage (MB)</th>
+                        <th>Valid Until</th>
+                        <th/>
+                    </tr>
+                </thead>
+                <t t-foreach="instances" t-as="instance">
+                <tr>
+                    <td>
+                        <a t-attf-href="/my/instance/#{instance.id}?#{keep_query()}">
+                            <t t-esc="instance.name"/>
+                        </a>
+                    </td>
+                    <td>
+                        <span t-field="instance.plan_id.name"/>
+                    </td>
+                    <td>
+                        <span t-field="instance.users_len"/> / <span t-field="instance.max_users"/>
+                    </td>
+                    <td>
+                        <span t-field="instance.total_storage"/> / <span t-field="instance.total_storage_limit"/>
+                    </td>
+                    <td>
+                        <span t-field="instance.expiration_datetime"/>
+                    </td>
+                    <td>
+                        <t t-if="instance.expired">
+                            <span class="label label-default"><i class="fa fa-fw fa-clock-o"/> Expired</span>
+                        </t>
+                    </td>
+                </tr>
+                </t>
+
+
+
+
+<!--                 <thead>
+                    <tr class="active">
+                        <th>Quotation #</th>
+                        <th class="text-right">Order Date</th>
+                        <th class="text-right">Valid Until</th>
+                        <th class="text-center"/>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <t t-foreach="quotations" t-as="quotation">
+                    <tr>
+                        <td><a t-att-href="quotation.get_portal_url()"><t t-esc="quotation.name"/></a></td>
+                        <td class="text-right"><span t-field="quotation.date_order"/></td>
+                        <td class="text-right"><span t-field="quotation.validity_date"/></td>
+                        <td class="text-center">
+                            <span t-if="quotation.state == 'cancel'" class="badge badge-pill badge-secondary"><i class="fa fa-fw fa-remove"/> Cancelled</span>
+                            <span t-if="quotation.is_expired" class="badge badge-pill badge-secondary"><i class="fa fa-fw fa-clock-o"/> Expired</span>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="quotation.amount_total"/>
+                        </td>
+                    </tr>
+                </t> -->
+            </t>
+
         </t>
     </template>
 
@@ -251,7 +328,7 @@
         </t>
     </template>
 
-    <template id="portal_my_home_menu_instances" name="Portal layout : Saas Instances menu entries" inherit_id="portal.portal_layout" priority="25">
+    <!--template id="portal_my_home_menu_instances" name="Portal layout : Saas Instances menu entries" inherit_id="portal.portal_layout" priority="25">
         <xpath expr="//ol[contains(@class,'o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'Portal My Home : Saas instances' or instances or saas_portal_client">
                 <a href="/my/instances">Instances</a>
@@ -260,6 +337,6 @@
                 <t t-esc="saas_portal_client.name"/>
             </li>
         </xpath>
-    </template>
+    </template-->
 
 </odoo>
