@@ -3,6 +3,7 @@ import requests
 from datetime import datetime, timedelta
 from odoo import api, exceptions, fields, models
 from odoo.tools.translate import _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from werkzeug.exceptions import Forbidden
 
 import logging
@@ -284,7 +285,7 @@ class SaasPortalClient(models.Model):
                 'params': [{'key': 'saas_client.max_users',
                             'value': record.max_users, 'hidden': True},
                            {'key': 'saas_client.expiration_datetime',
-                            'value': record.expiration_datetime,
+                            'value': record.expiration_datetime.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                             'hidden': True},
                            {'key': 'saas_client.total_storage_limit',
                             'value': record.total_storage_limit,
