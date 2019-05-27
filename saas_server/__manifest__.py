@@ -13,6 +13,7 @@
         'website',
     ],
     'data': [
+        'security/ir.model.access.csv',
         'views/saas_server.xml',
         'views/res_config_settings_views.xml',
         'data/auth_oauth_data.xml',

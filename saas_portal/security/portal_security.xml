@@ -11,7 +11,7 @@
 		<record id="saas_group_agent" model="res.groups">
 		    <field name="name">Agent</field>
 		    <field name="category_id" ref="saas-portal_security_category"/>
-    		<field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+    		<!--field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/-->
 		</record>
 
 		<record id="saas_group_moderator" model="res.groups">
