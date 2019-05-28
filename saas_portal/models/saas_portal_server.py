@@ -63,7 +63,7 @@ class SaasPortalServer(models.Model):
     subdomain = fields.Char('Sub Domain', required=True)
     domain = fields.Char(related='branch_id.branch_domain', string='Server SaaS domain', readonly=True)
     branch_prefix = fields.Char(related='branch_id.prefix', string='Branch Domain Prefix', readonly=True)
-    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch', ondelete='restrict')
+    branch_id = fields.Many2one('saas_portal.server_branch', string='SaaS Server Branch', ondelete='restrict', required=True)
     branch_aux_ids = fields.Many2many('saas_portal.server_branch', 'aux_server_ids', string='SaaS Server Branches')
     parameter_ids = fields.One2many('saas_portal.server_parameter', 'server_id',  string='SaaS Server Parameter',
                                     ondelete='restrict')
