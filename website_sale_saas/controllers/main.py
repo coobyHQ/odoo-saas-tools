@@ -6,6 +6,7 @@ from odoo.addons.saas_portal.controllers.main import SaasPortal
 from odoo.exceptions import ValidationError
 from odoo.addons.base.models.ir_qweb_fields import nl2br
 from odoo.addons.saas_base.exceptions import MaximumDBException, MaximumTrialDBException
+from odoo.addons.payment.controllers.portal import PaymentProcessing
 from urllib.parse import urlencode
 import werkzeug
 import json
@@ -307,28 +308,25 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
 
          - UDPATE ME
         """
-        if transaction_id is None:
-            tx = request.website.sale_get_transaction()
-        else:
-            tx = request.env['payment.transaction'].browse(transaction_id)
-
         if sale_order_id is None:
             order = request.website.sale_get_order()
         else:
             order = request.env['sale.order'].sudo().browse(sale_order_id)
             assert order.id == request.session.get('sale_last_order_id')
 
+        if transaction_id:
+            tx = request.env['payment.transaction'].sudo().browse(transaction_id)
+            assert tx in order.transaction_ids()
+        elif order:
+            tx = order.get_portal_last_transaction()
+        else:
+            tx = None
+
         if not order or (order.amount_total and not tx):
             return request.redirect('/shop')
 
-        if (not order.amount_total and not tx) or tx.state in ['pending', 'done', 'authorized']:
-            if (not order.amount_total and not tx):
-                # Orders are confirmed by payment transactions, but there is none for free orders,
-                # (e.g. free events), so confirm immediately
-                order.with_context(send_email=True).action_confirm()
-        elif tx and tx.state == 'cancel':
-            # cancel the quotation
-            order.action_cancel()
+        if order and not order.amount_total and not tx:
+            return request.redirect(order.get_portal_url())
 
         # clean context and session, then redirect to the confirmation page
         request.website.sale_reset()
@@ -348,6 +346,7 @@ class SaasCreateInstanceAfterValidating(WebsiteSale):
                 elif client:
                     self.upgrade_client_with_topup(client, plan_id, order.id)
 
+        PaymentProcessing.remove_payment_transaction(tx)
         return request.redirect('/shop/confirmation')
 
     @http.route(['/shop/payment'], type='http', auth="public", website=True)
