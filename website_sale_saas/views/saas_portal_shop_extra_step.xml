@@ -8,55 +8,84 @@
                         <form action="/website_form/" method="post" class="s_website_form container-fluid" enctype="multipart/form-data" data-force_action="shop.sale.order.dbname" data-model_name="sale.order" data-success_page="/shop/payment">
                             <div class="form-group row form-field o_website_form_custom">
                                 <!--label for="dbname" class="control-label">Domain:</label-->
-                                <t t-if="not instances">
+                                <table t-if="not instances">
                                     <h2 class="mb8 mt8">Desired web address for your system</h2>
                                     <div class="input-group">
                                         <input type="text" name="dbname" t-att-value="dbname" id="dbname"
                                                 class="form-control" placeholder="your-company-name" required="required"/>
                                         <input type="text" name="dbname_base_saas_domain" t-att-value="dbname_base_saas_domain" id="dbname_base_saas_domain"
                                                 class="form-control hidden" style="display:none;"/>
-                                        <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden;">.<t t-raw="base_saas_domain"/></span>
+                                        <span class="input-group-addon" style="max-width: 150px; overflow-y: hidden; font-size: 20px;">.<t t-raw="base_saas_domain"/></span>
                                     </div>
                                     <br/>
-                                    <h3 class="mb8 mt8" style="text-align: center; color: orange;">Your Odoo Instance Size</h3>
-                                    <div class="col-xs-6 o_kanban_primary_left" id="plan_users">
-                                        <span class="col-xs-6 text-right text-muted">Max. users in plan:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['plan_users'] or ''" style="white-space: nowrap;"/>
-                                        </span>
-                                    </div>
-                                    <div class="col-xs-6 o_kanban_primary_right" id="plan_storage">
-                                        <span class="col-xs-6 text-right text-muted">Max. storage in plan:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['plan_storage'] or ''" style="white-space: nowrap;"/> MB
-                                        </span>
-                                    </div>
-                                    <div class="col-xs-6 o_kanban_primary_left" id="add_users">
-                                        <span class="col-xs-6 text-right text-muted">Additional users:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['additional_users'] or '0'" style="white-space: nowrap;"/>
-                                        </span>
-                                    </div>
-                                    <div class="col-xs-6 o_kanban_primary_right" id="add_storage">
-                                        <span class="col-xs-6 text-right text-muted">Additional storage:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['additional_storage'] or '0'" style="white-space: nowrap;"/> MB
-                                        </span>
-                                    </div>
-                                    <div class="col-xs-6 o_kanban_primary_left" id="max_users">
-                                        <span class="col-xs-6 text-right text-muted">Total max. users:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['max_allowed_users'] or ''" style="white-space: nowrap;"/>
-                                        </span>
-                                    </div>
-                                    <div class="col-xs-6 o_kanban_primary_right" id="max_storage">
-                                        <span class="col-xs-6 text-right text-muted">Total max. storage:</span>
-                                        <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
-                                            <span t-raw="plan and plan['max_allowed_storage'] or ''" style="white-space: nowrap;"/> MB
-                                        </span>
-                                    </div>
+                                    <h3 class="mb8 mt8" style="text-align: center; color: orange;">Your Cooby Instance Size</h3>
 
-                                </t>
+                                    <table class="table table-striped table-sm" id="instance_overview">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span class="col-xs-6 text-right text-muted">Max. users in plan:</span>
+                                                </td>
+                                                <td>
+                                                    <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                        <span t-raw="plan and plan['plan_users'] or ''" style="white-space: nowrap;"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="col-xs-6 text-right text-muted">Max. storage in plan:</span>
+                                                </td>
+                                                <td>
+                                                    <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                        <span t-raw="plan and plan['plan_storage'] or ''" style="white-space: nowrap;"/> MB
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="col-xs-6 text-right text-muted">Additional users:</span>
+                                                </td>
+                                                <td>
+                                                    <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                        <span t-raw="plan and plan['additional_users'] or '0'" style="white-space: nowrap;"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="col-xs-6 text-right text-muted">Additional storage:</span>
+                                                </td>
+                                                <td>
+                                                    <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                        <span t-raw="plan and plan['additional_storage'] or '0'" style="white-space: nowrap;"/> MB
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="col-xs-6 text-right text-muted">Total max. users:</span>
+                                                </td>
+                                                <td>
+                                                    <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                        <span t-raw="plan and plan['max_allowed_users'] or ''" style="white-space: nowrap;"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="col-xs-6 text-right text-muted">Total max. storage:</span>
+                                                </td>
+                                                <td>
+                                                    <span class="col-xs-6 text-right-not-xs text-left-xs text-muted">
+                                                        <span t-raw="plan and plan['max_allowed_storage'] or ''" style="white-space: nowrap;"/> MB
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </table>
                                 <t t-if="instances">
                                     <h2 class="mb8 mt8">Select Your Instance To Upgrade</h2>
                                     <div class="form-group">
