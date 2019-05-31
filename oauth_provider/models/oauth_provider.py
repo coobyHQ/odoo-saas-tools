@@ -42,7 +42,7 @@ class OauthApplication(models.Model):
             vals = {
                 'user_id': user_id,
                 'scope': 'userinfo',
-                'expires': expires.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                'expires': expires,
                 'token': oauthlib_common.generate_token(),
                 'application_id': self.id,
             }
@@ -77,7 +77,7 @@ class OauthAccessToken(models.Model):
     @api.multi
     def is_expired(self):
         self.ensure_one()
-        return datetime.now() > datetime.strptime(self.expires, DEFAULT_SERVER_DATETIME_FORMAT)
+        return datetime.now() > self.expires
 
     @api.multi
     def _allow_scopes(self, scopes):

@@ -7,9 +7,8 @@ from datetime import datetime, timedelta
 from odoo import api, exceptions, fields, models
 from odoo.tools import scan_languages
 from odoo.tools.translate import _
-from odoo.addons.base.res.res_partner import _tz_get
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-
+from odoo.addons.base.models.res_partner import _tz_get
 from odoo.addons.saas_base.exceptions import MaximumTrialDBException
 from odoo.addons.saas_base.exceptions import MaximumDBException
 from werkzeug.exceptions import Forbidden
@@ -268,7 +267,7 @@ class SaasPortalPlan(models.Model):
             'login': owner_user.login,
             'name': owner_user.name,
             'email': owner_user.email,
-            'password_crypt': owner_user.password_crypt,
+            'password': owner_user.password,
         }
         return owner_user_data
 
@@ -277,8 +276,7 @@ class SaasPortalPlan(models.Model):
         self.ensure_one()
         trial_hours = trial and self.expiration
         initial_expiration_datetime = datetime.now()
-        trial_expiration_datetime = (initial_expiration_datetime + timedelta(
-            hours=trial_hours)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        trial_expiration_datetime = (initial_expiration_datetime + timedelta(hours=trial_hours)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         return trial and trial_expiration_datetime or initial_expiration_datetime.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
     @api.multi
@@ -737,7 +735,7 @@ class SaasPortalClient(models.Model):
         notification_delta = int(self.env['ir.config_parameter'].sudo(
         ).get_param('saas_portal.expiration_notify_in_advance', '0'))
         if notification_delta > 0:
-            records = self.search([('expiration_datetime', '<=', (datetime.now() + timedelta(days=notification_delta)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
+            records = self.search([('expiration_datetime', '<=', (datetime.now() + timedelta(days=notification_delta))),
                                    ('notification_sent', '=', False)])
             records.write({'notification_sent': True})
             for record in records:
@@ -763,7 +761,7 @@ class SaasPortalClient(models.Model):
     def write(self, values):
         if 'expiration_datetime' in values:
             payload = {
-                'params': [{'key': 'saas_client.expiration_datetime', 'value': values['expiration_datetime'], 'hidden': True}],
+                'params': [{'key': 'saas_client.expiration_datetime', 'value': values['expiration_datetime'].strftime(DEFAULT_SERVER_DATETIME_FORMAT), 'hidden': True}],
             }
 
             for record in self:
@@ -823,8 +821,7 @@ class SaasPortalClient(models.Model):
         if expiration:
             now = datetime.now()
             delta = timedelta(hours=expiration)
-            vals['expiration_datetime'] = (
-                now + delta).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            vals['expiration_datetime'] = (now + delta)
 
         client = p_client.create(vals)
         client_id = client.client_id
@@ -873,7 +870,7 @@ class SaasPortalClient(models.Model):
     def get_upgrade_database_payload(self):
         self.ensure_one()
         return {'params': [{'key': 'saas_client.expiration_datetime',
-                            'value': self.expiration_datetime,
+                            'value': self.expiration_datetime.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                             'hidden': True}]}
 
     @api.multi
@@ -883,7 +880,7 @@ class SaasPortalClient(models.Model):
                 'params': [{'key': 'saas_client.max_users',
                             'value': record.max_users, 'hidden': True},
                            {'key': 'saas_client.expiration_datetime',
-                            'value': record.expiration_datetime,
+                            'value': record.expiration_datetime.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                             'hidden': True},
                            {'key': 'saas_client.total_storage_limit',
                             'value': record.total_storage_limit,
